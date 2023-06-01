@@ -1,0 +1,212 @@
+import 'package:bach_thes/components/personal_button.dart';
+import 'package:bach_thes/components/text_field.dart';
+import 'package:bach_thes/pages/home_page.dart';
+import 'package:flutter/material.dart';
+
+class RegistrationPage extends StatefulWidget {
+  const RegistrationPage({Key? key}) : super(key: key);
+
+  @override
+  _RegistrationPage createState() => _RegistrationPageState();
+}
+
+class _RegistrationPageState extends State<RegistrationPage>{
+  @override
+  Widget buil(BuildContext context){
+    return Scaffold(
+        backgroundColor: Colors.white,
+        body: SafeArea(
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text(
+                  "Register now!",
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 25,
+                      fontWeight: FontWeight.w500),
+                ),
+                const SizedBox(height: 5),
+                /*PersonalizedTextInputField(
+                    hintText: "Name",
+                    obscureText: false,
+                    controller: nameController),
+                const SizedBox(height: 3),
+                PersonalizedTextInputField(
+                    hintText: "Email",
+                    obscureText: false,
+                    controller: emailController),
+                const SizedBox(height: 3),
+                PersonalizedTextInputField(
+                    hintText: "Set password",
+                    obscureText: true,
+                    controller: passwordController),*/
+                const SizedBox(height: 3),
+
+                GestureDetector(
+                    onTap: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => HomePage()));
+                    },
+                    child: const Text("Register now!")),
+
+                //PersonalButton(text: "Register", onTap: RegisterUser())
+              ],
+            ),
+          ),
+        ));
+  }
+}
+  //final nameController = TextEditingController();
+  //final emailController = TextEditingController();
+  //final passwordController = TextEditingController();
+
+  /*RegisterUser(ContextMenuButtonItem context) {GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => RegistrationPage()));
+                  },
+                  child: const Text(
+                    "Not a member yet? Sign up here!",
+                    style: TextStyle(fontWeight: FontWeight.w500),
+                  ),
+                )
+
+  }*/
+
+
+
+
+-----------------------
+Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => HomePage()));
+                    },
+.--------------------------------
+OLD LOGIN PAGE 
+//the login page, where user inputs his email and password and signs in the application
+//user can also sign in with appleId or googleId
+//or he can register if they are not using the application already
+
+
+import 'package:bach_thes/components/personal_button.dart';
+import 'package:bach_thes/components/text_field.dart';
+//import 'package:bach_thes/pages/authentication_page.dart';
+import 'package:bach_thes/pages/home_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:bach_thes/components/square_tile.dart';
+//import 'package:firebase_auth/firebase_auth.dart';
+import 'registration_page.dart';
+
+class LoginPage extends StatefulWidget {
+  LoginPage({super.key});
+
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  // text editing controllers
+
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+
+  void signUserIn() async {
+    await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: emailController.text, password: passwordController.text);
+  }
+
+  //build function
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        backgroundColor: Color.fromARGB(255, 197, 202, 204),
+        body: SafeArea(
+          child: Center(
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                //the main elements of the login page
+                //logo
+                SquareTile(imageUrl: 'lib/images/gore.png'),
+
+                const SizedBox(
+                  height: 20,
+                ),
+
+                // email textbox
+                PersonalizedTextInputField(
+                  hintText: 'Enter your email',
+                  obscureText: false,
+                  controller: emailController,
+                ),
+
+                const SizedBox(
+                  height: 20,
+                ),
+
+                //password textbox
+                PersonalizedTextInputField(
+                  hintText: 'Enter your password',
+                  obscureText: true,
+                  controller: passwordController,
+                ),
+
+                const SizedBox(
+                  height: 10,
+                ),
+
+                //forgot password?
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text(
+                        'Forgot Password?',
+                        style: TextStyle(color: Colors.grey[600]),
+                      ),
+                    ],
+                  ),
+                ),
+
+                const SizedBox(
+                  height: 10,
+                ),
+
+                //sign in button with function to sign the user in
+                PersonalButton(text: "Sign in", onTap: _navigateToHomePage(context)),
+
+                const SizedBox(
+                  height: 20,
+                ),
+
+          
+                //Not a member yet? Sign up!
+                GestureDetector(
+                  onTap: () {
+                    _navigateToRegistrationPage(context);
+                  },
+                  child: const Text(
+                    "Not a member yet? Sign up here!",
+                    style: TextStyle(fontWeight: FontWeight.w500),
+                  ),
+                )
+              ])),
+        ));
+  }
+}
+
+void _navigateToRegistrationPage(BuildContext context) {
+  Navigator.of(context)
+      .push(MaterialPageRoute(builder: (context) => RegistrationPage()));
+}
+
+void _navigateToHomePage(BuildContext context) {
+  Navigator.of(context)
+      .push(MaterialPageRoute(builder: (context) => HomePage()));
+}
+_____________________________________________________________________________________

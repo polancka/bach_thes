@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class PersonalButton extends StatelessWidget {
   final String text;
-  final Function()? onTap;
+  final void Function()? onTap;
 
   const PersonalButton({required this.text, required this.onTap, super.key});
 
