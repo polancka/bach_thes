@@ -1,3 +1,5 @@
+import 'package:bach_thes/pages/home_page.dart';
+import 'package:bach_thes/pages/reg_page.dart';
 import 'package:flutter/material.dart';
 
 Image logoWidget(String imageUrl) {
@@ -32,4 +34,40 @@ TextField reusableTextField(String hinttext, TextEditingController controller,
   );
 }
 
-//add reusable Sign in /register button
+//Login button
+SizedBox logInButton(BuildContext context, String text) {
+  return SizedBox(
+    width: MediaQuery.of(context).size.width,
+    height: 40,
+    child: TextButton(
+        onPressed: () {
+          Navigator.of(context)
+              .push(MaterialPageRoute(builder: (context) => HomePage()));
+        },
+        style: ButtonStyle(
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20))),
+            backgroundColor: MaterialStateProperty.resolveWith((states) {
+              if (!states.contains(MaterialState.pressed)) {
+                return Colors.white;
+              } else {
+                return Colors.pinkAccent;
+              }
+            })),
+        child: Text(text)),
+  );
+}
+
+//sign up button
+SizedBox signUpButton(BuildContext context) {
+  return SizedBox(
+    child: TextButton(
+      onPressed: () {
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => RegPage()));
+      },
+      child: Text("Not a member? Sign up!"),
+    ),
+  );
+}

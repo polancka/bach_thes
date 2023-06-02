@@ -15,25 +15,6 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
 
-  void _showErrorMessage(String message) {
-    showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text(message),
-          );
-        });
-
-    void signUserIn() async {
-      try {
-        await FirebaseAuth.instance.signInWithEmailAndPassword(
-            email: _emailController.text, password: _passwordController.text);
-      } on FirebaseAuthException catch (e) {
-        _showErrorMessage(e.code);
-      }
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -63,7 +44,14 @@ class _LoginPageState extends State<LoginPage> {
               height: 20,
             ),
             reusableTextField(
-                "Password", _passwordController, true, Icons.lock_outline)
+                "Password", _passwordController, true, Icons.lock_outline),
+            SizedBox(height: 20),
+
+            logInButton(context, "Log in!"),
+            signUpButton(context),
+
+            SizedBox(height: 20),
+            //signUp(context)
           ]),
         )),
       ),
@@ -71,12 +59,22 @@ class _LoginPageState extends State<LoginPage> {
   }
 }
 
-void _navigateToHomePage(BuildContext context) {
-  Navigator.of(context)
-      .push(MaterialPageRoute(builder: (context) => const HomePage()));
-}
+/*Row signUp(BuildContext context) {
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: [
+      Text("Not a member yet?"),
+      GestureDetector(
+        onTap: () {
+          WidgetsBinding.instance!.addPostFrameCallback((_) {
+            Navigator.pushReplacement(
+                context, MaterialPageRoute(builder: (_) => RegistrationPage()));
+          });
+        },
+        child: const Text("Sign up!",
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+      )
+    ],
+  );
+}*/
 
-void _navigateToRegistrationPage(BuildContext context) {
-  Navigator.of(context)
-      .push(MaterialPageRoute(builder: (context) => RegistrationPage()));
-}

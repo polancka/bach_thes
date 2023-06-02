@@ -1,4 +1,4 @@
-import 'package:bach_thes/pages/authentication_page.dart';
+import 'package:bach_thes/pages/reg_page.dart';
 import 'package:flutter/material.dart';
 //import 'models/peak.dart';
 //import 'mock_database/mock_peak.dart';
@@ -10,11 +10,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'pages/home_page.dart';
 import 'pages/login.dart';
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+void main() {
   //final List<Peak> mockPeaks = MockPeak.FetchAll();
   return runApp(const MyApp());
 }
@@ -24,7 +20,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       debugShowCheckedModeBanner: false,
       home: LoginPage(),
     );
