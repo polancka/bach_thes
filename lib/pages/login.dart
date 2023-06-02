@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'home_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:bach_thes/components/reusable_widgets.dart';
+import 'forgoten_password.dart';
 
 //TODO: add (dis)appering text if the username or password is not correct
 //TODO: add dis(apearing) text if the user is not registered yet
@@ -35,7 +36,7 @@ class _LoginPageState extends State<LoginPage> {
         child: SingleChildScrollView(
             child: Padding(
           padding: EdgeInsets.fromLTRB(
-              20, MediaQuery.of(context).size.height * 0.2, 20, 0),
+              20, MediaQuery.of(context).size.height * 0.1, 20, 0),
           child: Column(children: <Widget>[
             logoWidget("lib/images/gore.png"),
             SizedBox(
@@ -49,7 +50,21 @@ class _LoginPageState extends State<LoginPage> {
             reusableTextField(
                 "Password", _passwordController, true, Icons.lock_outline),
             SizedBox(height: 20),
-
+            //forgot password?
+            GestureDetector(
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => ResetPassworPage()));
+              },
+              child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+                Text(
+                  "Forgot password?",
+                  style: TextStyle(
+                      color: Colors.white, fontWeight: FontWeight.w300),
+                )
+              ]),
+            ),
+            SizedBox(height: 20),
             logInButton(context, "Log in!", _emailController.text,
                 _passwordController.text),
             signUpButton(context),

@@ -9,6 +9,7 @@ import 'firebase_options.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'pages/home_page.dart';
 import 'pages/login.dart';
+import 'package:bach_thes/pages/forgoten_password.dart';
 
 void main() async {
   //ensure widget binding before running the aplication

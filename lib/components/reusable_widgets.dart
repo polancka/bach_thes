@@ -14,26 +14,36 @@ Image logoWidget(String imageUrl) {
   );
 }
 
-TextField reusableTextField(String hinttext, TextEditingController controller,
+Align reusableTextField(String hinttext, TextEditingController controller,
     bool isPassword, IconData icon) {
-  return TextField(
-    controller: controller,
-    obscureText: isPassword,
-    decoration: InputDecoration(
-      prefixIcon: Icon(
-        icon,
-        color: Colors.white,
-      ),
-      labelText: hinttext,
-      filled: true,
-      floatingLabelBehavior: FloatingLabelBehavior.never,
-      fillColor: Colors.white.withOpacity(0.3),
-      labelStyle: TextStyle(color: Colors.white, fontWeight: FontWeight.w400),
-      border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(20.0),
-          borderSide: BorderSide(width: 0, style: BorderStyle.none)),
-    ),
-  );
+  return Align(
+      alignment: Alignment.center,
+      child: TextField(
+        textAlign: TextAlign.center,
+        textAlignVertical: TextAlignVertical.center,
+        style: TextStyle(
+          color: Colors.white,
+        ),
+        controller: controller,
+        obscureText: isPassword,
+        decoration: InputDecoration(
+          prefixIcon: Icon(
+            icon,
+            color: Colors.white,
+          ),
+          labelText: hinttext,
+          filled: true,
+          floatingLabelBehavior: FloatingLabelBehavior.never,
+          fillColor: Colors.white.withOpacity(0.3),
+          labelStyle: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.w400,
+          ),
+          border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(20.0),
+              borderSide: BorderSide(width: 0, style: BorderStyle.none)),
+        ),
+      ));
 }
 
 //Login button
