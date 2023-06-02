@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "938720584355",
+    "firebase_url": "https://hiking-app-56fa9-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "hiking-app-56fa9",
+    "storage_bucket": "hiking-app-56fa9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:938720584355:android:4207eeb38feaa6aa731516",
+        "android_client_info": {
+          "package_name": "com.example.bach_thes"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBiwqF8Nwvrrcd6IKP3mMJMh0ej5cn4QRQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

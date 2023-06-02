@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'home_page.dart';
-import 'registration_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:bach_thes/components/reusable_widgets.dart';
+
+//TODO: add (dis)appering text if the username or password is not correct
+//TODO: add dis(apearing) text if the user is not registered yet
+//TODO: close the keyboard on its own
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -47,7 +50,8 @@ class _LoginPageState extends State<LoginPage> {
                 "Password", _passwordController, true, Icons.lock_outline),
             SizedBox(height: 20),
 
-            logInButton(context, "Log in!"),
+            logInButton(context, "Log in!", _emailController.text,
+                _passwordController.text),
             signUpButton(context),
 
             SizedBox(height: 20),

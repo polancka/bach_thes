@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
+import 'home_page.dart';
 import 'package:bach_thes/components/reusable_widgets.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+//TODO:add authentication on email and password and pop up warnings if the password is too short
+//TODO: add a "which hiking level are you"
+//TODO: store the name and level in association with the profile
 
 class RegPage extends StatefulWidget {
   const RegPage({super.key});
@@ -17,6 +23,12 @@ class _RegPageState extends State<RegPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        extendBodyBehindAppBar: true,
+        appBar: AppBar(
+          iconTheme: IconThemeData(color: Colors.pinkAccent),
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+        ),
         backgroundColor: Colors.white12,
         body: Container(
           width: MediaQuery.of(context).size.width,
@@ -32,6 +44,15 @@ class _RegPageState extends State<RegPage> {
             padding: EdgeInsets.fromLTRB(
                 20, MediaQuery.of(context).size.height * 0.2, 20, 0),
             child: Column(children: <Widget>[
+              Padding(
+                  padding: EdgeInsets.fromLTRB(25, 25, 25, 30),
+                  child: Text(
+                    "Join our community",
+                    style: TextStyle(
+                        color: Colors.white.withOpacity(0.8),
+                        fontWeight: FontWeight.bold,
+                        fontSize: 25),
+                  )),
               reusableTextField(
                   "Your name", newNameController, false, Icons.person_outline),
               const SizedBox(height: 20),
@@ -43,7 +64,8 @@ class _RegPageState extends State<RegPage> {
               const SizedBox(
                 height: 20,
               ),
-              logInButton(context, "Register!"),
+              regButton(context, "Join", newEmailController.text,
+                  newPasswordController.text)
             ]),
           )),
         ),

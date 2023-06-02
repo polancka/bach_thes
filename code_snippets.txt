@@ -210,3 +210,10 @@ void _navigateToHomePage(BuildContext context) {
       .push(MaterialPageRoute(builder: (context) => HomePage()));
 }
 _____________________________________________________________________________________
+Another way of navigating pages
+ {
+                WidgetsBinding.instance!.addPostFrameCallback((_) {
+                  Navigator.pushReplacement(
+                      context, MaterialPageRoute(builder: (_) => HomePage()));
+                });
+              }
