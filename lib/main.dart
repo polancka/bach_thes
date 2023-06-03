@@ -16,7 +16,11 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   //initializing Firebase
-  await Firebase.initializeApp();
+  try {
+    await Firebase.initializeApp();
+  } on FirebaseException catch (e) {
+    print(e);
+  }
 
   return runApp(const MyApp());
 }

@@ -54,12 +54,16 @@ SizedBox logInButton(
     height: 40,
     child: TextButton(
         onPressed: () {
-          FirebaseAuth.instance
-              .signInWithEmailAndPassword(email: username, password: password)
-              .then((value) {
-            Navigator.of(context)
-                .push(MaterialPageRoute(builder: (context) => HomePage()));
-          });
+          try {
+            FirebaseAuth.instance
+                .signInWithEmailAndPassword(email: username, password: password)
+                .then((value) {
+              Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (context) => HomePage()));
+            });
+          } on FirebaseException catch (e) {
+            print(e);
+          }
         },
         style: ButtonStyle(
             shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -80,15 +84,19 @@ SizedBox regButton(
     height: 40,
     child: TextButton(
         onPressed: () {
-          FirebaseAuth.instance
-              .createUserWithEmailAndPassword(
-                  email: username, password: password)
-              .then((value) {
-            Navigator.of(context)
-                .push(MaterialPageRoute(builder: (context) => HomePage()));
-          }).onError((error, stackTrace) {
-            print("Error ${error.toString()}");
-          });
+          try {
+            FirebaseAuth.instance
+                .createUserWithEmailAndPassword(
+                    email: username, password: password)
+                .then((value) {
+              Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (context) => HomePage()));
+            }).onError((error, stackTrace) {
+              print("Error ${error.toString()}");
+            });
+          } on FirebaseException catch (e) {
+            print(e);
+          }
         },
         style: ButtonStyle(
             shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -97,8 +105,8 @@ SizedBox regButton(
             backgroundColor: MaterialStateProperty.resolveWith((states) {
               return Colors.white;
             })),
-        child:
-            Text("Register now", style: TextStyle(color: Colors.pinkAccent))),
+        child: const Text("Register now",
+            style: TextStyle(color: Colors.pinkAccent))),
   );
 }
 
@@ -110,7 +118,7 @@ SizedBox signUpButton(BuildContext context) {
         Navigator.of(context)
             .push(MaterialPageRoute(builder: (context) => RegPage()));
       },
-      child: Text(
+      child: const Text(
         "Not a member? Sign up!",
         style: TextStyle(color: Colors.white),
       ),
