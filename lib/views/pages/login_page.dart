@@ -1,8 +1,9 @@
+import 'package:bach_thes/controllers/navigation_controller.dart';
+import 'package:bach_thes/views/pages/forgoten_password_page.dart';
 import 'package:flutter/material.dart';
 import 'package:bach_thes/views/pages/home_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:bach_thes/views/widgets/reusable_widgets.dart';
-import 'forgoten_password.dart';
 
 //TODO: add (dis)appering text if the username or password is not correct
 //TODO: add dis(apearing) text if the user is not registered yet
@@ -18,8 +19,8 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final formfield = GlobalKey<FormState>();
   bool passToogle = true;
-  TextEditingController _emailController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -53,22 +54,22 @@ class _LoginPageState extends State<LoginPage> {
               //forgot password?
               GestureDetector(
                 onTap: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => ResetPassworPage()));
+                  MyNavigator(context).NavigateToForgotenPassword();
                 },
-                child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-                  Text(
-                    "Forgot password?",
-                    style: TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.w300),
-                  )
-                ]),
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: const [
+                      Text(
+                        "Forgot password?",
+                        style: TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.w300),
+                      )
+                    ]),
               ),
               SizedBox(height: 20),
               logInButton(context, "Log in!", _emailController.text,
                   _passwordController.text),
               signUpButton(context),
-
               SizedBox(height: 20),
               //signUp(context)
             ]),

@@ -1,6 +1,9 @@
 import 'dart:math';
+import 'package:bach_thes/controllers/login_controller.dart';
+import 'package:bach_thes/controllers/navigation_controller.dart';
+import 'package:bach_thes/controllers/registration_controller.dart';
 import 'package:bach_thes/views/pages/home_page.dart';
-import 'package:bach_thes/views/pages/reg_page.dart';
+import 'package:bach_thes/views/pages/registration_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -131,16 +134,8 @@ SizedBox logInButton(
     height: 40,
     child: TextButton(
         onPressed: () {
-          try {
-            FirebaseAuth.instance
-                .signInWithEmailAndPassword(email: username, password: password)
-                .then((value) {
-              Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (context) => HomePage()));
-            });
-          } on FirebaseException catch (e) {
-            print(e);
-          }
+          LoginController(username, password);
+          MyNavigator(context).NavigateToHome();
         },
         style: ButtonStyle(
             shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -161,19 +156,9 @@ SizedBox regButton(
     height: 40,
     child: TextButton(
         onPressed: () {
-          try {
-            FirebaseAuth.instance
-                .createUserWithEmailAndPassword(
-                    email: username, password: password)
-                .then((value) {
-              Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (context) => HomePage()));
-            }).onError((error, stackTrace) {
-              print("Error ${error.toString()}");
-            });
-          } on FirebaseException catch (e) {
-            print(e);
-          }
+          RegistrationController(text, username, password, "beginner");
+          //create new user profile
+          MyNavigator(context).NavigateToHome();
         },
         style: ButtonStyle(
             shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -192,8 +177,7 @@ SizedBox signUpButton(BuildContext context) {
   return SizedBox(
     child: TextButton(
       onPressed: () {
-        Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => RegPage()));
+        MyNavigator(context).NavigateToRegistration();
       },
       child: const Text(
         "Not a member? Sign up!",
