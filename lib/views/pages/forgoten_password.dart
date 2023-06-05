@@ -1,23 +1,18 @@
 import 'package:flutter/material.dart';
-import 'home_page.dart';
-import 'package:bach_thes/components/reusable_widgets.dart';
+import 'package:flutter/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'login.dart';
+import 'package:bach_thes/views/widgets/reusable_widgets.dart';
 
-//TODO:add authentication on email and password and pop up warnings if the password is too short
-//TODO: add a "which hiking level are you"
-//TODO: store the name and level in association with the profile
-
-class RegPage extends StatefulWidget {
-  const RegPage({super.key});
+class ResetPassworPage extends StatefulWidget {
+  const ResetPassworPage({super.key});
 
   @override
-  State<RegPage> createState() => _RegPageState();
+  State<ResetPassworPage> createState() => _ResetPassworPageState();
 }
 
-class _RegPageState extends State<RegPage> {
-  TextEditingController newNameController = TextEditingController();
-  TextEditingController newEmailController = TextEditingController();
-  TextEditingController newPasswordController = TextEditingController();
+class _ResetPassworPageState extends State<ResetPassworPage> {
+  TextEditingController resetPasswordEmailController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -47,29 +42,35 @@ class _RegPageState extends State<RegPage> {
               Padding(
                   padding: EdgeInsets.fromLTRB(25, 25, 25, 30),
                   child: Text(
-                    "Join our community",
+                    "Reset password",
                     style: TextStyle(
                         color: Colors.white.withOpacity(0.8),
                         fontWeight: FontWeight.bold,
                         fontSize: 25),
                   )),
-              reusableTextField(
-                  "Your name", newNameController, false, Icons.person_outline),
+              reusableTextField("Your email", resetPasswordEmailController,
+                  false, Icons.email_outlined),
               const SizedBox(height: 20),
-              reusableTextField("Your email", newEmailController, false,
-                  Icons.email_outlined),
-              const SizedBox(height: 20),
-              reusableTextField("Your password", newPasswordController, true,
-                  Icons.lock_outline),
-              const SizedBox(
-                height: 20,
-              ),
-              regButton(context, "Join", newEmailController.text,
-                  newPasswordController.text)
+              GestureDetector(
+                  onTap: () {
+                    resendPassword(resetPasswordEmailController.text);
+                    Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => LoginPage()));
+                  },
+                  child: Text("Send email with the reset link",
+                      style: TextStyle(color: Colors.white)))
             ]),
           )),
         ),
       ),
     );
+  }
+}
+
+Future resendPassword(String email) async {
+  try {
+    await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+  } on FirebaseException catch (e) {
+    print(e);
   }
 }

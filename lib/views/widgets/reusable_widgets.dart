@@ -1,6 +1,6 @@
 import 'dart:math';
-import 'package:bach_thes/pages/home_page.dart';
-import 'package:bach_thes/pages/reg_page.dart';
+import 'package:bach_thes/views/pages/home_page.dart';
+import 'package:bach_thes/views/pages/reg_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -14,13 +14,90 @@ Image logoWidget(String imageUrl) {
   );
 }
 
+Align reusableTextFieldEmail(String hinttext, TextEditingController controller,
+    bool isPassword, IconData icon) {
+  return Align(
+      alignment: Alignment.center,
+      child: TextFormField(
+        keyboardType: TextInputType.emailAddress,
+        style: TextStyle(
+          color: Colors.white,
+        ),
+        controller: controller,
+        obscureText: isPassword,
+        decoration: InputDecoration(
+          prefixIcon: Icon(
+            icon,
+            color: Colors.white,
+          ),
+          labelText: hinttext,
+          filled: true,
+          floatingLabelBehavior: FloatingLabelBehavior.never,
+          fillColor: Colors.white.withOpacity(0.3),
+          labelStyle: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.w400,
+          ),
+          border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(20.0),
+              borderSide: BorderSide(width: 0, style: BorderStyle.none)),
+        ),
+      ));
+}
+
+Align reusableTextFieldPassword(String hinttext,
+    TextEditingController controller, bool isPassword, IconData icon) {
+  return Align(
+      alignment: Alignment.center,
+      child: TextFormField(
+        validator: (value) {
+          if (value == null ||
+              value.isEmpty ||
+              !value.contains('@') ||
+              !value.contains('.')) {
+            return 'Invalid Email';
+          }
+          return null;
+        },
+        style: TextStyle(
+          color: Colors.white,
+        ),
+        controller: controller,
+        obscureText: isPassword,
+        decoration: InputDecoration(
+          prefixIcon: Icon(
+            icon,
+            color: Colors.white,
+          ),
+          labelText: hinttext,
+          filled: true,
+          floatingLabelBehavior: FloatingLabelBehavior.never,
+          fillColor: Colors.white.withOpacity(0.3),
+          labelStyle: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.w400,
+          ),
+          border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(20.0),
+              borderSide: BorderSide(width: 0, style: BorderStyle.none)),
+        ),
+      ));
+}
+
 Align reusableTextField(String hinttext, TextEditingController controller,
     bool isPassword, IconData icon) {
   return Align(
       alignment: Alignment.center,
-      child: TextField(
-        textAlign: TextAlign.center,
-        textAlignVertical: TextAlignVertical.center,
+      child: TextFormField(
+        validator: (value) {
+          if (value == null ||
+              value.isEmpty ||
+              !value.contains('@') ||
+              !value.contains('.')) {
+            return 'Invalid Email';
+          }
+          return null;
+        },
         style: TextStyle(
           color: Colors.white,
         ),
