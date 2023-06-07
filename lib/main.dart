@@ -1,3 +1,4 @@
+import 'package:bach_thes/views/pages/list_of_peaks.dart';
 import 'package:bach_thes/views/pages/registration_page.dart';
 import 'package:flutter/material.dart';
 //import 'models/peak.dart';

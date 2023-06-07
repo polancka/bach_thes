@@ -1,3 +1,5 @@
+import 'package:bach_thes/controllers/registration_controller.dart';
+import 'package:bach_thes/models/registration_model.dart';
 import 'package:flutter/material.dart';
 import 'home_page.dart';
 import 'package:bach_thes/views/widgets/reusable_widgets.dart';
@@ -8,6 +10,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 //TODO: store the name and level in association with the profile
 
 class RegistrationPage extends StatefulWidget {
+  //final RegistrationController controller;
+  //final RegistrationModel model;
   const RegistrationPage({super.key});
 
   @override
@@ -56,11 +60,11 @@ class _RegistrationPageState extends State<RegistrationPage> {
               reusableTextField(
                   "Your name", newNameController, false, Icons.person_outline),
               const SizedBox(height: 20),
-              reusableTextFieldEmail("Your email", newEmailController, false,
+              reusableTextField("Your email", newEmailController, false,
                   Icons.email_outlined),
               const SizedBox(height: 20),
-              reusableTextFieldEmail("Your password", newPasswordController,
-                  true, Icons.lock_outline),
+              reusableTextField("Your password", newPasswordController, true,
+                  Icons.lock_outline),
               const SizedBox(
                 height: 20,
               ),

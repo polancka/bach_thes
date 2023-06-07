@@ -1,3 +1,4 @@
+import 'package:bach_thes/models/registration_model.dart';
 import 'package:flutter/material.dart';
 import 'package:bach_thes/views/pages/forgoten_password_page.dart';
 import 'package:bach_thes/views/pages/home_page.dart';

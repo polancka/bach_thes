@@ -217,3 +217,91 @@ Another way of navigating pages
                       context, MaterialPageRoute(builder: (_) => HomePage()));
                 });
               }
+
+_____________________________________________________________________________________
+Personalized text fields 
+
+Align reusableTextFieldEmail(String hinttext, TextEditingController controller,
+    bool isPassword, IconData icon) {
+  return Align(
+      alignment: Alignment.center,
+      child: TextFormField(
+        keyboardType: TextInputType.emailAddress,
+        style: TextStyle(
+          color: Colors.white,
+        ),
+        controller: controller,
+        obscureText: isPassword,
+        decoration: InputDecoration(
+          prefixIcon: Icon(
+            icon,
+            color: Colors.white,
+          ),
+          labelText: hinttext,
+          filled: true,
+          floatingLabelBehavior: FloatingLabelBehavior.never,
+          fillColor: Colors.white.withOpacity(0.3),
+          labelStyle: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.w400,
+          ),
+          border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(20.0),
+              borderSide: BorderSide(width: 0, style: BorderStyle.none)),
+        ),
+      ));
+}
+
+Align reusableTextFieldPassword(String hinttext,
+    TextEditingController controller, bool isPassword, IconData icon) {
+  return Align(
+      alignment: Alignment.center,
+      child: TextFormField(
+        validator: (value) {
+          if (value == null ||
+              value.isEmpty ||
+              !value.contains('@') ||
+              !value.contains('.')) {
+            return 'Invalid Email';
+          }
+          return null;
+        },
+        style: TextStyle(
+          color: Colors.white,
+        ),
+        controller: controller,
+        obscureText: isPassword,
+        decoration: InputDecoration(
+          prefixIcon: Icon(
+            icon,
+            color: Colors.white,
+          ),
+          labelText: hinttext,
+          filled: true,
+          floatingLabelBehavior: FloatingLabelBehavior.never,
+          fillColor: Colors.white.withOpacity(0.3),
+          labelStyle: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.w400,
+          ),
+          border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(20.0),
+              borderSide: BorderSide(width: 0, style: BorderStyle.none)),
+        ),
+      ));
+}
+------------------------------------------------
+registration as statefull widgetsclass RegistrationPage extends StatefulWidget {
+  final RegistrationController controller;
+  final RegistrationModel model;
+  const RegistrationPage(
+      {super.key, required this.controller, required this.model});
+
+  @override
+  State<RegistrationPage> createState() => _RegistrationPageState();
+}
+
+class _RegistrationPageState extends State<RegistrationPage> {
+  TextEditingController newNameController = TextEditingController();
+  TextEditingController newEmailController = TextEditingController();
+  TextEditingController newPasswordController = TextEditingController();

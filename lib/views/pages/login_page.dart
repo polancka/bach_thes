@@ -1,3 +1,4 @@
+import 'package:bach_thes/controllers/login_controller.dart';
 import 'package:bach_thes/controllers/navigation_controller.dart';
 import 'package:bach_thes/views/pages/forgoten_password_page.dart';
 import 'package:flutter/material.dart';
@@ -17,8 +18,6 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final formfield = GlobalKey<FormState>();
-  bool passToogle = true;
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
@@ -41,16 +40,15 @@ class _LoginPageState extends State<LoginPage> {
           padding: EdgeInsets.fromLTRB(
               20, MediaQuery.of(context).size.height * 0.1, 20, 0),
           child: Form(
-            key: formfield,
             child: Column(children: <Widget>[
               logoWidget("lib/utils/images/gore.png"),
               const SizedBox(height: 30),
-              reusableTextFieldEmail(
+              reusableTextField(
                   "Email", _emailController, false, Icons.person_outline),
               const SizedBox(height: 20),
-              reusableTextFieldPassword(
+              reusableTextField(
                   "Password", _passwordController, true, Icons.lock_outline),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               //forgot password?
               GestureDetector(
                 onTap: () {
@@ -67,7 +65,8 @@ class _LoginPageState extends State<LoginPage> {
                     ]),
               ),
               SizedBox(height: 20),
-              logInButton(context, "Log in!", _emailController.text,
+
+              logInButton(context, "Log in", _emailController.text,
                   _passwordController.text),
               signUpButton(context),
               SizedBox(height: 20),

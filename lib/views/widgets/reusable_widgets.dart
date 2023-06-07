@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:bach_thes/controllers/login_controller.dart';
 import 'package:bach_thes/controllers/navigation_controller.dart';
 import 'package:bach_thes/controllers/registration_controller.dart';
+import 'package:bach_thes/models/registration_model.dart';
 import 'package:bach_thes/views/pages/home_page.dart';
 import 'package:bach_thes/views/pages/registration_page.dart';
 import 'package:flutter/material.dart';
@@ -15,76 +16,6 @@ Image logoWidget(String imageUrl) {
     height: 240,
     color: Colors.white,
   );
-}
-
-Align reusableTextFieldEmail(String hinttext, TextEditingController controller,
-    bool isPassword, IconData icon) {
-  return Align(
-      alignment: Alignment.center,
-      child: TextFormField(
-        keyboardType: TextInputType.emailAddress,
-        style: TextStyle(
-          color: Colors.white,
-        ),
-        controller: controller,
-        obscureText: isPassword,
-        decoration: InputDecoration(
-          prefixIcon: Icon(
-            icon,
-            color: Colors.white,
-          ),
-          labelText: hinttext,
-          filled: true,
-          floatingLabelBehavior: FloatingLabelBehavior.never,
-          fillColor: Colors.white.withOpacity(0.3),
-          labelStyle: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.w400,
-          ),
-          border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(20.0),
-              borderSide: BorderSide(width: 0, style: BorderStyle.none)),
-        ),
-      ));
-}
-
-Align reusableTextFieldPassword(String hinttext,
-    TextEditingController controller, bool isPassword, IconData icon) {
-  return Align(
-      alignment: Alignment.center,
-      child: TextFormField(
-        validator: (value) {
-          if (value == null ||
-              value.isEmpty ||
-              !value.contains('@') ||
-              !value.contains('.')) {
-            return 'Invalid Email';
-          }
-          return null;
-        },
-        style: TextStyle(
-          color: Colors.white,
-        ),
-        controller: controller,
-        obscureText: isPassword,
-        decoration: InputDecoration(
-          prefixIcon: Icon(
-            icon,
-            color: Colors.white,
-          ),
-          labelText: hinttext,
-          filled: true,
-          floatingLabelBehavior: FloatingLabelBehavior.never,
-          fillColor: Colors.white.withOpacity(0.3),
-          labelStyle: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.w400,
-          ),
-          border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(20.0),
-              borderSide: BorderSide(width: 0, style: BorderStyle.none)),
-        ),
-      ));
 }
 
 Align reusableTextField(String hinttext, TextEditingController controller,
@@ -134,8 +65,7 @@ SizedBox logInButton(
     height: 40,
     child: TextButton(
         onPressed: () {
-          LoginController(username, password);
-          MyNavigator(context).NavigateToHome();
+          LoginController(username, password).logInUser(context);
         },
         style: ButtonStyle(
             shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -148,7 +78,7 @@ SizedBox logInButton(
   );
 }
 
-//Register button
+//Register button - needs fixing concerning mvc structure
 SizedBox regButton(
     BuildContext context, String text, String username, String password) {
   return SizedBox(
@@ -156,9 +86,9 @@ SizedBox regButton(
     height: 40,
     child: TextButton(
         onPressed: () {
-          RegistrationController(text, username, password, "beginner");
+          RegistrationController(username, password).createNewUser(context);
           //create new user profile
-          MyNavigator(context).NavigateToHome();
+          //MyNavigator(context).NavigateToHome();
         },
         style: ButtonStyle(
             shape: MaterialStateProperty.all<RoundedRectangleBorder>(

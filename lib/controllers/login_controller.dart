@@ -1,5 +1,4 @@
 import 'package:bach_thes/controllers/navigation_controller.dart';
-import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginController {
@@ -8,7 +7,7 @@ class LoginController {
 
   LoginController(this._email, this._password);
 
-  Future<void> logInUser(BuildContext context) async {
+  Future<void> logInUser(context) async {
     try {
       FirebaseAuth.instance
           .signInWithEmailAndPassword(
