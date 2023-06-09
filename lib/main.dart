@@ -1,9 +1,7 @@
 import 'package:bach_thes/views/pages/list_of_peaks.dart';
 import 'package:bach_thes/views/pages/registration_page.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-//import 'models/peak.dart';
-//import 'mock_database/mock_peak.dart';
-//import 'package:bach_thes/peak_list';
 import 'package:bach_thes/views/pages/login_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -17,10 +15,14 @@ void main() async {
 
   //initializing Firebase
   try {
-    await Firebase.initializeApp();
+    await await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
   } on FirebaseException catch (e) {
     print(e);
   }
+
+  //var db = FirebaseFirestore.instance;
 
   return runApp(const MyApp());
 }
@@ -32,7 +34,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: LoginPage(),
+      home: SearchPeaks(),
     );
   }
 }

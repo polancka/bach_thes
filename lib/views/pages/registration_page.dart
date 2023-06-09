@@ -10,8 +10,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 //TODO: store the name and level in association with the profile
 
 class RegistrationPage extends StatefulWidget {
-  //final RegistrationController controller;
-  //final RegistrationModel model;
   const RegistrationPage({super.key});
 
   @override

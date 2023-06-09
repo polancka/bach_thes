@@ -78,7 +78,7 @@ SizedBox logInButton(
   );
 }
 
-//Register button - needs fixing concerning mvc structure
+//Register button
 SizedBox regButton(
     BuildContext context, String text, String username, String password) {
   return SizedBox(
@@ -88,7 +88,6 @@ SizedBox regButton(
         onPressed: () {
           RegistrationController(username, password).createNewUser(context);
           //create new user profile
-          //MyNavigator(context).NavigateToHome();
         },
         style: ButtonStyle(
             shape: MaterialStateProperty.all<RoundedRectangleBorder>(

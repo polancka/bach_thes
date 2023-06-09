@@ -2,8 +2,8 @@ import 'package:bach_thes/models/place.dart';
 
 class Path {
   final int id;
-  final Place startingPointId;
-  final Place finishPointId;
+  final int startingPointId;
+  final int finishPointId;
   final int startingPointAltitude;
   final int finishPointAltitude;
   final int alitmeters;
