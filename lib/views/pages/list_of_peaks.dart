@@ -21,16 +21,18 @@ class SearchPeaks extends StatelessWidget {
             style: TextStyle(color: Colors.white),
           ),
         ),
-        body: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Container(
-              child: ListView.separated(
-                  itemCount: MockPeak.FetchAll().length,
-                  itemBuilder: (context, index) =>
-                      buildListItem(context, MockPeak.FetchAll()[index]),
-                  separatorBuilder: (context, index) => const SizedBox(
-                        height: 10,
-                      ))),
+        body: StreamBuilder(
+          stream: db.collection('Peaks').snapshots(),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return const Text("Loading ...");
+            }
+            return ListView.builder(
+                itemExtent: 80.0, //add medaiQuery.width *0.2
+                itemCount: snapshot.data?.docs.length,
+                itemBuilder: (context, index) =>
+                    buildListItem(context, snapshot.data!.docs[index]));
+          },
         ));
   }
 }

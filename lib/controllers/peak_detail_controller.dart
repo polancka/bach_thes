@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:bach_thes/models/peak.dart';
 import 'package:bach_thes/models/path.dart';
@@ -8,23 +11,24 @@ import 'package:bach_thes/views/pages/path_detail.dart';
 //Provides a widget that shows all the information about the peak, including
 //all the paths leading up to it
 
-void navigateToPathDetail(BuildContext context, Path path) {
+/*void navigateToPathDetail(BuildContext context, Path path) {
   Navigator.push(
       //adds the page to the stack, MaterialPageRoute determines to which screen it goes
       context,
       MaterialPageRoute(builder: (context) => PathDetail(path as Path)));
 }
 
-List<Widget> renderPeakDetail(BuildContext context, Peak peak) {
+List<Widget> renderPeakDetail(BuildContext context, DocumentSnapshot document) {
   var result = List<Widget>.empty(growable: true);
-  result.add(bannerImage(peak.urlThumbnail, 170.0));
-  result.addAll(renderPeakPaths(context, peak));
+  result.add(bannerImage(document['urlThumbnail'], 170.0));
+  log(document['name'].toString());
+  //result.addAll(renderPeakPaths(context, document));
   return result;
-}
+}*/
 
-List<ListTile> renderPeakPaths(BuildContext context, Peak peak) {
+/*List<ListTile> renderPeakPaths(BuildContext context, DocumentSnapshot document) {
   var result = List<ListTile>.empty(growable: true);
-  for (int i = 0; i < peak.possiblePaths.length; i++) {
+  for (int i = 0; i < document['possiblePaths'].length; i++) {
     result.add(ListTile(
       leading: Icon(Icons.nordic_walking_outlined),
       title: Text(
@@ -41,7 +45,7 @@ List<ListTile> renderPeakPaths(BuildContext context, Peak peak) {
     result.add(sectionText(peak.possiblePaths[i].description));
   }*/
   return result;
-}
+}*/
 
 //just stylist stuff, migh be taken out later or put in the styles.dart
 
@@ -73,9 +77,10 @@ Widget bannerImage(String url, double height) {
       child: Image.network(url, fit: BoxFit.fitWidth));
 }
 
-List<Widget> renderBody(BuildContext context, Peak peak) {
+List<Widget> renderBody(BuildContext context, DocumentSnapshot document) {
   var result = List<Widget>.empty(growable: true);
-  result.add(bannerImage(peak.urlThumbnail, 170.0));
-  result.addAll(renderPeakPaths(context, peak));
+  result.add(bannerImage(document['urlThumbnail'], 170.0));
+  //result.add(document[])
+  //result.addAll(renderPeakPaths(context, document));
   return result;
 }
