@@ -6,6 +6,8 @@ import 'dart:developer';
 import 'package:bach_thes/globals.dart';
 import 'package:bach_thes/main.dart';
 
+//UI for landing page
+
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 

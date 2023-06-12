@@ -3,6 +3,9 @@ import 'package:bach_thes/models/peak.dart';
 import 'package:bach_thes/controllers/peak_detail_controller.dart';
 import 'dart:developer';
 
+//make prettier UI
+//UI for the detail page of a specific peak. List possible paths.
+
 class PeakDetail extends StatelessWidget {
   final Peak peak;
   PeakDetail(this.peak);

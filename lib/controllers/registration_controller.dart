@@ -1,6 +1,9 @@
 import 'package:bach_thes/controllers/navigation_controller.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'dart:developer';
+
+//Class that registers a new user - adds a new entry to the Firebase Authentication database
 
 class RegistrationController {
   String _email;
@@ -16,7 +19,7 @@ class RegistrationController {
         MyNavigator(context).NavigateToLogin();
       });
     } on FirebaseException catch (e) {
-      print(e);
+      log(e.toString());
     }
   }
 }

@@ -1,5 +1,11 @@
 import 'package:bach_thes/controllers/navigation_controller.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:developer';
+import 'package:flutter/material.dart';
+
+//Login controller checks if the data inputed in the login fields match the ones in Firebase Authentication base
+
+//TODO: add error message
 
 class LoginController {
   String _email;
@@ -16,7 +22,7 @@ class LoginController {
         MyNavigator(context).NavigateToHome();
       });
     } on FirebaseException catch (e) {
-      print(e);
+      log(e.toString());
     }
   }
 }

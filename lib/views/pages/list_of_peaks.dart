@@ -5,6 +5,8 @@ import 'package:bach_thes/models/mock_database/mock_peak.dart';
 import 'package:bach_thes/globals.dart';
 import 'package:bach_thes/controllers/list_of_peaks_controller.dart';
 
+//UI for the list of peaks shown during search (?) function
+
 class SearchPeaks extends StatelessWidget {
   const SearchPeaks({super.key});
 

@@ -28,7 +28,7 @@ Align reusableTextField(String hinttext, TextEditingController controller,
               value.isEmpty ||
               !value.contains('@') ||
               !value.contains('.')) {
-            return 'Invalid Email';
+            return 'Please enter a valid email';
           }
           return null;
         },

@@ -1,0 +1,1 @@
+//Controller for the landing page, provides navigation to all functionalities of the application

@@ -15,6 +15,8 @@ mixin MockPeak implements Peak {
         possiblePaths: [
           Path(
               id: 1,
+              startingPointName: "Aljažev dom v Vratih",
+              endPointName: "Triglav",
               startingPointId: 11,
               finishPointId: 1,
               startingPointAltitude: 100,
@@ -25,6 +27,8 @@ mixin MockPeak implements Peak {
               description: "Najbolj priljubljena pot za obisk Triglava"),
           Path(
               id: 2,
+              startingPointName: "Dolina krma",
+              endPointName: "Triglav",
               startingPointId: 12,
               finishPointId: 1,
               startingPointAltitude: 120,
@@ -49,6 +53,8 @@ mixin MockPeak implements Peak {
         possiblePaths: [
           Path(
               id: 1,
+              startingPointName: "Matizovec",
+              endPointName: "Kofce",
               startingPointId: 11,
               finishPointId: 2,
               startingPointAltitude: 100,
@@ -59,6 +65,8 @@ mixin MockPeak implements Peak {
               description: "Najbolj priljubljena pot za obisk Kofc"),
           Path(
               id: 2,
+              startingPointName: "Mrzli studenec",
+              endPointName: "Kofce",
               startingPointId: 12,
               finishPointId: 2,
               startingPointAltitude: 120,
@@ -83,6 +91,8 @@ mixin MockPeak implements Peak {
         possiblePaths: [
           Path(
               id: 1,
+              startingPointName: "Koča pri Savici",
+              endPointName: "Dom na Komni",
               startingPointId: 11,
               finishPointId: 3,
               startingPointAltitude: 100,
@@ -93,6 +103,8 @@ mixin MockPeak implements Peak {
               description: "Najbolj priljubljena pot za obisk Komne"),
           Path(
               id: 2,
+              startingPointName: "Dolina Blato",
+              endPointName: "Dom na Komni",
               startingPointId: 12,
               finishPointId: 3,
               startingPointAltitude: 120,

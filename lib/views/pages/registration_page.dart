@@ -9,6 +9,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 //TODO: add a "which hiking level are you"
 //TODO: store the name and level in association with the profile
 
+//UI for registration page
+
 class RegistrationPage extends StatefulWidget {
   const RegistrationPage({super.key});
 

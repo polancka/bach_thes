@@ -10,6 +10,8 @@ import 'package:bach_thes/views/widgets/reusable_widgets.dart';
 //TODO: add dis(apearing) text if the user is not registered yet
 //TODO: close the keyboard on its own
 
+//UI for the login page, forgotten password and switching to registration
+
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 

@@ -7,6 +7,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:bach_thes/views/pages/home_page.dart';
 import 'package:bach_thes/views/widgets/reusable_widgets.dart';
 
+//UI for the forgotten password page
+
 class ForgotenPasswordPage extends StatefulWidget {
   const ForgotenPasswordPage({super.key});
 
