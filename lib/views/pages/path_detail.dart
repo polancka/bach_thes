@@ -1,9 +1,5 @@
 //make UI for page that shows information about a specific path
 
-//gather information from Firestore
-
-//add information to Firestore (not via app)
-
 //implement search function - search bar, look for solutions
 
 //implement drawer

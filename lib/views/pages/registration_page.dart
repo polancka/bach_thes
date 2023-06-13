@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'home_page.dart';
 import 'package:bach_thes/views/widgets/reusable_widgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:bach_thes/utils/styles.dart';
 
 //TODO:add authentication on email and password and pop up warnings if the password is too short
 //TODO: add a "which hiking level are you"
@@ -29,7 +30,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
       child: Scaffold(
         extendBodyBehindAppBar: true,
         appBar: AppBar(
-          iconTheme: IconThemeData(color: Colors.pinkAccent),
+          iconTheme: IconThemeData(color: Styles.deepgreen),
           backgroundColor: Colors.transparent,
           elevation: 0,
         ),
@@ -37,9 +38,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
         body: Container(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             gradient: LinearGradient(
-                colors: [Colors.purple, Colors.pinkAccent, Colors.white],
+                colors: [Styles.deepgreen, Styles.lightgreen, Styles.offwhite],
                 begin: Alignment.bottomRight,
                 end: Alignment.topLeft),
           ),

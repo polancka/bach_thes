@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:bach_thes/views/pages/home_page.dart';
 import 'package:bach_thes/views/widgets/reusable_widgets.dart';
+import 'package:bach_thes/utils/styles.dart';
 
 //UI for the forgotten password page
 
@@ -25,7 +26,7 @@ class _ForgotenPasswordPageState extends State<ForgotenPasswordPage> {
       child: Scaffold(
         extendBodyBehindAppBar: true,
         appBar: AppBar(
-          iconTheme: IconThemeData(color: Colors.pinkAccent),
+          iconTheme: IconThemeData(color: Styles.deepgreen),
           backgroundColor: Colors.transparent,
           elevation: 0,
         ),
@@ -33,9 +34,9 @@ class _ForgotenPasswordPageState extends State<ForgotenPasswordPage> {
         body: Container(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             gradient: LinearGradient(
-                colors: [Colors.purple, Colors.pinkAccent, Colors.white],
+                colors: [Styles.deepgreen, Styles.lightgreen, Styles.offwhite],
                 begin: Alignment.bottomRight,
                 end: Alignment.topLeft),
           ),

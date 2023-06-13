@@ -11,20 +11,12 @@ import 'package:bach_thes/views/pages/path_detail.dart';
 //Provides a widget that shows all the information about the peak, including
 //all the paths leading up to it
 
-/*void navigateToPathDetail(BuildContext context, Path path) {
+void navigateToPathDetail(BuildContext context, Path path) {
   Navigator.push(
       //adds the page to the stack, MaterialPageRoute determines to which screen it goes
       context,
       MaterialPageRoute(builder: (context) => PathDetail(path as Path)));
 }
-
-List<Widget> renderPeakDetail(BuildContext context, DocumentSnapshot document) {
-  var result = List<Widget>.empty(growable: true);
-  result.add(bannerImage(document['urlThumbnail'], 170.0));
-  log(document['name'].toString());
-  //result.addAll(renderPeakPaths(context, document));
-  return result;
-}*/
 
 /*List<ListTile> renderPeakPaths(BuildContext context, DocumentSnapshot document) {
   var result = List<ListTile>.empty(growable: true);
@@ -35,15 +27,19 @@ List<Widget> renderPeakDetail(BuildContext context, DocumentSnapshot document) {
           "${peak.possiblePaths[i].startingPointName},  ${peak.possiblePaths[i].duration}"),
       subtitle: Text(peak.altitude.toString()),
       trailing: Icon(Icons.keyboard_double_arrow_right_outlined),
-      onTap: () => navigateToPathDetail(context, peak.possiblePaths[i]),
+      onTap: () => navigateToPathDetail(context, document.possiblePaths[i]),
     ));
   }
-  /*final result = <Widget>[];
+
+  final result = <Widget>[];
+
+
   for (int i = 0; i < peak.possiblePaths.length; i++) {
     result.add(sectionTitle(
         "From starting point no. ${peak.possiblePaths[i].startingPointId}"));
     result.add(sectionText(peak.possiblePaths[i].description));
-  }*/
+  }
+
   return result;
 }*/
 
@@ -54,19 +50,26 @@ Widget sectionTitle(String text) {
       padding: EdgeInsets.fromLTRB(25.0, 25.0, 25.0, 10.0),
       child: Text(
         text,
-        textAlign: TextAlign.left,
-        style: Styles.headerLarge,
+        textAlign: TextAlign.center,
+        style: TextStyle(
+            color: Styles.deepgreen, fontSize: 25, fontWeight: FontWeight.bold),
       ));
 }
 
 Widget sectionText(String text) {
   return Container(
       padding: EdgeInsets.fromLTRB(25.0, 25.0, 25.0, 10.0),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+      ),
       child: Text(
         text,
-        textAlign: TextAlign.left,
+        textAlign: TextAlign.start,
         style: TextStyle(
-          color: Colors.black,
+          color: Styles.deepgreen,
+          fontWeight: FontWeight.normal,
+          fontSize: 14,
         ),
       ));
 }
@@ -79,8 +82,10 @@ Widget bannerImage(String url, double height) {
 
 List<Widget> renderBody(BuildContext context, DocumentSnapshot document) {
   var result = List<Widget>.empty(growable: true);
-  result.add(bannerImage(document['urlThumbnail'], 170.0));
-  //result.add(document[])
+  result.add(bannerImage(document['urlThumbnail'], 200.0));
+  result.add(sectionTitle("${document['name']} - ${document['altitude']}m "));
+  result.add(sectionText("${document['description']}"));
+
   //result.addAll(renderPeakPaths(context, document));
   return result;
 }

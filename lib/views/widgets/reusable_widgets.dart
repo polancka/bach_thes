@@ -7,6 +7,7 @@ import 'package:bach_thes/views/pages/home_page.dart';
 import 'package:bach_thes/views/pages/registration_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:bach_thes/utils/styles.dart';
 
 Image logoWidget(String imageUrl) {
   return Image.asset(
@@ -74,7 +75,7 @@ SizedBox logInButton(
             backgroundColor: MaterialStateProperty.resolveWith((states) {
               return Colors.white;
             })),
-        child: Text(text, style: TextStyle(color: Colors.pinkAccent))),
+        child: Text(text, style: TextStyle(color: Styles.deepgreen))),
   );
 }
 
@@ -96,8 +97,7 @@ SizedBox regButton(
             backgroundColor: MaterialStateProperty.resolveWith((states) {
               return Colors.white;
             })),
-        child: const Text("Register now",
-            style: TextStyle(color: Colors.pinkAccent))),
+        child: Text("Register now", style: TextStyle(color: Styles.deepgreen))),
   );
 }
 
@@ -113,5 +113,18 @@ SizedBox signUpButton(BuildContext context) {
         style: TextStyle(color: Colors.white),
       ),
     ),
+  );
+}
+
+Container landingPageTile(BuildContext context, String text) {
+  return Container(
+    width: MediaQuery.of(context).size.width * 0.30,
+    height: MediaQuery.of(context).size.height * 0.3,
+    child: DecoratedBox(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: Styles.offwhite,
+        ),
+        child: Text(text, style: TextStyle(color: Styles.deepgreen))),
   );
 }

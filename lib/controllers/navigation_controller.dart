@@ -1,4 +1,5 @@
 import 'package:bach_thes/models/registration_model.dart';
+import 'package:bach_thes/views/pages/list_of_peaks.dart';
 import 'package:bach_thes/views/pages/path_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:bach_thes/views/pages/forgoten_password_page.dart';
@@ -16,6 +17,11 @@ class MyNavigator {
   NavigateToLogin() {
     Navigator.of(context)
         .push(MaterialPageRoute(builder: (context) => LoginPage()));
+  }
+
+  NavigateToSearchPeaks() {
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => SearchPeaks()));
   }
 
   NavigateToHome() {

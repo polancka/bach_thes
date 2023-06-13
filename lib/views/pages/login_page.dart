@@ -4,6 +4,7 @@ import 'package:bach_thes/views/pages/forgoten_password_page.dart';
 import 'package:flutter/material.dart';
 import 'package:bach_thes/views/pages/home_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:bach_thes/utils/styles.dart';
 import 'package:bach_thes/views/widgets/reusable_widgets.dart';
 
 //TODO: add (dis)appering text if the username or password is not correct
@@ -31,9 +32,9 @@ class _LoginPageState extends State<LoginPage> {
       body: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           gradient: LinearGradient(
-              colors: [Colors.purple, Colors.pinkAccent, Colors.white],
+              colors: [Styles.deepgreen, Styles.lightgreen, Styles.offwhite],
               begin: Alignment.bottomRight,
               end: Alignment.topLeft),
         ),

@@ -24,4 +24,8 @@ class Styles {
     color: _textColorDefault,
     fontSize: _textSizeDefault,
   );
+
+  static final lightgreen = Color(0xff7FB685);
+  static final deepgreen = Color(0xff426A5A);
+  static final offwhite = Color(0xffE3DBDB);
 }
