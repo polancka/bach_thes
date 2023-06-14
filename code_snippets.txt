@@ -391,4 +391,21 @@ class SearchPeaks extends StatelessWidget {
         ));
   }
 }
+------------------------------
+delujoč streambuilder za prikaz peaksov 
+child: StreamBuilder(
+                    stream: db.collection('Peaks').snapshots(),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData) {
+                        return const Text("Loading ...");
+                      }
+
+                      //log(snapshot.data!.docs[1].//get('altitude').toString());
+                      return ListView.separated(
+                          separatorBuilder: ((context, index) =>
+                              const SizedBox(height: 10)),
+                          itemCount: snapshot.data!.docs.length,
+                          itemBuilder: (context, index) => buildListItem(
+                              context, snapshot.data!.docs[index]));
+                    },
 

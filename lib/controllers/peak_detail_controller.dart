@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -80,11 +81,68 @@ Widget bannerImage(String url, double height) {
       child: Image.network(url, fit: BoxFit.fitWidth));
 }
 
+List<Widget> renderPaths(BuildContext context, DocumentSnapshot document) {
+  final arrayOfPaths = document['Paths'];
+  //returns the values as [{startingPointName: Ljubljana, description: Opis poti, ...}, {...,...,...}]
+  //var firstPath = arrayOfPaths[0].toString();
+  //var secondPath = arrayOfPaths[1].toString();
+
+  //Map<String, dynamic> jsonPath = jsonDecode(firstPath);
+  //Map<String, dynamic> jsonPathTwo = jsonDecode(secondPath);
+
+  //
+  var result = <Widget>[];
+
+  for (int i = 0; i < document['Paths'].length; i++) {
+    var firstPath = arrayOfPaths[i].toString();
+    Map<String, dynamic> jsonPath = jsonDecode(firstPath);
+
+    //TODO: make a new Path for every path, this path is then sent
+    Path path = Path(
+        id: jsonPath['id'],
+        startingPointName: jsonPath['StartingPointName'],
+        alitmeters: jsonPath['altimeters'],
+        difficulty: jsonPath['difficulty'],
+        duration: jsonPath['duration'],
+        description: jsonPath['description']);
+    result.add(ListTile(
+        leading: Icon(Icons.nordic_walking_outlined),
+        title: Text("${jsonPath['StartingPointName']}"),
+        subtitle: Text("Chose this path"),
+        trailing: Icon(Icons.keyboard_double_arrow_right_outlined),
+        onTap: () => navigateToPathDetail(context, path)));
+  }
+
+  return result;
+
+  /*return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Padding(
+          padding: EdgeInsets.all(20),
+          child: Column(
+            children: [
+              Text("${arrayOfPaths[0]}"),
+              SizedBox(height: 10),
+              Text("${arrayOfPaths[1]}"),
+            ],
+          )));*/
+}
+
 List<Widget> renderBody(BuildContext context, DocumentSnapshot document) {
   var result = List<Widget>.empty(growable: true);
   result.add(bannerImage(document['urlThumbnail'], 200.0));
   result.add(sectionTitle("${document['name']} - ${document['altitude']}m "));
   result.add(sectionText("${document['description']}"));
+  result.add(SizedBox(
+    height: 15,
+  ));
+
+  //TODO: add check if the peak has paths, if not, return a text saying there are no paths
+  //if there are paths, display them with renderPaths method
+  result.addAll(renderPaths(context, document));
 
   //result.addAll(renderPeakPaths(context, document));
   return result;

@@ -21,6 +21,7 @@ class PeakDetail extends StatelessWidget {
           backgroundColor: Colors.transparent,
         ),
         body: Container(
+            height: MediaQuery.of(context).size.height,
             decoration: BoxDecoration(
               gradient: LinearGradient(colors: [
                 Styles.deepgreen,

@@ -1,7 +1,7 @@
 import 'package:bach_thes/models/path.dart';
 import 'package:bach_thes/models/peak.dart';
 
-mixin MockPeak implements Peak {
+/*mixin MockPeak implements Peak {
   static final List<Peak> peaks = [
     Peak(
         //latitude: "1.1.1",
@@ -126,4 +126,4 @@ mixin MockPeak implements Peak {
   static Peak FetchOne(int index) {
     return MockPeak.peaks[index];
   }
-}
+}*/
