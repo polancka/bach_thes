@@ -40,7 +40,25 @@ class _SearchPeaksState extends State<SearchPeaks> {
   }
 
   _onSearchChanged() {
-    print(_searchController.text);
+    searcResultsList();
+  }
+
+  searcResultsList() {
+    var showResults = [];
+    if (_searchController.text != "") {
+      //we have a search parameter
+      for (var peakSnapshot in _allPeaks) {
+        var name = peakSnapshot['name'].toString().toLowerCase();
+        if (name.contains(_searchController.text.toLowerCase())) {
+          showResults.add(peakSnapshot);
+        }
+      }
+    } else {
+      showResults = List.from(_allPeaks);
+    }
+    setState(() {
+      _resultsList = showResults;
+    });
   }
 
   @override
@@ -56,6 +74,7 @@ class _SearchPeaksState extends State<SearchPeaks> {
     setState(() {
       _allPeaks = data.docs;
     });
+    searcResultsList();
     return "complete";
   }
 
@@ -86,9 +105,9 @@ class _SearchPeaksState extends State<SearchPeaks> {
                     ], begin: Alignment.bottomRight, end: Alignment.topLeft),
                   ),
                   child: ListView.builder(
-                    itemCount: _allPeaks.length,
+                    itemCount: _resultsList.length,
                     itemBuilder: (BuildContext context, int index) =>
-                        buildListItem(context, _allPeaks[index]),
+                        buildListItem(context, _resultsList[index]),
                   )))
         ]));
   }

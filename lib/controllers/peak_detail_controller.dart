@@ -83,14 +83,7 @@ Widget bannerImage(String url, double height) {
 
 List<Widget> renderPaths(BuildContext context, DocumentSnapshot document) {
   final arrayOfPaths = document['Paths'];
-  //returns the values as [{startingPointName: Ljubljana, description: Opis poti, ...}, {...,...,...}]
-  //var firstPath = arrayOfPaths[0].toString();
-  //var secondPath = arrayOfPaths[1].toString();
 
-  //Map<String, dynamic> jsonPath = jsonDecode(firstPath);
-  //Map<String, dynamic> jsonPathTwo = jsonDecode(secondPath);
-
-  //
   var result = <Widget>[];
 
   for (int i = 0; i < document['Paths'].length; i++) {
@@ -133,7 +126,7 @@ List<Widget> renderPaths(BuildContext context, DocumentSnapshot document) {
 
 List<Widget> renderBody(BuildContext context, DocumentSnapshot document) {
   var result = List<Widget>.empty(growable: true);
-  result.add(bannerImage(document['urlThumbnail'], 200.0));
+  result.add(bannerImage(document['urlThumbnail'], 200));
   result.add(sectionTitle("${document['name']} - ${document['altitude']}m "));
   result.add(sectionText("${document['description']}"));
   result.add(SizedBox(
