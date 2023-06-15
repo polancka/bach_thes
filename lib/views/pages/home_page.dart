@@ -1,4 +1,8 @@
 import 'package:bach_thes/controllers/navigation_controller.dart';
+import 'package:bach_thes/models/hiker.dart';
+import 'package:bach_thes/views/pages/list_of_peaks.dart';
+import 'package:bach_thes/views/pages/map_page.dart';
+import 'package:bach_thes/views/pages/profile_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
@@ -18,6 +22,8 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final w = MediaQuery.of(context).size.width;
     final h = MediaQuery.of(context).size.height;
+
+    List pages = [MapPage(), SearchPeaks(), ProfilePage()];
 
     return SafeArea(
       child: Scaffold(
@@ -42,7 +48,7 @@ class HomePage extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text("Welcome",
+                          Text("Welcome hiker!",
                               style: TextStyle(
                                   color: Styles.deepgreen,
                                   fontWeight: FontWeight.bold,

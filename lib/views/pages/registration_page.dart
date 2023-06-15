@@ -70,7 +70,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                 height: 20,
               ),
               regButton(context, "Join", newEmailController.text,
-                  newPasswordController.text)
+                  newPasswordController.text, newNameController.text)
             ]),
           )),
         ),

@@ -80,15 +80,15 @@ SizedBox logInButton(
 }
 
 //Register button
-SizedBox regButton(
-    BuildContext context, String text, String username, String password) {
+SizedBox regButton(BuildContext context, String text, String email,
+    String password, String username) {
   return SizedBox(
     width: MediaQuery.of(context).size.width,
     height: 40,
     child: TextButton(
         onPressed: () {
-          RegistrationController(username, password).createNewUser(context);
-          //create new user profile
+          RegistrationController(email, password, username)
+              .createNewUser(context);
         },
         style: ButtonStyle(
             shape: MaterialStateProperty.all<RoundedRectangleBorder>(

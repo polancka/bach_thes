@@ -23,8 +23,6 @@ class Peak {
 
   var db = FirebaseFirestore.instance;
 
-  addNewPeak() {}
-
   Future<String> fetchPeaks() async {
     await db.collection("peaks").get().then((event) {
       for (var doc in event.docs) {

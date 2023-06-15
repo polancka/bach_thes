@@ -99,6 +99,10 @@ List<Widget> renderPaths(BuildContext context, DocumentSnapshot document) {
         duration: jsonPath['duration'],
         description: jsonPath['description']);
     result.add(ListTile(
+        //shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        //selectedTileColor: Colors.white,
+        tileColor: Colors.black,
+        dense: true,
         leading: Icon(Icons.nordic_walking_outlined),
         title: Text("${jsonPath['StartingPointName']}"),
         subtitle: Text("Chose this path"),
@@ -127,7 +131,13 @@ List<Widget> renderPaths(BuildContext context, DocumentSnapshot document) {
 List<Widget> renderBody(BuildContext context, DocumentSnapshot document) {
   var result = List<Widget>.empty(growable: true);
   result.add(bannerImage(document['urlThumbnail'], 200));
-  result.add(sectionTitle("${document['name']} - ${document['altitude']}m "));
+  result.add(sectionTitle("${document['name']}"));
+  result.add(Text(
+    "${document['altitude']}",
+  ));
+  result.add(SizedBox(
+    height: 15,
+  ));
   result.add(sectionText("${document['description']}"));
   result.add(SizedBox(
     height: 15,
@@ -135,7 +145,11 @@ List<Widget> renderBody(BuildContext context, DocumentSnapshot document) {
 
   //TODO: add check if the peak has paths, if not, return a text saying there are no paths
   //if there are paths, display them with renderPaths method
-  result.addAll(renderPaths(context, document));
+  /*try {
+    result.addAll(renderPaths(context, document));
+  } on FirebaseFirestore catch (e) {
+    print(e);
+  }*/
 
   //result.addAll(renderPeakPaths(context, document));
   return result;
