@@ -6,9 +6,6 @@ import 'package:bach_thes/controllers/peak_detail_controller.dart';
 import 'dart:developer';
 import 'package:bach_thes/utils/styles.dart';
 
-//make prettier UI
-//UI for the detail page of a specific peak. List possible paths.
-
 class PeakDetail extends StatefulWidget {
   final DocumentSnapshot document;
   PeakDetail(this.document);
@@ -31,13 +28,11 @@ class _PeakDetailState extends State<PeakDetail> {
       print(_allPaths);
     });
 
-    // print("FROM SET STATE" + _allPaths.toString());
     return "complete";
   }
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getPaths();
   }

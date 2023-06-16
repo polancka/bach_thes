@@ -13,10 +13,6 @@ import 'navigation_controller.dart';
 //Provides a widget that shows all the information about the peak, including
 //all the paths leading up to it
 
-var db = FirebaseFirestore.instance;
-
-//just stylist stuff, migh be taken out later or put in the styles.dart
-
 Widget sectionTitle(String text) {
   return Container(
       padding: EdgeInsets.fromLTRB(25.0, 25.0, 25.0, 10.0),
@@ -50,30 +46,6 @@ Widget bannerImage(String url, double height) {
   return Container(
       constraints: BoxConstraints.tightFor(height: height),
       child: Image.network(url, fit: BoxFit.fitWidth));
-}
-
-renderPathsThree(BuildContext context, DocumentSnapshot document) async {
-  late QueryDocumentSnapshot docPaths;
-  var paths = await FirebaseFirestore.instance
-      .collection('Paths')
-      .where('finishPointName', isEqualTo: document['name'])
-      .get()
-      .then((querySnapshot) => docPaths = querySnapshot.docs.first);
-
-  var result = <Widget>[];
-
-  result.add(ListTile(
-      //shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      //selectedTileColor: Colors.white,
-      tileColor: Colors.black,
-      dense: true,
-      leading: Icon(Icons.nordic_walking_outlined),
-      title: Text("Test"),
-      subtitle: Text("Chose this path"),
-      trailing: Icon(Icons.keyboard_double_arrow_right_outlined),
-      onTap: () => {}));
-
-  return result;
 }
 
 List<Widget> renderBody(
@@ -110,11 +82,6 @@ List<Widget> renderBody(
   return result;
 }
 
-Widget buildListItemPaths(BuildContext context, List<dynamic> pathInfo) {
-  print('${pathInfo[0]}');
-  return Text(pathInfo[0]);
-}
-
 List<Widget> returnAllPaths(BuildContext context, List<dynamic> allPaths) {
   List<Widget> result = [];
 
@@ -140,7 +107,7 @@ List<Widget> returnAllPaths(BuildContext context, List<dynamic> allPaths) {
                 Icons.keyboard_double_arrow_right_outlined,
                 color: Colors.white,
               ),
-              onTap: () => MyNavigator(context).NavigateToHome(),
+              onTap: () => MyNavigator(context).navigateToPathDetail(),
             ))));
   }
 
