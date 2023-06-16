@@ -90,7 +90,7 @@ class PathDetail extends StatelessWidget {
                         children: [
                           Container(
                             child: Text(
-                              "${path.alitmeters}m višinske razlike",
+                              "${path.altimeters}m višinske razlike",
                               style: TextStyle(fontSize: 12),
                             ),
                           ),

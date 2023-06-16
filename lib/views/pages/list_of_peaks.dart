@@ -70,7 +70,11 @@ class _SearchPeaksState extends State<SearchPeaks> {
 
   getPeaksStreamSnapshots() async {
     //final uid = await Provider.of(context).auth.getCurrentUID();
-    var data = await FirebaseFirestore.instance.collection('Peaks').get();
+    var data = await FirebaseFirestore.instance
+        .collection('Peaks')
+        .orderBy('sortValue')
+        .get();
+
     setState(() {
       _allPeaks = data.docs;
     });
@@ -97,18 +101,11 @@ class _SearchPeaksState extends State<SearchPeaks> {
           ),
           Expanded(
               child: Container(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(colors: [
-                      Styles.deepgreen,
-                      Styles.lightgreen,
-                      Styles.offwhite
-                    ], begin: Alignment.bottomRight, end: Alignment.topLeft),
-                  ),
                   child: ListView.builder(
-                    itemCount: _resultsList.length,
-                    itemBuilder: (BuildContext context, int index) =>
-                        buildListItem(context, _resultsList[index]),
-                  )))
+            itemCount: _resultsList.length,
+            itemBuilder: (BuildContext context, int index) =>
+                buildListItem(context, _resultsList[index]),
+          )))
         ]));
   }
 }

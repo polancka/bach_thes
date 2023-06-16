@@ -1,3 +1,4 @@
+import 'package:bach_thes/models/path.dart';
 import 'package:bach_thes/models/registration_model.dart';
 import 'package:bach_thes/views/pages/list_of_peaks.dart';
 import 'package:bach_thes/views/pages/path_detail.dart';
@@ -37,5 +38,12 @@ class MyNavigator {
   NavigateToForgotenPassword() {
     Navigator.of(context)
         .push(MaterialPageRoute(builder: (context) => ForgotenPasswordPage()));
+  }
+
+  void navigateToPathDetail(BuildContext context, Path path) {
+    Navigator.push(
+        //adds the page to the stack, MaterialPageRoute determines to which screen it goes
+        context,
+        MaterialPageRoute(builder: (context) => PathDetail(path as Path)));
   }
 }

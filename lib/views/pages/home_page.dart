@@ -1,5 +1,6 @@
 import 'package:bach_thes/controllers/navigation_controller.dart';
 import 'package:bach_thes/models/hiker.dart';
+import 'package:bach_thes/models/path.dart';
 import 'package:bach_thes/views/pages/list_of_peaks.dart';
 import 'package:bach_thes/views/pages/map_page.dart';
 import 'package:bach_thes/views/pages/profile_page.dart';
@@ -12,6 +13,7 @@ import 'package:bach_thes/globals.dart';
 import 'package:bach_thes/main.dart';
 import 'package:bach_thes/utils/styles.dart';
 import 'package:bach_thes/views/widgets/reusable_widgets.dart';
+import 'package:bach_thes/models/peak.dart';
 
 //UI for landing page
 
@@ -31,13 +33,6 @@ class HomePage extends StatelessWidget {
         body: Container(
             width: w,
             height: h,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(colors: [
-                Styles.deepgreen,
-                Styles.lightgreen,
-                Styles.offwhite
-              ], begin: Alignment.bottomRight, end: Alignment.topLeft),
-            ),
             child: SingleChildScrollView(
               child: Padding(
                 padding: EdgeInsets.fromLTRB(20, h * 0.1, 20, 0),
@@ -104,21 +99,7 @@ Future<void> readPeaks() async {
 }
 
 //function for adding to the database
-Future<void> uploadingData(
-  int _peakId,
-  String _peakName,
-  int _peakAltitude,
-  String _peakDescription,
-  String _urlThumbnail,
-) async {
-  await db.collection("Peaks").add({
-    'id': _peakId,
-    'name': _peakName,
-    'altitude': _peakAltitude,
-    'description': _peakDescription,
-    'urlThumbnail': _urlThumbnail,
-  });
-}
+
 
 /*uploadingData(
         1,

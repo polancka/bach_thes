@@ -408,4 +408,146 @@ child: StreamBuilder(
                           itemBuilder: (context, index) => buildListItem(
                               context, snapshot.data!.docs[index]));
                     },
+-----------------------------
+checki if has paths
+ /*try {
+    result.addAll(renderPaths(context, document));
+  } on FirebaseFirestore catch (e) {
+    print(e);
+  }*/
+------------------
+findPaths(String name) async {
+  var paths = await FirebaseFirestore.instance
+      .collection('Paths')
+      .where('finishPointName', isEqualTo: name)
+      .get();
+
+  return paths.docs.first['name'];
+}
+---------------------
+working function for displaying paths with jsonDecode/*List<Widget> renderPaths(BuildContext context, DocumentSnapshot document) {
+  final arrayOfPaths = document['Paths'];
+
+  var result = <Widget>[];
+
+  for (int i = 0; i < document['Paths'].length; i++) {
+    var firstPath = arrayOfPaths[i].toString();
+    Map<String, dynamic> jsonPath = jsonDecode(firstPath);
+
+    //TODO: make a new Path for every path, this path is then sent
+    Path path = Path(
+        id: jsonPath['id'],
+        pathName: jsonPath['pathName'],
+        startingPointName: jsonPath['StartingPointName'],
+        startingPointId: jsonPath['startingPointId'],
+        startingPointAltitude: jsonPath['startingPointAltitude'],
+        finishPointName: jsonPath['finishPointName'],
+        alitmeters: jsonPath['altimeters'],
+        altimetersOnTheWay: jsonPath['altimetersOnTheWay'],
+        difficulty: jsonPath['difficulty'],
+        duration: jsonPath['duration'],
+        description: jsonPath['description'],
+        recommendedEquipment: jsonPath['recommendedEquipment']);
+    result.add(ListTile(
+        //shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        //selectedTileColor: Colors.white,
+        tileColor: Colors.black,
+        dense: true,
+        leading: Icon(Icons.nordic_walking_outlined),
+        title: Text("${jsonPath['StartingPointName']}"),
+        subtitle: Text("Chose this path"),
+        trailing: Icon(Icons.keyboard_double_arrow_right_outlined),
+        onTap: () => navigateToPathDetail(context, path)));
+  }
+
+  return result;
+
+  /*return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Padding(
+          padding: EdgeInsets.all(20),
+          child: Column(
+            children: [
+              Text("${arrayOfPaths[0]}"),
+              SizedBox(height: 10),
+              Text("${arrayOfPaths[1]}"),
+            ],
+          )));*/
+}*/
+---------------------
+nek low effort
+Future<List<Widget>> renderPathsTwo(
+    BuildContext context, DocumentSnapshot document) async {
+  var result = <Widget>[];
+
+  var paths = await FirebaseFirestore.instance
+      .collection('Paths')
+      .where('finishPointName', isEqualTo: document['name'])
+      .get();
+
+  result.add(ListTile(
+      //shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      //selectedTileColor: Colors.white,
+      tileColor: Colors.black,
+      dense: true,
+      leading: Icon(Icons.nordic_walking_outlined),
+      title: Text("Test"),
+      subtitle: Text("Chose this path"),
+      trailing: Icon(Icons.keyboard_double_arrow_right_outlined),
+      onTap: () => {}));
+
+  return result;
+}
+----------------
+another effort of rendering paths/*List<ListTile> renderPeakPaths(BuildContext context, DocumentSnapshot document) {
+  var result = List<ListTile>.empty(growable: true);
+  for (int i = 0; i < document['possiblePaths'].length; i++) {
+    result.add(ListTile(
+      leading: Icon(Icons.nordic_walking_outlined),
+      title: Text(
+          "${peak.possiblePaths[i].startingPointName},  ${peak.possiblePaths[i].duration}"),
+      subtitle: Text(peak.altitude.toString()),
+      trailing: Icon(Icons.keyboard_double_arrow_right_outlined),
+      onTap: () => navigateToPathDetail(context, document.possiblePaths[i]),
+    ));
+  }
+
+  final result = <Widget>[];
+
+
+  for (int i = 0; i < peak.possiblePaths.length; i++) {
+    result.add(sectionTitle(
+        "From starting point no. ${peak.possiblePaths[i].startingPointId}"));
+    result.add(sectionText(peak.possiblePaths[i].description));
+  }
+
+  return result;
+}*/
+--------------------------------
+Card for list peak/ paths
+Container(
+      child: Card(
+          margin: EdgeInsets.all(3),
+          color: Styles.deepgreen.withOpacity(0.7),
+          shape: ContinuousRectangleBorder(
+              borderRadius: BorderRadius.circular(20)),
+          child: ListTile(
+            leading: Icon(
+              Icons.hiking_outlined,
+              color: Colors.white,
+            ),
+            title: Text(
+              pathInfo[0],
+              style: TextStyle(color: Colors.white),
+            ),
+            subtitle: Text(pathInfo[1], style: TextStyle(color: Colors.white)),
+            trailing: Icon(
+              Icons.keyboard_double_arrow_right_outlined,
+              color: Colors.white,
+            ),
+            onTap: () => MyNavigator(context).NavigateToHome(),
+          )));
 
