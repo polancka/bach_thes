@@ -40,10 +40,10 @@ class MyNavigator {
         .push(MaterialPageRoute(builder: (context) => ForgotenPasswordPage()));
   }
 
-  void navigateToPathDetail(BuildContext context, Path path) {
+  void navigateToPathDetail(dynamic path) {
     Navigator.push(
         //adds the page to the stack, MaterialPageRoute determines to which screen it goes
         context,
-        MaterialPageRoute(builder: (context) => PathDetail(path as Path)));
+        MaterialPageRoute(builder: (context) => PathDetail(path)));
   }
 }

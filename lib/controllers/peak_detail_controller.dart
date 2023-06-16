@@ -107,7 +107,8 @@ List<Widget> returnAllPaths(BuildContext context, List<dynamic> allPaths) {
                 Icons.keyboard_double_arrow_right_outlined,
                 color: Colors.white,
               ),
-              onTap: () => MyNavigator(context).navigateToPathDetail(),
+              onTap: () =>
+                  MyNavigator(context).navigateToPathDetail(docSnapshot),
             ))));
   }
 
