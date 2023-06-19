@@ -41,12 +41,6 @@ class _PeakDetailState extends State<PeakDetail> {
   Widget build(BuildContext context) {
     return Scaffold(
         extendBodyBehindAppBar: false,
-        appBar: AppBar(
-          centerTitle: true,
-          title: Text("Peak", style: TextStyle(color: Styles.deepgreen)),
-          backgroundColor: Colors.white,
-          iconTheme: IconThemeData(color: Styles.deepgreen),
-        ),
         body: Container(
             height: MediaQuery.of(context).size.height,
             child: SingleChildScrollView(

@@ -30,12 +30,6 @@ class PathDetail extends StatelessWidget {
     return SafeArea(
         child: Scaffold(
             extendBodyBehindAppBar: false,
-            appBar: AppBar(
-              centerTitle: true,
-              title: Text("Path", style: TextStyle(color: Styles.deepgreen)),
-              backgroundColor: Colors.white,
-              iconTheme: IconThemeData(color: Styles.deepgreen),
-            ),
             body: Container(
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height,

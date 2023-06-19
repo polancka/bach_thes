@@ -13,18 +13,27 @@ class RegistrationController {
 
   RegistrationController(this._email, this._password, this._username);
 
+  bool validUser = false;
+
   Future<void> createNewUser(context) async {
     try {
       FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: _email, password: _password)
           .then((value) {
-        MyNavigator(context).NavigateToLogin();
+        validUser = true;
+        MyNavigator(context).navigateToMainPage();
       });
     } on FirebaseException catch (e) {
+      validUser = false;
+      print("the user is not valid1");
       log(e.toString());
+      print("the user is not valid2");
     }
 
-    addHiker(_email, _username);
-    MyNavigator(context).NavigateToHome();
+    if (validUser = false) {
+      print("the user is not valid");
+    }
+
+    //addHiker(_email, _username);
   }
 }

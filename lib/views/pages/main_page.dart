@@ -1,7 +1,11 @@
+import 'package:bach_thes/controllers/navigation_controller.dart';
 import 'package:bach_thes/views/pages/home_page.dart';
 import 'package:bach_thes/views/pages/list_of_peaks.dart';
 import 'package:bach_thes/views/pages/map_page.dart';
 import 'package:bach_thes/views/pages/profile_page.dart';
+import 'package:bach_thes/views/widgets/reusable_widgets.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:bach_thes/utils/styles.dart';
 
@@ -27,6 +31,8 @@ class _MainPageState extends State<MainPage> {
     }
 
     return Scaffold(
+      appBar: myAppBar(""),
+      drawer: myDrawer(context),
       body: pages[currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,

@@ -85,27 +85,20 @@ class _SearchPeaksState extends State<SearchPeaks> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Styles.deepgreen.withOpacity(0.9),
-          title: Text(
-            "Search Slovenian peaks",
-            style: TextStyle(color: Colors.white),
-          ),
-        ),
         body: Column(children: [
-          TextField(
-            controller: _searchController,
-            decoration: InputDecoration(
-              prefixIcon: Icon(Icons.search),
-            ),
-          ),
-          Expanded(
-              child: Container(
-                  child: ListView.builder(
-            itemCount: _resultsList.length,
-            itemBuilder: (BuildContext context, int index) =>
-                buildListItem(context, _resultsList[index]),
-          )))
-        ]));
+      TextField(
+        controller: _searchController,
+        decoration: InputDecoration(
+          prefixIcon: Icon(Icons.search),
+        ),
+      ),
+      Expanded(
+          child: Container(
+              child: ListView.builder(
+        itemCount: _resultsList.length,
+        itemBuilder: (BuildContext context, int index) =>
+            buildListItem(context, _resultsList[index]),
+      )))
+    ]));
   }
 }

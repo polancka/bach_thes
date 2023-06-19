@@ -5,6 +5,7 @@ import 'package:bach_thes/views/pages/list_of_peaks.dart';
 import 'package:bach_thes/views/pages/map_page.dart';
 import 'package:bach_thes/views/pages/profile_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:bach_thes/models/peak.dart';
@@ -29,6 +30,7 @@ class HomePage extends StatelessWidget {
 
     return SafeArea(
       child: Scaffold(
+        drawer: myDrawer(context),
         backgroundColor: Colors.white12,
         body: Container(
             width: w,
@@ -97,25 +99,3 @@ Future<void> readPeaks() async {
     }
   });
 }
-
-//function for adding to the database
-
-
-/*uploadingData(
-        1,
-        "Grintovec",
-        2558,
-        "Grintovec je najvišji vrh Kamniških in Savinjskih Alp. Nahaja se nad dolino Kamniške Bistrice, Suhega dola in nad dolino Ravenske Kočne. Razgled z vrha je najlepši proti Jezerski in Kokrski Kočni na zahodni strani, na severu se lepo vidi Jezerska dolina in vrhovi nad Jezerskim proti vzhodu pa se vidi greben Grintovcev od Dolgega Hrbta, čez Štruco do Skute. Proti jugu pa se vidi Kalški greben in v ozadju Ljubljanska kotlina. Vrh ima vpisno knjigo in žig.",
-        "https://www.hribi.net/Gora/p6250106medium5xm.jpg");
-    uploadingData(
-        2,
-        "Skuta",
-        2532,
-        "Skuta je 2532 m visoka gora, ki se nahaja v osrčju Kamniško Savinjskih Alp. Z vrha, na katerem je vpisna skrinjica in žig, se nam odpre lep razgled na najvišje vrhove Kamniško Savinjskih Alp.",
-        "https://www.hribi.net/slike11/P106066849386308.jpg");
-    uploadingData(
-        3,
-        "Ojstrica",
-        2350,
-        "Ojstrica, katera ime je dobila po svoji ostri obliki, se strmo dviga nad Korošico, Logarsko dolino in Robanovim kotom. Z vrha, na katerem se nahaja vpisna skrinjica z žigom, se nam odpre lep razgled na najvišje vrhove Kamniško Savinjskih Alp.",
-        "https://www.hribi.net/slike1/Ojstrica%20036102960.jpg"); */

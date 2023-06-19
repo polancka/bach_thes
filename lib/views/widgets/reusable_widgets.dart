@@ -1,10 +1,6 @@
-import 'dart:math';
 import 'package:bach_thes/controllers/login_controller.dart';
 import 'package:bach_thes/controllers/navigation_controller.dart';
 import 'package:bach_thes/controllers/registration_controller.dart';
-import 'package:bach_thes/models/registration_model.dart';
-import 'package:bach_thes/views/pages/home_page.dart';
-import 'package:bach_thes/views/pages/registration_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:bach_thes/utils/styles.dart';
@@ -127,4 +123,45 @@ Container landingPageTile(BuildContext context, String text) {
         ),
         child: Text(text, style: TextStyle(color: Styles.deepgreen))),
   );
+}
+
+//Hamburger menu - contains options such as log out. Navigations on tap yet to be made in detail.
+Drawer myDrawer(BuildContext context) {
+  return Drawer(
+      elevation: 50,
+      backgroundColor: Styles.deepgreen,
+      child: Container(
+          padding: EdgeInsets.all(35),
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: [
+              ListTile(
+                  leading: Icon(
+                    Icons.exit_to_app,
+                    color: Colors.white,
+                  ),
+                  title: Text(
+                    "Log out",
+                    style: TextStyle(color: Colors.white, fontSize: 15),
+                  ),
+                  onTap: () {
+                    FirebaseAuth.instance
+                        .signOut()
+                        .then((value) => {})
+                        .catchError((error) => {
+                              //eror happened
+                            });
+                  })
+            ],
+          )));
+}
+
+//App bar that enables the drawer to be accessed. It does not contain a title.
+AppBar myAppBar(String text) {
+  return AppBar(
+      backgroundColor: Styles.deepgreen.withOpacity(0.9),
+      title: Text(
+        text,
+        style: TextStyle(color: Colors.white),
+      ));
 }

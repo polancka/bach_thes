@@ -19,7 +19,7 @@ class LoginController {
           .signInWithEmailAndPassword(
               email: this._email, password: this._password)
           .then((value) {
-        MyNavigator(context).NavigateToHome();
+        MyNavigator(context).navigateToMainPage();
       });
     } on FirebaseException catch (e) {
       log(e.toString());
