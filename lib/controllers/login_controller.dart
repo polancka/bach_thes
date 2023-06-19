@@ -4,7 +4,6 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 
 //Login controller checks if the data inputed in the login fields match the ones in Firebase Authentication base
-
 //TODO: add error message
 
 class LoginController {

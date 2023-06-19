@@ -9,6 +9,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:bach_thes/utils/styles.dart';
 
+/*Main page serves as a frame for navigating between pages using the bottom 
+navigation bar. It also features a custom drawer and a custom app bar, which 
+are defined in views/widgets/resuable_widgets.dart */
+
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
 

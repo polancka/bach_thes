@@ -7,7 +7,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:bach_thes/utils/styles.dart';
 
 //TODO:add authentication on email and password and pop up warnings if the password is too short
-//TODO: add a "which hiking level are you"
 //TODO: store the name and level in association with the profile
 
 //UI for registration page

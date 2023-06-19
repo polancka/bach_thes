@@ -5,6 +5,7 @@ import 'dart:developer';
 import 'package:bach_thes/models/hiker.dart';
 
 //Class that registers a new user - adds a new entry to the Firebase Authentication database
+//TODO : add validation and display error messages on error
 
 class RegistrationController {
   String _email;

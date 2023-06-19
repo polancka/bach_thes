@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:bach_thes/utils/styles.dart';
 
+/* Different widgets that are used multiple times or by multiple pages */
+
 Image logoWidget(String imageUrl) {
   return Image.asset(
     imageUrl,
@@ -112,6 +114,7 @@ SizedBox signUpButton(BuildContext context) {
   );
 }
 
+//Landing page tile (will probably be delted)
 Container landingPageTile(BuildContext context, String text) {
   return Container(
     width: MediaQuery.of(context).size.width * 0.30,

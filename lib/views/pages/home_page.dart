@@ -30,72 +30,33 @@ class HomePage extends StatelessWidget {
 
     return SafeArea(
       child: Scaffold(
-        drawer: myDrawer(context),
-        backgroundColor: Colors.white12,
-        body: Container(
+          drawer: myDrawer(context),
+          backgroundColor: Colors.white12,
+          body: Container(
             width: w,
             height: h,
             child: SingleChildScrollView(
               child: Padding(
                 padding: EdgeInsets.fromLTRB(20, h * 0.1, 20, 0),
                 child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text("Welcome hiker!",
-                              style: TextStyle(
-                                  color: Styles.deepgreen,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 25))
-                        ],
-                      ),
-                      SizedBox(
-                        height: h * 0.1,
-                      ),
-                      Row(
-                        children: [
-                          TextButton.icon(
-                              onPressed:
-                                  MyNavigator(context).NavigateToSearchPeaks,
-                              icon: Icon(Icons.hiking_outlined,
-                                  color: Colors.white),
-                              label: Text(
-                                "Search Peaks",
-                                style: TextStyle(color: Colors.white),
-                              )),
-                          //landingPageTile(context, "Search peaks and paths"),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          //landingPageTile(context, "My booklet")
-                          //second tile
-                        ],
-                      ),
-                      //SizedBox(height: 10),
-                      /*Row(
-                        children: [
-                          landingPageTile(context, "My profile"),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          landingPageTile(context, "Look up on the map")
-                        ],
-                      )*/
-                    ]),
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text("Welcome hiker!",
+                            style: TextStyle(
+                                color: Styles.deepgreen,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 25))
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            )),
-      ),
+            ),
+          )),
     );
   }
-}
-
-Future<void> readPeaks() async {
-  await db.collection("Peaks").get().then((event) {
-    for (var doc in event.docs) {
-      log("${doc.id} => ${doc.data()}");
-    }
-  });
 }

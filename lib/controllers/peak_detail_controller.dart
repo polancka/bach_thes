@@ -10,9 +10,19 @@ import 'package:bach_thes/views/pages/peak_detail.dart';
 import 'package:bach_thes/views/pages/path_detail.dart';
 import 'navigation_controller.dart';
 
-//Provides a widget that shows all the information about the peak, including
-//all the paths leading up to it
+/*Peak_detail_controller contains logic for rendering the page with additional
+information about the chosen peak. It includes rendering a list of paths, of 
+which ending point is the chosen peak. The information is gathered from Firebase Firestore.
+If there are no paths, none are displayed.*/
 
+//renders the top image
+Widget bannerImage(String url, double height) {
+  return Container(
+      constraints: BoxConstraints.tightFor(height: height),
+      child: Image.network(url, fit: BoxFit.fitWidth));
+}
+
+//renders the title
 Widget sectionTitle(String text) {
   return Container(
       padding: EdgeInsets.fromLTRB(25.0, 25.0, 25.0, 10.0),
@@ -24,6 +34,7 @@ Widget sectionTitle(String text) {
       ));
 }
 
+//renders the description
 Widget sectionText(String text) {
   return Container(
       padding: EdgeInsets.fromLTRB(25.0, 25.0, 25.0, 10.0),
@@ -42,49 +53,9 @@ Widget sectionText(String text) {
       ));
 }
 
-Widget bannerImage(String url, double height) {
-  return Container(
-      constraints: BoxConstraints.tightFor(height: height),
-      child: Image.network(url, fit: BoxFit.fitWidth));
-}
-
-List<Widget> renderBody(
-    BuildContext context, DocumentSnapshot document, List<dynamic> allPaths) {
-  var result = List<Widget>.empty(growable: true);
-
-  result.add(bannerImage(document['urlThumbnail'], 200));
-  result.add(sectionTitle("${document['name']}"));
-  result.add(Center(
-      child: Text(
-    "${document['altitude']}m",
-    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
-  )));
-  result.add(SizedBox(
-    height: 15,
-  ));
-  result.add(sectionText("${document['description']}"));
-  result.add(SizedBox(
-    height: 15,
-  ));
-
-  result.add(Center(
-      child: Text(
-    "How to get there?",
-    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
-  )));
-
-  result.add(SizedBox(
-    height: 15,
-  ));
-
-  result.addAll(returnAllPaths(context, allPaths));
-
-  return result;
-}
-
+//renders a list of paths
 List<Widget> returnAllPaths(BuildContext context, List<dynamic> allPaths) {
   List<Widget> result = [];
-
   for (var docSnapshot in allPaths) {
     result.add(Container(
         child: Card(
@@ -111,6 +82,38 @@ List<Widget> returnAllPaths(BuildContext context, List<dynamic> allPaths) {
                   MyNavigator(context).navigateToPathDetail(docSnapshot),
             ))));
   }
+
+  return result;
+}
+
+//Renders the entire body
+List<Widget> renderBody(
+    BuildContext context, DocumentSnapshot document, List<dynamic> allPaths) {
+  var result = List<Widget>.empty(growable: true);
+
+  result.add(bannerImage(document['urlThumbnail'], 200));
+  result.add(sectionTitle("${document['name']}"));
+  result.add(Center(
+      child: Text(
+    "${document['altitude']}m",
+    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+  )));
+  result.add(SizedBox(
+    height: 15,
+  ));
+  result.add(sectionText("${document['description']}"));
+  result.add(SizedBox(
+    height: 15,
+  ));
+  result.add(Center(
+      child: Text(
+    "How to get there?",
+    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+  )));
+  result.add(SizedBox(
+    height: 15,
+  ));
+  result.addAll(returnAllPaths(context, allPaths));
 
   return result;
 }

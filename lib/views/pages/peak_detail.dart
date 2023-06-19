@@ -6,6 +6,9 @@ import 'package:bach_thes/controllers/peak_detail_controller.dart';
 import 'dart:developer';
 import 'package:bach_thes/utils/styles.dart';
 
+/* UI for more information about the chosen peak. It displays the photo, name,
+ description and possible paths leading up to the peak.*/
+
 class PeakDetail extends StatefulWidget {
   final DocumentSnapshot document;
   PeakDetail(this.document);
@@ -40,6 +43,12 @@ class _PeakDetailState extends State<PeakDetail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          title: Text("Peak", style: TextStyle(color: Styles.deepgreen)),
+          backgroundColor: Colors.white,
+          iconTheme: IconThemeData(color: Styles.deepgreen),
+        ),
         extendBodyBehindAppBar: false,
         body: Container(
             height: MediaQuery.of(context).size.height,

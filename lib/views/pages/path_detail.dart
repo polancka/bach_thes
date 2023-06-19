@@ -1,25 +1,11 @@
-//make UI for page that shows information about a specific path
-
-//implement search function - search bar, look for solutions
-
-//implement drawer
-
-//implement profile UI
-
-//Collecting user data from firestore - make a new collection or add parameters to authentication database
-
-//MVC or MVVM dillema - pros and cons of each, which is more suitable, how to implement
-
-//Sign in - simple pop up messages "The password does not match the email adress given"
-
-//Register - simple pop up messages "Please enter a valid email" / "Please enter a name" / "The password must be at least 8 characters long
-
-//home page UI - four tiles leading to different pages, implement the UI and the controller that is bassically just a navigator
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:bach_thes/models/path.dart';
 import 'package:bach_thes/utils/styles.dart';
+
+/* UI for displayinf more information about a chosen path. User wil also be able 
+to record his hike on this path by pressing the "Record" button. */
 
 class PathDetail extends StatelessWidget {
   final dynamic path;
@@ -30,6 +16,12 @@ class PathDetail extends StatelessWidget {
     return SafeArea(
         child: Scaffold(
             extendBodyBehindAppBar: false,
+            appBar: AppBar(
+              centerTitle: true,
+              title: Text("Path", style: TextStyle(color: Styles.deepgreen)),
+              backgroundColor: Colors.white,
+              iconTheme: IconThemeData(color: Styles.deepgreen),
+            ),
             body: Container(
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height,

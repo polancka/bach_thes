@@ -43,6 +43,7 @@ class _SearchPeaksState extends State<SearchPeaks> {
     searcResultsList();
   }
 
+  //if possible at some point move this function to the list_of_peaks controller
   searcResultsList() {
     var showResults = [];
     if (_searchController.text != "") {
