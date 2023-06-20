@@ -1,16 +1,4 @@
-# bach_thes
+# bachelor thesis - Development of a gamified hiking app for Android and iOS using Flutter 
 
-A new Flutter project.
+The aim of the project is to develop a mobile app, suitable for Android and iOS, that would serve as a helping tool while hiking in Slovenian mountains. The application would serve as a digital hiking booklet, in which the user would receive a stamp for each conquered peak in Slovenian mountains.  It would provide information on Slovenian hiking trails (difficulty, duration, starting points, latitude etc.) and would also enable the user to suggest changes to certain information (the state of the trail, encountering dangerous animals, working hours of the mountain huts along the way etc.). The app would serve as a gps tracker and would also offer offline storage of information on chosen trail. The app would also be able to suggest a trail, based on user preferences - chosen region, preferred duration and difficulty, altimeters etc.). In the applications certain aspects of gamification will be used: scoring point for each peak achieved, receiving badges for different challenges (two hikes in a week, longest hike so far, 1500 altimeters achieved etc. ), moving through different levels (beginner, intermediate, pro) and scoreboard of all users who want to participate. 
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
