@@ -1,5 +1,6 @@
 import 'package:bach_thes/views/pages/list_of_peaks.dart';
 import 'package:bach_thes/views/pages/main_page.dart';
+import 'package:bach_thes/views/pages/profile_page.dart';
 import 'package:bach_thes/views/pages/registration_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';

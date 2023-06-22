@@ -72,6 +72,7 @@ class _LoginPageState extends State<LoginPage> {
               logInButton(context, "Log in", _emailController.text,
                   _passwordController.text),
               signUpButton(context),
+
               SizedBox(height: 20),
               //signUp(context)
             ]),

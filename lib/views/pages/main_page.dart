@@ -21,16 +21,22 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  int currentIndex = 0;
+  int currentIndex = 3;
+  var thisUserId;
 
   @override
   Widget build(BuildContext context) {
+    setState(() {
+      thisUserId = FirebaseAuth.instance.currentUser?.uid;
+    });
+
     List pages = [HomePage(), MapPage(), SearchPeaks(), ProfilePage()];
 
     void onTap(int index) {
       print(currentIndex);
       setState(() {
         currentIndex = index;
+        thisUserId = FirebaseAuth.instance.currentUser?.uid;
       });
     }
 

@@ -19,6 +19,11 @@ class LoginController {
           email: this._email, password: this._password);
 
       //succesful login
+
+      //change the current user variable
+      var currentUser = FirebaseAuth.instance.currentUser?.uid;
+
+      //navigate to the apps main
       MyNavigator(context).navigateToMainPage();
     } on FirebaseAuthException catch (error) {
       var errorMessage = error.message.toString();

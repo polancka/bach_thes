@@ -22,7 +22,8 @@ class RegistrationController {
       await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: _email, password: _password);
       //success
-      validUser = true;
+      //var currentUser = FirebaseAuth.instance.currentUser?.uid;
+      //addHiker(this._email, this._username, currentUser);
       MyNavigator(context).navigateToMainPage();
     } on FirebaseAuthException catch (error) {
       validUser = false;

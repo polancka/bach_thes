@@ -1,19 +1,65 @@
+import 'package:bach_thes/models/hike.dart';
+import 'package:bach_thes/models/hiker.dart';
 import 'package:bach_thes/views/widgets/booklet_widget.dart';
 import 'package:bach_thes/views/widgets/mountain_card.dart';
+import 'package:bach_thes/views/widgets/reusable_widgets.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:bach_thes/utils/styles.dart';
+import 'package:percent_indicator/percent_indicator.dart';
+import 'package:bach_thes/views/widgets/hike_card.dart';
+import 'main_page.dart';
+import 'package:bach_thes/models/hiker.dart';
 
 /* UI for showing users profile page. it shows their picture, username, 
 level, number of points on a progress bar and their booklet. The booklet itself
  consists of recorderd hikes and achieved peaks and badges. Both parts of the 
  booklet are clickable. They lead to new pages with all possible peaks.*/
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
+  //final DocumentSnapshot profile;
+  //ProfilePage(this.profile);
+
+  @override
+  State<ProfilePage> createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  var currentHiker;
+  var currentUserTwo = FirebaseAuth.instance.currentUser?.uid.toString();
+
+  getHiker() async {
+    var profiles = await FirebaseFirestore.instance
+        .collection('Hikers')
+        .where('id', isEqualTo: currentUserTwo)
+        .get();
+    var profilestwo = profiles.docs;
+    for (var userSnapshot in profilestwo) {
+      //error when running : "Another exception was thrown: NoSuchMethodError: The getter 'username' was called on null." but it does load
+      setState(() {
+        currentHiker = Hiker(
+            id: userSnapshot['id'].toString(),
+            username: userSnapshot['username'].toString(),
+            email: userSnapshot['email'].toString(),
+            profilePicture: userSnapshot['pictureUrl'].toString(),
+            level: userSnapshot['level'].toString(),
+            points: userSnapshot['points'].toString(),
+            bookletId: userSnapshot['bookletId'].toString(),
+            scoreboardParticipation:
+                userSnapshot['scoreboardParticipation'].toString());
+      });
+    }
+  }
+
   final List achievedPeaks = [];
+
   final List achievedBadges = [];
 
   @override
   Widget build(BuildContext context) {
+    getHiker();
+
     return Scaffold(
         body: Column(
       children: [
@@ -22,26 +68,105 @@ class ProfilePage extends StatelessWidget {
         ),
         CircleAvatar(
           backgroundColor: Styles.lightgreen,
+          backgroundImage: AssetImage('lib/utils/images/gore.png'),
           radius: 50,
-          child: Image.asset('lib/utils/images/gore.png'),
         ),
+        //logoWidget(currentHiker.profilePicture),
         SizedBox(
           height: 20,
         ),
         Center(
             child: Container(
-          child: Text("Ana Polančec", style: Styles.headerLarge),
+          child: Text("${currentHiker.username}", style: Styles.headerLarge),
         )),
         SizedBox(
           height: 20,
         ),
-        renderBooklet()
+        //level
+        Center(
+            child: Container(
+          child: Text("Level ${currentHiker.level}",
+              style: TextStyle(fontSize: 15)),
+        )),
+
+        SizedBox(height: 10),
+        Center(
+            child: Container(
+          child: Text("${currentHiker.points}/${currentHiker.level}00",
+              style: TextStyle(fontSize: 15)),
+        )),
+
+        //progress bar with points
+        Padding(
+          padding: EdgeInsets.all(15.0),
+          child: LinearPercentIndicator(
+            width: MediaQuery.of(context).size.width - 50,
+            animation: true,
+            lineHeight: 20.0,
+            animationDuration: 2500,
+            percent: 0.2,
+            center: Text("20%"),
+            barRadius: Radius.circular(20),
+            progressColor: Styles.deepgreen,
+          ),
+        ),
+        SizedBox(
+          height: 25,
+        ),
+        Center(
+            child:
+                Text("My most recent hikes", style: TextStyle(fontSize: 18))),
+
+        //most recent hikes (top 3 or display "You don't have any recent hikes yet")
+        Center(
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Container(
+              width: MediaQuery.of(context).size.width * 0.9,
+              decoration: BoxDecoration(
+                color: Styles.offwhite,
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Center(child: Text("")),
+              ),
+            ),
+          ),
+        )
+
+        //build list of latest hikes
+
+        //latest badge
+        //Text with navigation to the Booklet page
+        // renderBooklet()
       ],
     ));
   }
 }
 
-  /*return Scaffold(
+/*getHikerInfo() async {
+  var currentUserOne = FirebaseAuth.instance.currentUser?.uid.toString();
+  var data = FirebaseFirestore.instance
+      .collection('Hikers')
+      .where('id', isEqualTo: currentUserOne);
+
+  String usernamee = data.get('email' as GetOptions?).toString();
+
+  //Hiker currentHiker
+}
+
+Future<QuerySnapshot> getHikerData() async {
+  var currentUserOne = FirebaseAuth.instance.currentUser?.uid.toString();
+  return await FirebaseFirestore.instance
+      .collection("Hikers")
+      .where('id', isEqualTo: currentUserOne)
+      .get();
+}*/
+
+  
+
+/*return Scaffold(
       body: Column(
         children: [
           //background top picture
@@ -56,4 +181,3 @@ class ProfilePage extends StatelessWidget {
         ],
       ),
     );*/
-
