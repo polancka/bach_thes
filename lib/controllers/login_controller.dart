@@ -2,6 +2,7 @@ import 'package:bach_thes/controllers/navigation_controller.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:developer';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 //Login controller checks if the data inputed in the login fields match the ones in Firebase Authentication base
 //TODO: add error message
@@ -14,14 +15,14 @@ class LoginController {
 
   Future<void> logInUser(context) async {
     try {
-      FirebaseAuth.instance
-          .signInWithEmailAndPassword(
-              email: this._email, password: this._password)
-          .then((value) {
-        MyNavigator(context).navigateToMainPage();
-      });
-    } on FirebaseException catch (e) {
-      log(e.toString());
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: this._email, password: this._password);
+
+      //succesful login
+      MyNavigator(context).navigateToMainPage();
+    } on FirebaseAuthException catch (error) {
+      var errorMessage = error.message.toString();
+      Fluttertoast.showToast(msg: errorMessage, gravity: ToastGravity.CENTER);
     }
   }
 }

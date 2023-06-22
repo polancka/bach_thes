@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'dart:developer';
 import 'package:bach_thes/models/hiker.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 //Class that registers a new user - adds a new entry to the Firebase Authentication database
 //TODO : add validation and display error messages on error
@@ -18,21 +19,15 @@ class RegistrationController {
 
   Future<void> createNewUser(context) async {
     try {
-      FirebaseAuth.instance
-          .createUserWithEmailAndPassword(email: _email, password: _password)
-          .then((value) {
-        validUser = true;
-        MyNavigator(context).navigateToMainPage();
-      });
-    } on FirebaseException catch (e) {
+      await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(email: _email, password: _password);
+      //success
+      validUser = true;
+      MyNavigator(context).navigateToMainPage();
+    } on FirebaseAuthException catch (error) {
       validUser = false;
-      print("the user is not valid1");
-      log(e.toString());
-      print("the user is not valid2");
-    }
-
-    if (validUser = false) {
-      print("the user is not valid");
+      var errorMessage = error.message.toString();
+      Fluttertoast.showToast(msg: errorMessage, gravity: ToastGravity.CENTER);
     }
 
     //addHiker(_email, _username);
