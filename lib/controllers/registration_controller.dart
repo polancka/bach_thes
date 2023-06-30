@@ -1,4 +1,5 @@
 import 'package:bach_thes/controllers/navigation_controller.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'dart:developer';
@@ -22,15 +23,15 @@ class RegistrationController {
       await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: _email, password: _password);
       //success
-      //var currentUser = FirebaseAuth.instance.currentUser?.uid;
-      //addHiker(this._email, this._username, currentUser);
+      var currentUser = FirebaseAuth.instance.currentUser?.uid;
+      Future<DocumentReference> thisHikerRef =
+          addHiker(_email, _username, currentUser);
+      print(thisHikerRef);
       MyNavigator(context).navigateToMainPage();
     } on FirebaseAuthException catch (error) {
       validUser = false;
       var errorMessage = error.message.toString();
       Fluttertoast.showToast(msg: errorMessage, gravity: ToastGravity.CENTER);
     }
-
-    //addHiker(_email, _username);
   }
 }

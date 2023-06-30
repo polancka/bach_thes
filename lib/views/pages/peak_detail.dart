@@ -28,7 +28,7 @@ class _PeakDetailState extends State<PeakDetail> {
 
     setState(() {
       _allPaths = List.from(paths.docs);
-      print(_allPaths);
+      //print(_allPaths);
     });
 
     return "complete";

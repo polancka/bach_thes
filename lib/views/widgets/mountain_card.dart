@@ -2,32 +2,32 @@ import 'package:flutter/material.dart';
 import 'package:bach_thes/utils/styles.dart';
 
 class MountainCard extends StatelessWidget {
-  const MountainCard({super.key});
+  String name;
+  int altitude;
+  //maybe add reference and make it clickable
+  MountainCard(this.name, this.altitude);
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Container(
-        height: 30,
-        width: 120,
-        decoration: BoxDecoration(
-            shape: BoxShape.rectangle,
-            color: Styles.deepgreen,
-            borderRadius: BorderRadius.circular(20)),
-        child: Column(
-          children: [
-            Container(
-              child: Image.asset('lib/utils/images/profile_back.png'),
-            ),
-            Container(
-              height: 30,
-              decoration: BoxDecoration(color: Colors.white),
-              child: Center(child: Text("Testno ime")),
-            )
-          ],
-        ),
-      ),
-    );
+    return Container(
+        child: Card(
+            margin: EdgeInsets.all(3),
+            color: Styles.deepgreen.withOpacity(0.7),
+            shape: ContinuousRectangleBorder(
+                borderRadius: BorderRadius.circular(20)),
+            child: ListTile(
+              title: Text(
+                name,
+                style: TextStyle(color: Colors.white),
+              ),
+              subtitle: Text(
+                altitude.toString(),
+                style: TextStyle(color: Colors.white),
+              ),
+              trailing: Icon(
+                Icons.keyboard_double_arrow_right_outlined,
+                color: Colors.white,
+              ),
+            )));
   }
 }

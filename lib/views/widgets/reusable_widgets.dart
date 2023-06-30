@@ -1,9 +1,12 @@
 import 'package:bach_thes/controllers/login_controller.dart';
 import 'package:bach_thes/controllers/navigation_controller.dart';
 import 'package:bach_thes/controllers/registration_controller.dart';
+import 'package:bach_thes/views/pages/login_page.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:bach_thes/utils/styles.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 /* Different widgets that are used multiple times or by multiple pages */
 
@@ -147,13 +150,15 @@ Drawer myDrawer(BuildContext context) {
                     "Log out",
                     style: TextStyle(color: Colors.white, fontSize: 15),
                   ),
-                  onTap: () {
-                    FirebaseAuth.instance
-                        .signOut()
-                        .then((value) => {})
-                        .catchError((error) => {
-                              //eror happened
-                            });
+                  onTap: () async {
+                    await FirebaseAuth.instance.signOut().then((value) =>
+                        Navigator.of(context).pushAndRemoveUntil(
+                            MaterialPageRoute(
+                                builder: (context) => LoginPage()),
+                            (route) => false));
+
+                    //clear user cache
+                    //Navigator.pushAndRemoveUntil(context, newRoute, (route) => false)
                   })
             ],
           )));
@@ -167,4 +172,29 @@ AppBar myAppBar(String text) {
         text,
         style: TextStyle(color: Colors.white),
       ));
+}
+
+Widget listItemHike(dynamic docSnapshot) {
+  return Container(
+      child: Card(
+    color: Styles.deepgreen.withOpacity(0.7),
+    shape: ContinuousRectangleBorder(borderRadius: BorderRadius.circular(20)),
+    child: ListTile(
+        /*leading: Icon(
+          Icons.check_box,
+          color: Colors.white,
+        ),*/
+        title: Text(
+          "Hike to ${docSnapshot['endPointName']}",
+          style: TextStyle(color: Colors.white),
+        ),
+        subtitle: Text(
+            "Time: ${docSnapshot['duration']} \nAltimeters: ${docSnapshot['altimeters']}",
+            style: TextStyle(color: Colors.white)),
+        trailing: Icon(
+          Icons.check_box,
+          color: Colors.white,
+        ),
+        onTap: () => () {}),
+  ));
 }

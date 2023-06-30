@@ -1,4 +1,4 @@
-import 'package:bach_thes/views/widgets/mountain_card.dart';
+/*import 'package:bach_thes/views/widgets/mountain_card.dart';
 import 'package:flutter/material.dart';
 import 'horizontal_scroll_peaks.dart';
 import 'package:bach_thes/utils/styles.dart';
@@ -46,4 +46,4 @@ Widget renderBooklet() {
       ))
     ],
   ));
-}
+}*/

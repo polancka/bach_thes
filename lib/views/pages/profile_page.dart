@@ -1,3 +1,5 @@
+import 'package:bach_thes/controllers/profile_page_controller.dart';
+import 'package:bach_thes/models/current_user.dart';
 import 'package:bach_thes/models/hike.dart';
 import 'package:bach_thes/models/hiker.dart';
 import 'package:bach_thes/views/widgets/booklet_widget.dart';
@@ -11,6 +13,7 @@ import 'package:percent_indicator/percent_indicator.dart';
 import 'package:bach_thes/views/widgets/hike_card.dart';
 import 'main_page.dart';
 import 'package:bach_thes/models/hiker.dart';
+import 'package:bach_thes/globals.dart';
 
 /* UI for showing users profile page. it shows their picture, username, 
 level, number of points on a progress bar and their booklet. The booklet itself
@@ -18,48 +21,39 @@ level, number of points on a progress bar and their booklet. The booklet itself
  booklet are clickable. They lead to new pages with all possible peaks.*/
 
 class ProfilePage extends StatefulWidget {
-  //final DocumentSnapshot profile;
-  //ProfilePage(this.profile);
-
   @override
   State<ProfilePage> createState() => _ProfilePageState();
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  var currentHiker;
   var currentUserTwo = FirebaseAuth.instance.currentUser?.uid.toString();
 
-  getHiker() async {
-    var profiles = await FirebaseFirestore.instance
-        .collection('Hikers')
-        .where('id', isEqualTo: currentUserTwo)
-        .get();
-    var profilestwo = profiles.docs;
-    for (var userSnapshot in profilestwo) {
-      //error when running : "Another exception was thrown: NoSuchMethodError: The getter 'username' was called on null." but it does load
-      setState(() {
-        currentHiker = Hiker(
-            id: userSnapshot['id'].toString(),
-            username: userSnapshot['username'].toString(),
-            email: userSnapshot['email'].toString(),
-            profilePicture: userSnapshot['pictureUrl'].toString(),
-            level: userSnapshot['level'].toString(),
-            points: userSnapshot['points'].toString(),
-            bookletId: userSnapshot['bookletId'].toString(),
-            scoreboardParticipation:
-                userSnapshot['scoreboardParticipation'].toString());
-      });
-    }
-  }
+  List recentHikes = [];
 
   final List achievedPeaks = [];
 
   final List achievedBadges = [];
 
+  returnListHikes(String? currentUserTwo) async {
+    var recordedHikesQuery = await FirebaseFirestore.instance
+        .collection('RecordedHikes')
+        .where('hikerId', isEqualTo: currentUserTwo)
+        .get();
+
+    setState(() {
+      recentHikes = List.from(recordedHikesQuery.docs);
+    });
+    //print(recentHikes);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    returnListHikes(currentUserTwo);
+  }
+
   @override
   Widget build(BuildContext context) {
-    getHiker();
-
     return Scaffold(
         body: Column(
       children: [
@@ -128,9 +122,10 @@ class _ProfilePageState extends State<ProfilePage> {
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Center(child: Text("")),
-              ),
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: renderLatestHikes(recentHikes),
+                  )),
             ),
           ),
         )
@@ -164,8 +159,6 @@ Future<QuerySnapshot> getHikerData() async {
       .get();
 }*/
 
-  
-
 /*return Scaffold(
       body: Column(
         children: [
@@ -181,3 +174,5 @@ Future<QuerySnapshot> getHikerData() async {
         ],
       ),
     );*/
+
+

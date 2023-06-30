@@ -11,21 +11,28 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'views/pages/home_page.dart';
 import 'package:bach_thes/views/pages/forgoten_password_page.dart';
 import 'views/pages/map_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-void main() async {
+Future<void> main() async {
   //ensure widget binding before running the aplication
   WidgetsFlutterBinding.ensureInitialized();
+  //SharedPreferences prefs = await SharedPreferences.getInstance();
+  //var email = prefs.getString("email");
+  //print(email);
 
   //initializing Firebase
   try {
-    await await Firebase.initializeApp(
+    await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
   } on FirebaseException catch (e) {
     print(e);
   }
 
-  //var db = FirebaseFirestore.instance;
+  /*runApp(MaterialApp(
+    debugShowCheckedModeBanner: false,
+    home: email == null ? LoginPage() : MainPage(),
+  ));*/
 
   return runApp(const MyApp());
 }
