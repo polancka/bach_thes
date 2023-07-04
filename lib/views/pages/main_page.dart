@@ -30,7 +30,7 @@ class _MainPageState extends State<MainPage> {
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   late Future<String> _emailSharedPref;
 
-  int currentIndex = 0;
+  int currentIndex = 3;
   var thisUserId;
 
   //function that collects the data from firebase about the current user

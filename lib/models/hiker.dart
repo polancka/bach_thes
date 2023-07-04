@@ -20,6 +20,23 @@ class Hiker {
       required this.points,
       required this.bookletId,
       required this.scoreboardParticipation});
+
+  String getParticipation() {
+    return this.scoreboardParticipation;
+  }
+}
+
+changeParticipation(bool isParticipating, Hiker currentHiker) async {
+  var wantedDocuments = await FirebaseFirestore.instance
+      .collection('Hikers')
+      .where('id', isEqualTo: currentHiker.id)
+      .get();
+  var docRef = wantedDocuments.docs.first.id;
+
+  final docRefUpdate = db.collection('Hikers').doc("${docRef}");
+  docRefUpdate.update({"scoreboardParticipation": isParticipating}).then(
+      (value) => print("DocumentSnapshot successfully updated!"),
+      onError: (e) => print("Error updating document $e"));
 }
 
 Future<DocumentReference> addHiker(String email, String username, String? userId

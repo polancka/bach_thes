@@ -76,6 +76,7 @@ flutter:
   assets:
      - lib/utils/images/gore.png
      - lib/utils/images/profile_back.png
+     - lib/utils/images/user_logo.png
     
 
  

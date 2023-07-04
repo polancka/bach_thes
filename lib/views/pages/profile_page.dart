@@ -61,10 +61,13 @@ class _ProfilePageState extends State<ProfilePage> {
           height: 25,
         ),
         CircleAvatar(
-          backgroundColor: Styles.lightgreen,
-          backgroundImage: AssetImage('lib/utils/images/gore.png'),
-          radius: 50,
-        ),
+            backgroundColor: Styles.lightgreen,
+            radius: 50,
+            child: CircleAvatar(
+              backgroundColor: Colors.white,
+              backgroundImage: AssetImage('lib/utils/images/user_logo.png'),
+              radius: 40,
+            )),
         //logoWidget(currentHiker.profilePicture),
         SizedBox(
           height: 20,
@@ -129,12 +132,6 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
           ),
         )
-
-        //build list of latest hikes
-
-        //latest badge
-        //Text with navigation to the Booklet page
-        // renderBooklet()
       ],
     ));
   }

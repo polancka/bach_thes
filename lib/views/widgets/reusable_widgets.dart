@@ -143,6 +143,20 @@ Drawer myDrawer(BuildContext context) {
             children: [
               ListTile(
                   leading: Icon(
+                    Icons.settings,
+                    color: Colors.white,
+                  ),
+                  title: Text(
+                    "Settings",
+                    style: TextStyle(color: Colors.white, fontSize: 15),
+                  ),
+                  onTap: () {
+                    //open settings
+
+                    MyNavigator(context).navigateToSettingsPage();
+                  }),
+              ListTile(
+                  leading: Icon(
                     Icons.exit_to_app,
                     color: Colors.white,
                   ),
@@ -151,6 +165,8 @@ Drawer myDrawer(BuildContext context) {
                     style: TextStyle(color: Colors.white, fontSize: 15),
                   ),
                   onTap: () async {
+                    //clear user cache
+                    //Navigator.pushAndRemoveUntil(context, newRoute, (route) => false)
                     await FirebaseAuth.instance.signOut().then((value) =>
                         Navigator.of(context).pushAndRemoveUntil(
                             MaterialPageRoute(
@@ -159,7 +175,7 @@ Drawer myDrawer(BuildContext context) {
 
                     //clear user cache
                     //Navigator.pushAndRemoveUntil(context, newRoute, (route) => false)
-                  })
+                  }),
             ],
           )));
 }
