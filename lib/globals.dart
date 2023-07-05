@@ -1,3 +1,4 @@
+import 'package:bach_thes/models/hiker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -10,4 +11,4 @@ incrementNextUserId() {
   nextUserId = nextUserId + 1;
 }
 
-var currentHiker;
+late Hiker currentHiker;

@@ -1,6 +1,7 @@
 import 'package:bach_thes/controllers/login_controller.dart';
 import 'package:bach_thes/controllers/navigation_controller.dart';
 import 'package:bach_thes/controllers/registration_controller.dart';
+import 'package:bach_thes/globals.dart';
 import 'package:bach_thes/views/pages/login_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -166,7 +167,7 @@ Drawer myDrawer(BuildContext context) {
                   ),
                   onTap: () async {
                     //clear user cache
-                    //Navigator.pushAndRemoveUntil(context, newRoute, (route) => false)
+                    //Navigator.pushAndRemoveUntil(context, newRoute, (route) => false
                     await FirebaseAuth.instance.signOut().then((value) =>
                         Navigator.of(context).pushAndRemoveUntil(
                             MaterialPageRoute(
@@ -183,6 +184,7 @@ Drawer myDrawer(BuildContext context) {
 //App bar that enables the drawer to be accessed. It does not contain a title.
 AppBar myAppBar(String text) {
   return AppBar(
+      centerTitle: true,
       backgroundColor: Styles.deepgreen.withOpacity(0.9),
       title: Text(
         text,

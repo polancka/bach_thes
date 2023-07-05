@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:bach_thes/globals.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +13,7 @@ class Hiker {
   final String points;
   final String bookletId;
   final String scoreboardParticipation;
+  final List<String> achievedPeaks;
   Hiker(
       {required this.id,
       required this.username,
@@ -19,10 +22,15 @@ class Hiker {
       required this.level,
       required this.points,
       required this.bookletId,
-      required this.scoreboardParticipation});
+      required this.scoreboardParticipation,
+      required this.achievedPeaks});
 
   String getParticipation() {
     return this.scoreboardParticipation;
+  }
+
+  List<String> getAchievedPeaks() {
+    return this.achievedPeaks;
   }
 }
 
@@ -51,7 +59,8 @@ Future<DocumentReference> addHiker(String email, String username, String? userId
     'level': 1,
     'points': 0,
     'bookletId': userId,
-    'scoreboardParticipation': false
+    'scoreboardParticipation': false,
+    'achievedPeaks': []
   });
 
   //add reference number for the booklet

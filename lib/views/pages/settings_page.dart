@@ -61,8 +61,7 @@ class _settingsPageState extends State<settingsPage> {
                       onChanged: (value) {
                         setState(() {
                           switchOn = value;
-                          changeUserParticipation();
-                          print(switchOn);
+                          changeParticipation(switchOn, currentHiker);
                         });
                       },
                       activeTrackColor: Color.fromARGB(255, 92, 188, 97),

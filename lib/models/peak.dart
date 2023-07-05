@@ -27,15 +27,15 @@ class Peak {
       required this.mountainChain});
 
   var db = FirebaseFirestore.instance;
+}
 
-  Future<String> fetchPeaks() async {
-    await db.collection("peaks").get().then((event) {
-      for (var doc in event.docs) {
-        print("${doc.id} => ${doc.data()}");
-      }
-    });
-    return "Hello";
-  }
+Future<String> fetchPeaks() async {
+  await FirebaseFirestore.instance.collection("Peaks").get().then((event) {
+    for (var doc in event.docs) {
+      print("${doc.id} => ${doc.data()}");
+    }
+  });
+  return "Hello";
 }
 
 Future<void> addNewPeak(

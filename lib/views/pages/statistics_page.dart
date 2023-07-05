@@ -1,3 +1,4 @@
+import 'package:bach_thes/views/widgets/reusable_widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -41,6 +42,12 @@ class _StatisticsPageState extends State<StatisticsPage> {
   }
 
   @override
+  void setState(VoidCallback fn) {
+    // TODO: implement setState
+    super.setState(fn);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: Column(children: [
@@ -50,7 +57,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
       Container(
           child: Center(
               child: Text(
-        "Scoreboard - top 10 hikers",
+        "Top 10 hikers",
         style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
       ))),
       //list of hikers

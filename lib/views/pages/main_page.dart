@@ -55,7 +55,8 @@ class _MainPageState extends State<MainPage> {
             points: userSnapshot['points'].toString(),
             bookletId: userSnapshot['bookletId'].toString(),
             scoreboardParticipation:
-                userSnapshot['scoreboardParticipation'].toString());
+                userSnapshot['scoreboardParticipation'].toString(),
+            achievedPeaks: List.from(userSnapshot['achievedPeaks']));
       });
     }
   }
@@ -84,8 +85,15 @@ class _MainPageState extends State<MainPage> {
       StatisticsPage()
     ];
 
+    List titles = [
+      "My profile",
+      "Search Slovenian Peaks",
+      "My hiking booklet",
+      "Scoreboard"
+    ];
+
     void onTap(int index) {
-      print(currentIndex);
+      //print(currentIndex);
       setState(() {
         currentIndex = index;
         thisUserId = FirebaseAuth.instance.currentUser?.uid;
@@ -93,7 +101,7 @@ class _MainPageState extends State<MainPage> {
     }
 
     return Scaffold(
-      appBar: myAppBar(""),
+      appBar: myAppBar(titles[currentIndex]),
       drawer: myDrawer(context),
       body: pages[currentIndex],
       bottomNavigationBar: BottomNavigationBar(
