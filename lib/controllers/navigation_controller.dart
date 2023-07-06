@@ -1,5 +1,7 @@
 import 'package:bach_thes/models/path.dart';
 import 'package:bach_thes/models/registration_model.dart';
+import 'package:bach_thes/views/pages/add_new_path_page.dart';
+import 'package:bach_thes/views/pages/add_new_peak_page.dart';
 import 'package:bach_thes/views/pages/list_of_peaks.dart';
 import 'package:bach_thes/views/pages/main_page.dart';
 import 'package:bach_thes/views/pages/path_detail.dart';
@@ -61,5 +63,20 @@ class MyNavigator {
 
     Navigator.push(
         context, MaterialPageRoute(builder: (context) => settingsPage()));
+  }
+
+  void navigateToAddNewPathPage(String endName, int id) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => addNewPathPage(
+                  name: '${endName}',
+                  id: id,
+                )));
+  }
+
+  void navigateToAddNewPeakPage() {
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => addNewPeakPage()));
   }
 }

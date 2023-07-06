@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:bach_thes/controllers/navigation_controller.dart';
 import 'package:bach_thes/models/peak.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -99,7 +100,21 @@ class _SearchPeaksState extends State<SearchPeaks> {
         itemCount: _resultsList.length,
         itemBuilder: (BuildContext context, int index) =>
             buildListItem(context, _resultsList[index]),
-      )))
+      ))),
+      ButtonBar(
+        alignment: MainAxisAlignment.center,
+        children: <Widget>[
+          TextButton(
+            child: Text(
+              '+ Add a new peak ',
+              style: TextStyle(color: Styles.deepgreen),
+            ),
+            onPressed: () {
+              MyNavigator(context).navigateToAddNewPeakPage();
+            },
+          )
+        ],
+      )
     ]));
   }
 }

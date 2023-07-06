@@ -33,8 +33,6 @@ Widget buildListItem(BuildContext context, DocumentSnapshot document) {
               "${document['name']},  ${document['altitude']}m",
               style: TextStyle(color: Colors.white),
             ),
-            subtitle: Text(document['altitude'].toString(),
-                style: TextStyle(color: Colors.white)),
             trailing: Icon(
               Icons.keyboard_double_arrow_right_outlined,
               color: Colors.white,

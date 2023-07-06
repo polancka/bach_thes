@@ -39,7 +39,7 @@ Future<String> fetchPeaks() async {
 }
 
 Future<void> addNewPeak(
-    int _id,
+    int? _id,
     String _name,
     int _altitude,
     String _description,

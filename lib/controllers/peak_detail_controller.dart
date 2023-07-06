@@ -114,6 +114,21 @@ List<Widget> renderBody(
     height: 15,
   ));
   result.addAll(returnAllPaths(context, allPaths));
+  result.add(ButtonBar(
+    alignment: MainAxisAlignment.center,
+    children: <Widget>[
+      TextButton(
+        child: Text(
+          '+ Add a new path ',
+          style: TextStyle(color: Styles.deepgreen),
+        ),
+        onPressed: () {
+          MyNavigator(context)
+              .navigateToAddNewPathPage(document['name'], document['id']);
+        },
+      )
+    ],
+  ));
 
   return result;
 }

@@ -178,7 +178,7 @@ Widget greyedOutMountainTile(String name, String urlThumbnail) {
     decoration: BoxDecoration(
       border: Border.all(color: Colors.black, width: 0.8),
       borderRadius: BorderRadius.circular(8),
-      color: Colors.white,
+      color: Colors.grey.withOpacity(0.3),
     ),
     child: Center(
       child: Column(
@@ -192,6 +192,7 @@ Widget greyedOutMountainTile(String name, String urlThumbnail) {
               child: Center(
             child: Text(
               "${name}",
+              textAlign: TextAlign.center,
               style: TextStyle(fontWeight: FontWeight.w600),
             ),
           ))
@@ -204,9 +205,9 @@ Widget greyedOutMountainTile(String name, String urlThumbnail) {
 Widget colorfulMountainTile(String name, String urlThumbnail) {
   return Container(
     decoration: BoxDecoration(
-      border: Border.all(color: Colors.black, width: 0.8),
+      border: Border.all(color: Styles.lightgreen, width: 1),
       borderRadius: BorderRadius.circular(8),
-      color: Styles.lightgreen,
+      color: Color.fromARGB(255, 134, 230, 138).withOpacity(0.8),
     ),
     child: Center(
       child: Column(
@@ -220,7 +221,9 @@ Widget colorfulMountainTile(String name, String urlThumbnail) {
               child: Center(
             child: Text(
               "${name}",
-              style: TextStyle(fontWeight: FontWeight.w600),
+              style: TextStyle(
+                  color: Color.fromARGB(255, 42, 98, 44),
+                  fontWeight: FontWeight.w600),
             ),
           ))
         ],
