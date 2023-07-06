@@ -23,7 +23,7 @@ class _PeakDetailState extends State<PeakDetail> {
   getPaths() async {
     var paths = await FirebaseFirestore.instance
         .collection('Paths')
-        .where('finishPointName', isEqualTo: widget.document['name'])
+        .where('id', isEqualTo: widget.document['id'])
         .get();
 
     setState(() {

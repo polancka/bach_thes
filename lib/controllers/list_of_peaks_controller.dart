@@ -10,7 +10,7 @@ It implements the display of tiles that each represents a peak, in alphabet orde
 The user can get more information with clicking on each of the tiles*/
 
 //Function to navigate to the page with details of the specific peak, whose tile was clicked
-void navigateToPeakDetail(BuildContext context, DocumentSnapshot document) {
+navigateToPeakDetail(BuildContext context, DocumentSnapshot document) {
   Navigator.push(
       context, MaterialPageRoute(builder: (context) => PeakDetail(document)));
 }

@@ -9,22 +9,22 @@ class Peak {
   final String name;
   final int altitude;
   final String description;
-  final List<Path> possiblePaths;
   final String urlThumbnail;
   final String longitude;
   final String latitude;
   final String mountainChain;
+  final String sortValue;
 
   Peak(
       {required this.id,
       required this.name,
       required this.altitude,
       required this.description,
-      required this.possiblePaths,
       required this.urlThumbnail,
       required this.longitude,
       required this.latitude,
-      required this.mountainChain});
+      required this.mountainChain,
+      required this.sortValue});
 
   var db = FirebaseFirestore.instance;
 }
@@ -46,7 +46,8 @@ Future<void> addNewPeak(
     String _urlThumbnail,
     String _longitude,
     String _latitude,
-    String _mountainChain) async {
+    String _mountainChain,
+    String _sortValue) async {
   await FirebaseFirestore.instance.collection("Peaks").add({
     'id': _id,
     'name': _name,
@@ -55,6 +56,7 @@ Future<void> addNewPeak(
     'urlThumbnail': _urlThumbnail,
     'longitude': _longitude,
     'latitude': _latitude,
-    'mountainChain': _mountainChain
+    'mountainChain': _mountainChain,
+    'sortValue': _sortValue
   });
 }

@@ -50,7 +50,8 @@ class _StatisticsPageState extends State<StatisticsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Column(children: [
+        body: SingleChildScrollView(
+            child: Column(children: [
       SizedBox(
         height: 10,
       ),
@@ -71,14 +72,23 @@ class _StatisticsPageState extends State<StatisticsPage> {
               borderRadius: BorderRadius.circular(20),
             ),
             child: Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(1.0),
                 child: Column(
                   children: renderTopHikers(_scoreboardHikers),
                 )),
           ),
         ),
-      )
-    ]));
+      ),
+      SizedBox(
+        height: 10,
+      ),
+      Container(
+          child: Center(
+              child: Text(
+        "My stats",
+        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+      ))),
+    ])));
   }
 }
 
@@ -100,6 +110,7 @@ Widget listItemTopHiker(dynamic docSnapshot, int index) {
     color: Styles.deepgreen.withOpacity(0.7),
     shape: ContinuousRectangleBorder(borderRadius: BorderRadius.circular(20)),
     child: ListTile(
+        visualDensity: VisualDensity(horizontal: 0, vertical: -4),
         leading: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
@@ -111,10 +122,16 @@ Widget listItemTopHiker(dynamic docSnapshot, int index) {
             ]),
         title: Text(
           "${docSnapshot['username']}",
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(
+            color: Colors.white,
+          ),
         ),
-        subtitle: Text("Points: ${docSnapshot['points']}",
-            style: TextStyle(color: Colors.white)),
+        trailing: Text(
+          "${docSnapshot['points']} points",
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        ),
         onTap: () => () {}),
   ));
 }

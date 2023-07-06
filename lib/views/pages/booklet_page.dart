@@ -1,3 +1,4 @@
+import 'package:bach_thes/controllers/list_of_peaks_controller.dart';
 import 'package:bach_thes/globals.dart';
 import 'package:bach_thes/views/widgets/reusable_widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -5,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:bach_thes/models/peak.dart';
 import 'package:bach_thes/utils/styles.dart';
 import 'package:bach_thes/models/hiker.dart';
+import 'package:bach_thes/controllers/navigation_controller.dart';
 
 class BookletPage extends StatefulWidget {
   const BookletPage({super.key});
@@ -56,6 +58,27 @@ class _BookletPageState extends State<BookletPage> {
     });
 
     return "complete";
+  }
+
+  List<Widget> renderGridTiles(
+      List<dynamic> listPeaks, List<String> achievedPeaks) {
+    List<Widget> allTiles = [];
+
+    for (var docSnapshot in listPeaks) {
+      if (achievedPeaks.contains(docSnapshot['name'])) {
+        allTiles.add(GridTile(
+            child: colorfulMountainTile(docSnapshot['name'].toString(),
+                docSnapshot['urlThumbnail'].toString())));
+      } else {
+        allTiles.add(
+          GridTile(
+            child: greyedOutMountainTile(docSnapshot['name'].toString(),
+                docSnapshot['urlThumbnail'].toString()),
+          ),
+        );
+      }
+    }
+    return allTiles;
   }
 
   @override
@@ -142,24 +165,6 @@ class _BookletPageState extends State<BookletPage> {
       ),
     )));
   }
-}
-
-List<Widget> renderGridTiles(
-    List<dynamic> listPeaks, List<String> achievedPeaks) {
-  List<Widget> allTiles = [];
-
-  for (var docSnapshot in listPeaks) {
-    if (achievedPeaks.contains(docSnapshot['name'])) {
-      allTiles.add(GridTile(
-          child: colorfulMountainTile(docSnapshot['name'].toString(),
-              docSnapshot['urlThumbnail'].toString())));
-    } else {
-      allTiles.add(GridTile(
-          child: greyedOutMountainTile(docSnapshot['name'].toString(),
-              docSnapshot['urlThumbnail'].toString())));
-    }
-  }
-  return allTiles;
 }
 
 //make tile for every peak in database and add it to the list

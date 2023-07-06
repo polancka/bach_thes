@@ -1,3 +1,4 @@
+import 'package:bach_thes/views/pages/addToDatabase.dart';
 import 'package:bach_thes/views/pages/list_of_peaks.dart';
 import 'package:bach_thes/views/pages/main_page.dart';
 import 'package:bach_thes/views/pages/profile_page.dart';
