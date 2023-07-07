@@ -14,6 +14,9 @@ class Hiker {
   final String bookletId;
   final String scoreboardParticipation;
   final List<String> achievedPeaks;
+  final int numberOfHikes;
+  final int timeTogheter;
+  final int altimetersTogheter;
   Hiker(
       {required this.id,
       required this.username,
@@ -23,7 +26,10 @@ class Hiker {
       required this.points,
       required this.bookletId,
       required this.scoreboardParticipation,
-      required this.achievedPeaks});
+      required this.achievedPeaks,
+      required this.numberOfHikes,
+      required this.timeTogheter,
+      required this.altimetersTogheter});
 
   String getParticipation() {
     return this.scoreboardParticipation;
@@ -60,7 +66,10 @@ Future<DocumentReference> addHiker(String email, String username, String? userId
     'points': 0,
     'bookletId': userId,
     'scoreboardParticipation': false,
-    'achievedPeaks': []
+    'achievedPeaks': [],
+    'numberOfHikes': 0,
+    'timeTogheter': 0,
+    'altimetersTogheter': 0
   });
 
   //add reference number for the booklet

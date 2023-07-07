@@ -34,6 +34,9 @@ class _ProfilePageState extends State<ProfilePage> {
 
   final List achievedBadges = [];
 
+  String percentProgress = '';
+  double decimalProgress = 0.0;
+
   returnListHikes(String? currentUserTwo) async {
     var recordedHikesQuery = await FirebaseFirestore.instance
         .collection('RecordedHikes')
@@ -46,10 +49,30 @@ class _ProfilePageState extends State<ProfilePage> {
     //print(recentHikes);
   }
 
+  String returnPercentProgress() {
+    //returns the percentage in 20% form
+    String percentprogres = '';
+    int remaining = int.parse(currentHiker.points) % 100;
+    percentprogres = remaining.toString();
+    return percentprogres;
+  }
+
+  double returnDecimalProgress() {
+    double decimalProgress = 0.0;
+    int remaining = int.parse(currentHiker.points) % 100;
+    decimalProgress = remaining / 100;
+    return decimalProgress;
+  }
+
   @override
   void initState() {
     super.initState();
     returnListHikes(currentUserTwo);
+    setState(() {
+      percentProgress = returnPercentProgress();
+      decimalProgress = returnDecimalProgress();
+    });
+    ;
   }
 
   @override
@@ -89,7 +112,7 @@ class _ProfilePageState extends State<ProfilePage> {
         SizedBox(height: 10),
         Center(
             child: Container(
-          child: Text("${currentHiker.points}/${currentHiker.level}00",
+          child: Text("${currentHiker.points}/${currentHiker.level}00 points",
               style: TextStyle(fontSize: 15)),
         )),
 
@@ -101,8 +124,9 @@ class _ProfilePageState extends State<ProfilePage> {
             animation: true,
             lineHeight: 20.0,
             animationDuration: 2500,
-            percent: 0.2,
-            center: Text("20%"),
+            percent: decimalProgress,
+            center: Text("${percentProgress}%",
+                style: TextStyle(color: Colors.white)),
             barRadius: Radius.circular(20),
             progressColor: Styles.deepgreen,
           ),

@@ -11,7 +11,7 @@ import 'package:bach_thes/views/pages/forgoten_password_page.dart';
 import 'package:bach_thes/views/pages/home_page.dart';
 import 'package:bach_thes/views/pages/login_page.dart';
 import 'package:bach_thes/views/pages/registration_page.dart';
-
+import 'package:bach_thes/views/pages/pointsAlert.dart';
 //Class that provides navigation to any of the pages of the application
 
 class MyNavigator {
@@ -78,5 +78,12 @@ class MyNavigator {
   void navigateToAddNewPeakPage() {
     Navigator.push(
         context, MaterialPageRoute(builder: (context) => addNewPeakPage()));
+  }
+
+  void navigateToPointsPage(String action, int points) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => PointsPage(action: action, points: points)));
   }
 }

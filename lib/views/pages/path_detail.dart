@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:bach_thes/models/path.dart';
 import 'package:bach_thes/utils/styles.dart';
+import 'package:bach_thes/controllers/navigation_controller.dart';
 
 /* UI for displayinf more information about a chosen path. User wil also be able 
 to record his hike on this path by pressing the "Record" button. */
@@ -103,7 +104,8 @@ class PathDetail extends StatelessWidget {
                                       MaterialStateColor.resolveWith(
                                           (states) => Styles.deepgreen)),
                               onPressed: () {
-                                log("pressed");
+                                MyNavigator(context).navigateToPointsPage(
+                                    "recording a hike", 15);
                               },
                               child: Text(
                                 "Record this path",

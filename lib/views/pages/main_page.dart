@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:bach_thes/controllers/navigation_controller.dart';
 import 'package:bach_thes/views/pages/booklet_page.dart';
 import 'package:bach_thes/views/pages/home_page.dart';
@@ -35,6 +37,7 @@ class _MainPageState extends State<MainPage> {
 
   //function that collects the data from firebase about the current user
   getHiker() async {
+    //print("in getHiker()");
     setState(() {
       thisUserId = FirebaseAuth.instance.currentUser?.uid;
     });
@@ -44,7 +47,9 @@ class _MainPageState extends State<MainPage> {
         .get();
     var profilestwo = profiles.docs;
     for (var userSnapshot in profilestwo) {
+      // print(int.parse(userSnapshot['numberOfHikes']));
       //error when running : "Another exception was thrown: NoSuchMethodError: The getter 'username' was called on null." but it does load
+      //print("${userSnapshot['timeTogheter']}");
       setState(() {
         currentHiker = Hiker(
             id: userSnapshot['id'].toString(),
@@ -56,7 +61,10 @@ class _MainPageState extends State<MainPage> {
             bookletId: userSnapshot['bookletId'].toString(),
             scoreboardParticipation:
                 userSnapshot['scoreboardParticipation'].toString(),
-            achievedPeaks: List.from(userSnapshot['achievedPeaks']));
+            achievedPeaks: List.from(userSnapshot['achievedPeaks']),
+            numberOfHikes: userSnapshot['numberOfHikes'],
+            timeTogheter: userSnapshot['timeTogheter'],
+            altimetersTogheter: userSnapshot['altimetersTogheter']);
       });
     }
   }
@@ -74,9 +82,14 @@ class _MainPageState extends State<MainPage> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    getHiker();
+  }
+
+  @override
   Widget build(BuildContext context) {
     //print(prefs.getString("email"));
-    getHiker();
 
     List pages = [
       ProfilePage(),
@@ -89,7 +102,7 @@ class _MainPageState extends State<MainPage> {
       "My profile",
       "Search Slovenian Peaks",
       "My hiking booklet",
-      "Scoreboard"
+      "Statistics"
     ];
 
     void onTap(int index) {

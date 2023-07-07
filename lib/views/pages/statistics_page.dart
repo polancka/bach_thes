@@ -1,3 +1,4 @@
+import 'package:bach_thes/globals.dart';
 import 'package:bach_thes/views/widgets/reusable_widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +19,8 @@ class _StatisticsPageState extends State<StatisticsPage> {
   //getting hikers for scoreboard from database
 
   List _scoreboardHikers = [];
+  int hours = 0;
+  int minutes = 0;
 
   getScoreboardHikers() async {
     var _listOfScoreboardHikers = await FirebaseFirestore.instance
@@ -29,10 +32,21 @@ class _StatisticsPageState extends State<StatisticsPage> {
 
     setState(() {
       _scoreboardHikers = List.from(_listOfScoreboardHikers.docs);
-      print(_scoreboardHikers);
+      //print(_scoreboardHikers);
     });
 
     return "complete";
+  }
+
+  int getHours(int allMinutes) {
+    var allhours = allMinutes ~/ 60;
+    print(allhours);
+    return allhours;
+  }
+
+  int getMinutes(int allMinutes) {
+    var remminutes = allMinutes % 60;
+    return remminutes;
   }
 
   @override
@@ -45,6 +59,8 @@ class _StatisticsPageState extends State<StatisticsPage> {
   void setState(VoidCallback fn) {
     // TODO: implement setState
     super.setState(fn);
+    hours = getHours(currentHiker.timeTogheter);
+    minutes = getMinutes(currentHiker.timeTogheter);
   }
 
   @override
@@ -52,8 +68,44 @@ class _StatisticsPageState extends State<StatisticsPage> {
     return Scaffold(
         body: SingleChildScrollView(
             child: Column(children: [
+      SizedBox(height: 25),
+      Container(
+          child: Center(
+              child: Text(
+        "My stats",
+        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+      ))),
+      SizedBox(
+        height: 15,
+      ),
+      Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text("Number of recorded hikes: ${currentHiker.numberOfHikes}")
+        ],
+      ),
       SizedBox(
         height: 10,
+      ),
+      Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [Text("Time spent hiking: ${hours}h ${minutes}min")],
+      ),
+      SizedBox(
+        height: 10,
+      ),
+      Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+              "Hiking altimeters combined: ${currentHiker.altimetersTogheter}m")
+        ],
+      ),
+      SizedBox(
+        height: 35,
       ),
       Container(
           child: Center(
@@ -82,12 +134,6 @@ class _StatisticsPageState extends State<StatisticsPage> {
       SizedBox(
         height: 10,
       ),
-      Container(
-          child: Center(
-              child: Text(
-        "My stats",
-        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-      ))),
     ])));
   }
 }
