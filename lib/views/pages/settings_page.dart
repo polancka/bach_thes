@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:bach_thes/globals.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class settingsPage extends StatefulWidget {
   const settingsPage({super.key});
@@ -14,32 +15,51 @@ class settingsPage extends StatefulWidget {
 }
 
 class _settingsPageState extends State<settingsPage> {
-  //get users scoreboardParticipation
-  getUserParticipation() async {
-    var participantID = FirebaseAuth.instance.currentUser?.uid.toString();
-    var isUserParticipating = await FirebaseFirestore.instance
-        .collection('Hikers')
-        .where('id', isEqualTo: participantID)
-        .get();
-    //var whatever = isUserParticipating.docs['id'];
+  var isParticipating;
+
+  changeParticipationToPrefs(bool participation) async {
+    //change shared prefs
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool('scoreboardParticipation', participation);
+    //change into database
+    setState(() {
+      isParticipating = prefs.getBool('scoreboardParticipation');
+      print(isParticipating.toString());
+    });
+    changeParticipation(participation, prefs.getString('id') ?? "");
   }
 
-  changeUserParticipation() {}
+  getParticipationFromPrefs() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await FirebaseFirestore.instance
+        .collection('Hikers')
+        .where('id', isEqualTo: FirebaseAuth.instance.currentUser?.uid)
+        .get()
+        .then((value) => changeParticipationToPrefs(
+            value.docs.first['scoreboardParticipation']));
+  }
 
   bool switchOn = false;
+
   @override
   void initState() {
-    super.initState();
-    String isParticipating = currentHiker.getParticipation();
-    if (isParticipating == "true") {
+    getParticipationFromPrefs();
+    if (isParticipating == true) {
       switchOn = true;
     } else {
       switchOn = false;
     }
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    if (isParticipating == true) {
+      switchOn = true;
+    } else {
+      switchOn = false;
+    }
+
     return Scaffold(
       appBar: myAppBar("Settings"),
       body: Padding(
@@ -61,7 +81,8 @@ class _settingsPageState extends State<settingsPage> {
                       onChanged: (value) {
                         setState(() {
                           switchOn = value;
-                          changeParticipation(switchOn, currentHiker);
+                          isParticipating = value;
+                          changeParticipationToPrefs(switchOn);
                         });
                       },
                       activeTrackColor: Color.fromARGB(255, 92, 188, 97),

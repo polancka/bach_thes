@@ -44,8 +44,11 @@ dependencies:
   firebase_auth: ^4.6.2
   fluttertoast: ^8.2.2
   percent_indicator: ^4.2.3
-  shared_preferences: ^2.1.2
+  shared_preferences: ^2.2.0
   flutter_local_notifications: ^14.1.1
+  http: ^0.13.6
+  intl: ^0.18.1
+  location: ^5.0.0
 
 
 dev_dependencies:
@@ -78,6 +81,7 @@ flutter:
      - lib/utils/images/profile_back.png
      - lib/utils/images/user_logo.png
      - lib/utils/images/points_conf.png
+     - lib/utils/images/Hiker.gif
     
 
  

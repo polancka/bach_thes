@@ -1,7 +1,11 @@
+import 'dart:io';
+
 import 'package:bach_thes/globals.dart';
 import 'package:bach_thes/views/widgets/reusable_widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'main_page.dart';
 
 import '../../utils/styles.dart';
 
@@ -19,8 +23,24 @@ class _StatisticsPageState extends State<StatisticsPage> {
   //getting hikers for scoreboard from database
 
   List _scoreboardHikers = [];
-  int hours = 0;
-  int minutes = 0;
+  var hours;
+  var minutes;
+  var timeTogheter =
+      1; //initialized to a random value to avoid dividing by zero
+  var numberOfHikes;
+  var altimetersTogheter;
+
+  getSharedPref() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      //add time ??
+      timeTogheter = prefs.getInt('timeTogheter')!;
+      numberOfHikes = prefs.getInt('numberOfHikes');
+      altimetersTogheter = prefs.getInt('altimetersTogheter');
+    });
+
+    return "complete";
+  }
 
   getScoreboardHikers() async {
     var _listOfScoreboardHikers = await FirebaseFirestore.instance
@@ -32,7 +52,6 @@ class _StatisticsPageState extends State<StatisticsPage> {
 
     setState(() {
       _scoreboardHikers = List.from(_listOfScoreboardHikers.docs);
-      //print(_scoreboardHikers);
     });
 
     return "complete";
@@ -51,16 +70,10 @@ class _StatisticsPageState extends State<StatisticsPage> {
 
   @override
   void initState() {
-    super.initState();
+    getSharedPref();
     getScoreboardHikers();
-  }
-
-  @override
-  void setState(VoidCallback fn) {
-    // TODO: implement setState
-    super.setState(fn);
-    hours = getHours(currentHiker.timeTogheter);
-    minutes = getMinutes(currentHiker.timeTogheter);
+    //set state to figure out minutes and hours
+    super.initState();
   }
 
   @override
@@ -81,17 +94,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
       Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text("Number of recorded hikes: ${currentHiker.numberOfHikes}")
-        ],
-      ),
-      SizedBox(
-        height: 10,
-      ),
-      Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [Text("Time spent hiking: ${hours}h ${minutes}min")],
+        children: [Text("Number of recorded hikes: ${numberOfHikes}")],
       ),
       SizedBox(
         height: 10,
@@ -101,8 +104,16 @@ class _StatisticsPageState extends State<StatisticsPage> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-              "Hiking altimeters combined: ${currentHiker.altimetersTogheter}m")
+              "Time spent hiking: ${timeTogheter ~/ 60}h ${timeTogheter % 60} min")
         ],
+      ),
+      SizedBox(
+        height: 10,
+      ),
+      Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [Text("Hiking altimeters combined: ${altimetersTogheter}m")],
       ),
       SizedBox(
         height: 35,
@@ -142,7 +153,6 @@ List<Widget> renderTopHikers(List<dynamic> listOfHikes) {
   var index = 1;
   List<Widget> latestHikes = List<Widget>.empty(growable: true);
   for (var docSnapshot in listOfHikes) {
-    //print(docSnapshot.toString());
     latestHikes.add(listItemTopHiker(docSnapshot, index));
     index = index + 1;
   }

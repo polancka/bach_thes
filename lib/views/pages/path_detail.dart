@@ -104,8 +104,7 @@ class PathDetail extends StatelessWidget {
                                       MaterialStateColor.resolveWith(
                                           (states) => Styles.deepgreen)),
                               onPressed: () {
-                                MyNavigator(context).navigateToPointsPage(
-                                    "recording a hike", 15);
+                                MyNavigator(context).navigateToRecordingPage();
                               },
                               child: Text(
                                 "Record this path",

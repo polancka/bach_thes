@@ -1,0 +1,53 @@
+@startuml ClassDiagram
+skinparam class {
+  backgroundColor white
+  borderColor #5FB8EC
+  arrowColor black
+}
+skinparam backgroundcolor transparent
+'skinparam shadowing false
+skinparam defaultTextAlignment center
+hide circle
+'hide members
+
+Class User {
+  - userId : int 	
+  - email: String
+  - password: String
+}
+
+Class Hiker {
+	- userId: String
+    -username: String
+    - points: int 
+    - level: int
+    - scoreboardParticipation: boolean
+    - bookletId : int
+}
+
+Class Peak {
+	- name: String
+    -altitude: int
+    - possiblePaths: List<Path>
+}
+
+class Path {
+	- name: String
+    - startingPointName: String
+    - duration: int
+    - difficulty: String
+    - altimeters: int
+    -altimetersOnTheWay: int
+}
+
+class Booklet {
+	- bookletId: int
+    - achievedPeaks: List<Peak>
+}
+
+
+Peak - Path
+Booklet - Peak
+Booklet - Hiker
+Hiker -- User
+@enduml

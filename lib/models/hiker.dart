@@ -9,11 +9,9 @@ class Hiker {
   final String username;
   final String email;
   final String profilePicture;
-  final String level;
-  final String points;
-  final String bookletId;
+  final int level;
+  final int points;
   final String scoreboardParticipation;
-  final List<String> achievedPeaks;
   final int numberOfHikes;
   final int timeTogheter;
   final int altimetersTogheter;
@@ -24,9 +22,7 @@ class Hiker {
       required this.profilePicture,
       required this.level,
       required this.points,
-      required this.bookletId,
       required this.scoreboardParticipation,
-      required this.achievedPeaks,
       required this.numberOfHikes,
       required this.timeTogheter,
       required this.altimetersTogheter});
@@ -34,16 +30,12 @@ class Hiker {
   String getParticipation() {
     return this.scoreboardParticipation;
   }
-
-  List<String> getAchievedPeaks() {
-    return this.achievedPeaks;
-  }
 }
 
-changeParticipation(bool isParticipating, Hiker currentHiker) async {
+changeParticipation(bool isParticipating, String id) async {
   var wantedDocuments = await FirebaseFirestore.instance
       .collection('Hikers')
-      .where('id', isEqualTo: currentHiker.id)
+      .where('id', isEqualTo: id)
       .get();
   var docRef = wantedDocuments.docs.first.id;
 

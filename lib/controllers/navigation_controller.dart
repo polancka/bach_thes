@@ -2,9 +2,11 @@ import 'package:bach_thes/models/path.dart';
 import 'package:bach_thes/models/registration_model.dart';
 import 'package:bach_thes/views/pages/add_new_path_page.dart';
 import 'package:bach_thes/views/pages/add_new_peak_page.dart';
+import 'package:bach_thes/views/pages/all_recordings_page.dart';
 import 'package:bach_thes/views/pages/list_of_peaks.dart';
 import 'package:bach_thes/views/pages/main_page.dart';
 import 'package:bach_thes/views/pages/path_detail.dart';
+import 'package:bach_thes/views/pages/recording_page.dart';
 import 'package:bach_thes/views/pages/settings_page.dart';
 import 'package:flutter/material.dart';
 import 'package:bach_thes/views/pages/forgoten_password_page.dart';
@@ -60,7 +62,6 @@ class MyNavigator {
 
   void navigateToSettingsPage() {
     Navigator.pop(context);
-
     Navigator.push(
         context, MaterialPageRoute(builder: (context) => settingsPage()));
   }
@@ -85,5 +86,15 @@ class MyNavigator {
         context,
         MaterialPageRoute(
             builder: (context) => PointsPage(action: action, points: points)));
+  }
+
+  void navigateToRecordingPage() {
+    Navigator.push(
+        context, MaterialPageRoute(builder: ((context) => RecordingPage())));
+  }
+
+  void navigateToAllRecordingsPage() {
+    Navigator.push(context,
+        MaterialPageRoute(builder: ((context) => AllRecordingsPage())));
   }
 }

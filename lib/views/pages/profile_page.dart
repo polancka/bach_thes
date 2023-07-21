@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:bach_thes/controllers/profile_page_controller.dart';
 import 'package:bach_thes/models/current_user.dart';
 import 'package:bach_thes/models/hike.dart';
@@ -11,9 +13,12 @@ import 'package:flutter/material.dart';
 import 'package:bach_thes/utils/styles.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:bach_thes/views/widgets/hike_card.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'main_page.dart';
 import 'package:bach_thes/models/hiker.dart';
 import 'package:bach_thes/globals.dart';
+
+//TODO: change current hiker to getting data from shared prefernces
 
 /* UI for showing users profile page. it shows their picture, username, 
 level, number of points on a progress bar and their booklet. The booklet itself
@@ -27,20 +32,30 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   var currentUserTwo = FirebaseAuth.instance.currentUser?.uid.toString();
-
   List recentHikes = [];
-
   final List achievedPeaks = [];
-
   final List achievedBadges = [];
+  var username;
+  var points = 1;
+  var level = 1;
 
   String percentProgress = '';
   double decimalProgress = 0.0;
+
+  getHikerData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      points = prefs.getInt('points')!;
+      username = prefs.getString('username');
+      level = prefs.getInt('level')!;
+    });
+  }
 
   returnListHikes(String? currentUserTwo) async {
     var recordedHikesQuery = await FirebaseFirestore.instance
         .collection('RecordedHikes')
         .where('hikerId', isEqualTo: currentUserTwo)
+        .limit(3)
         .get();
 
     setState(() {
@@ -52,33 +67,32 @@ class _ProfilePageState extends State<ProfilePage> {
   String returnPercentProgress() {
     //returns the percentage in 20% form
     String percentprogres = '';
-    int remaining = int.parse(currentHiker.points) % 100;
+    int remaining = points % 100;
     percentprogres = remaining.toString();
     return percentprogres;
   }
 
   double returnDecimalProgress() {
     double decimalProgress = 0.0;
-    int remaining = int.parse(currentHiker.points) % 100;
+    int remaining = points % 100;
     decimalProgress = remaining / 100;
     return decimalProgress;
   }
 
   @override
   void initState() {
-    super.initState();
+    getHikerData();
     returnListHikes(currentUserTwo);
-    setState(() {
-      percentProgress = returnPercentProgress();
-      decimalProgress = returnDecimalProgress();
-    });
-    ;
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    var percPoints = getPercent(points);
     return Scaffold(
-        body: Column(
+        body: Container(
+            child: SingleChildScrollView(
+                child: Column(
       children: [
         SizedBox(
           height: 25,
@@ -97,7 +111,7 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
         Center(
             child: Container(
-          child: Text("${currentHiker.username}", style: Styles.headerLarge),
+          child: Text("$username", style: Styles.headerLarge),
         )),
         SizedBox(
           height: 20,
@@ -105,14 +119,13 @@ class _ProfilePageState extends State<ProfilePage> {
         //level
         Center(
             child: Container(
-          child: Text("Level ${currentHiker.level}",
-              style: TextStyle(fontSize: 15)),
+          child: Text("Level ${level}", style: TextStyle(fontSize: 15)),
         )),
 
         SizedBox(height: 10),
         Center(
             child: Container(
-          child: Text("${currentHiker.points}/${currentHiker.level}00 points",
+          child: Text("${points}/${level}00 points",
               style: TextStyle(fontSize: 15)),
         )),
 
@@ -124,9 +137,9 @@ class _ProfilePageState extends State<ProfilePage> {
             animation: true,
             lineHeight: 20.0,
             animationDuration: 2500,
-            percent: decimalProgress,
-            center: Text("${percentProgress}%",
-                style: TextStyle(color: Colors.white)),
+            percent: getDecimal(points), //CHANGE WHEN DECIMAL PROGRESS IS FIXED
+            center:
+                Text("${percPoints}%", style: TextStyle(color: Colors.white)),
             barRadius: Radius.circular(20),
             progressColor: Styles.deepgreen,
           ),
@@ -157,10 +170,19 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
         )
       ],
-    ));
+    ))));
   }
 }
 
+int getPercent(int points) {
+  var percPoints = points % 100;
+  return percPoints;
+}
+
+double getDecimal(int points) {
+  var decPoints = (points % 100) / 100;
+  return decPoints;
+}
 /*getHikerInfo() async {
   var currentUserOne = FirebaseAuth.instance.currentUser?.uid.toString();
   var data = FirebaseFirestore.instance

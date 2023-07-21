@@ -25,4 +25,4 @@ incrementPeakIndex(int? currentIndex) async {
       onError: (e) => print("Error updating document $e"));
 }
 
-late Hiker currentHiker;
+//late Hiker currentHiker;

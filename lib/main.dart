@@ -14,13 +14,12 @@ import 'views/pages/home_page.dart';
 import 'package:bach_thes/views/pages/forgoten_password_page.dart';
 import 'views/pages/map_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'views/pages/recording_page.dart';
 
 Future<void> main() async {
   //ensure widget binding before running the aplication
   WidgetsFlutterBinding.ensureInitialized();
-  //SharedPreferences prefs = await SharedPreferences.getInstance();
-  //var email = prefs.getString("email");
-  //print(email);
+  SharedPreferences prefs = await SharedPreferences.getInstance();
 
   //initializing Firebase
   try {
@@ -33,7 +32,7 @@ Future<void> main() async {
 
   /*runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
-    home: email == null ? LoginPage() : MainPage(),
+    home: prefs.getBool('isLoggedIn') == true ? MainPage() : LoginPage(),
   ));*/
 
   return runApp(const MyApp());

@@ -1,21 +1,29 @@
 import 'package:bach_thes/models/path.dart';
 import 'package:bach_thes/models/peak.dart';
 import 'package:bach_thes/models/place.dart';
+import 'package:bach_thes/globals.dart';
 
 class Hike {
-  final int id;
-  final Path pathTaken;
-  final Peak finalPeak;
-  final List<Place> checkInPoints;
-  final DateTime dateAndTime;
-  final String duration;
+  final String id;
+  final dateAndTime;
+  final int duration;
   final int altimeters;
+  final String endPointName;
   Hike(
       {required this.id,
-      required this.pathTaken,
-      required this.finalPeak,
-      required this.checkInPoints,
       required this.dateAndTime,
       required this.duration,
-      required this.altimeters});
+      required this.altimeters,
+      required this.endPointName});
+}
+
+Future<void> addNewRecordedHike(String id, DateTime dateAndTime,
+    int durationInSeconds, int altimeters, String endPointName) async {
+  await db.collection("RecordedHikes").add({
+    'id': id,
+    'dateAndTime': dateAndTime,
+    'duration': durationInSeconds,
+    'altimeters': altimeters,
+    'endPointName': endPointName,
+  });
 }

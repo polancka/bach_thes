@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:bach_thes/controllers/navigation_controller.dart';
 import 'package:bach_thes/views/pages/booklet_page.dart';
 import 'package:bach_thes/views/pages/home_page.dart';
@@ -29,87 +28,50 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
-  late Future<String> _emailSharedPref;
-
   int currentIndex = 3;
-  var thisUserId;
 
   //function that collects the data from firebase about the current user
   getHiker() async {
-    //print("in getHiker()");
-    setState(() {
-      thisUserId = FirebaseAuth.instance.currentUser?.uid;
-    });
+    //TODO send all hiker parameters into set current hiker
     var profiles = await FirebaseFirestore.instance
         .collection('Hikers')
-        .where('id', isEqualTo: thisUserId)
-        .get();
-    var profilestwo = profiles.docs;
-    for (var userSnapshot in profilestwo) {
-      // print(int.parse(userSnapshot['numberOfHikes']));
-      //error when running : "Another exception was thrown: NoSuchMethodError: The getter 'username' was called on null." but it does load
-      //print("${userSnapshot['timeTogheter']}");
-      setState(() {
-        currentHiker = Hiker(
-            id: userSnapshot['id'].toString(),
-            username: userSnapshot['username'].toString(),
-            email: userSnapshot['email'].toString(),
-            profilePicture: userSnapshot['pictureUrl'].toString(),
-            level: userSnapshot['level'].toString(),
-            points: userSnapshot['points'].toString(),
-            bookletId: userSnapshot['bookletId'].toString(),
-            scoreboardParticipation:
-                userSnapshot['scoreboardParticipation'].toString(),
-            achievedPeaks: List.from(userSnapshot['achievedPeaks']),
-            numberOfHikes: userSnapshot['numberOfHikes'],
-            timeTogheter: userSnapshot['timeTogheter'],
-            altimetersTogheter: userSnapshot['altimetersTogheter']);
-      });
-    }
-  }
-
-  Future<void> _updateString() async {
-    final SharedPreferences prefs = await _prefs;
-    final String newEmail = "alo";
-
-    setState(() {
-      _emailSharedPref =
-          prefs.setString('email', newEmail).then((bool success) {
-        return newEmail;
-      });
-    });
+        .where('id', isEqualTo: FirebaseAuth.instance.currentUser?.uid)
+        .get()
+        .then((value) => setCurrentHiker(
+            value.docs.first['id'],
+            value.docs.first['username'],
+            value.docs.first['email'],
+            value.docs.first['level'],
+            value.docs.first['points'],
+            value.docs.first['numberOfHikes'],
+            value.docs.first['altimetersTogheter'],
+            value.docs.first['timeTogheter'],
+            value.docs.first['scoreboardParticipation']));
   }
 
   @override
   void initState() {
-    super.initState();
     getHiker();
+    super.initState();
   }
+
+  List pages = [ProfilePage(), SearchPeaks(), BookletPage(), StatisticsPage()];
+
+  List titles = [
+    "My profile",
+    "Search Slovenian Peaks",
+    "My hiking booklet",
+    "Statistics"
+  ];
 
   @override
   Widget build(BuildContext context) {
     //print(prefs.getString("email"));
 
-    List pages = [
-      ProfilePage(),
-      SearchPeaks(),
-      BookletPage(),
-      StatisticsPage()
-    ];
-
-    List titles = [
-      "My profile",
-      "Search Slovenian Peaks",
-      "My hiking booklet",
-      "Statistics"
-    ];
-
     void onTap(int index) {
       //print(currentIndex);
       setState(() {
         currentIndex = index;
-        thisUserId = FirebaseAuth.instance.currentUser?.uid;
       });
     }
 
@@ -149,5 +111,28 @@ class _MainPageState extends State<MainPage> {
         ],
       ),
     );
+  }
+
+  Future<void> setCurrentHiker(
+      String id,
+      String username,
+      String email,
+      int level,
+      int points,
+      int numberOfHikes,
+      int altimetersTogheter,
+      int timeTogheter,
+      bool scoreboardParticipation) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('id', id);
+    prefs.setString('username', username);
+    prefs.setString('email', email);
+    prefs.setInt('level', level);
+    prefs.setInt('points', points);
+    prefs.setInt('numberOfHikes', numberOfHikes);
+    prefs.setInt('timeTogheter', timeTogheter);
+    prefs.setInt('altimetersTogheter', altimetersTogheter);
+    prefs.setBool('scoreboardParticipation', scoreboardParticipation);
+    prefs.setBool('isLoggedIn', true);
   }
 }

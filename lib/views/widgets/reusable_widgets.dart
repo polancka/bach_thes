@@ -8,7 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:bach_thes/utils/styles.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:intl/intl.dart';
 /* Different widgets that are used multiple times or by multiple pages */
 
 Image logoWidget(String imageUrl) {
@@ -143,6 +144,25 @@ Drawer myDrawer(BuildContext context) {
             padding: EdgeInsets.zero,
             children: [
               ListTile(
+                  leading: Icon(Icons.track_changes, color: Colors.white),
+                  title: Text("Record a hike",
+                      style: TextStyle(color: Colors.white, fontSize: 15)),
+                  onTap: () {
+                    MyNavigator(context).navigateToRecordingPage();
+                  }),
+              ListTile(
+                leading: Icon(Icons.list, color: Colors.white),
+                title: Text("My recordings",
+                    style: TextStyle(color: Colors.white, fontSize: 15)),
+                onTap: () {
+                  MyNavigator(context).navigateToAllRecordingsPage();
+                },
+              ),
+              ListTile(
+                  leading: Icon(Icons.star, color: Colors.white),
+                  title: Text("My badges",
+                      style: TextStyle(color: Colors.white, fontSize: 15))),
+              ListTile(
                   leading: Icon(
                     Icons.settings,
                     color: Colors.white,
@@ -153,7 +173,6 @@ Drawer myDrawer(BuildContext context) {
                   ),
                   onTap: () {
                     //open settings
-
                     MyNavigator(context).navigateToSettingsPage();
                   }),
               ListTile(
@@ -166,6 +185,7 @@ Drawer myDrawer(BuildContext context) {
                     style: TextStyle(color: Colors.white, fontSize: 15),
                   ),
                   onTap: () async {
+                    //logOutInPrefs();
                     //clear user cache
                     //Navigator.pushAndRemoveUntil(context, newRoute, (route) => false
                     await FirebaseAuth.instance.signOut().then((value) =>
@@ -193,6 +213,11 @@ AppBar myAppBar(String text) {
 }
 
 Widget listItemHike(dynamic docSnapshot) {
+  String dateFormat = 'MM/dd/yy';
+  var time = (docSnapshot['dateAndTime'] as Timestamp).toDate();
+  DateTime docDateTime = DateTime.parse(time.toString());
+  var newtime = DateFormat(dateFormat).format(docDateTime);
+
   return Container(
       child: Card(
     color: Styles.deepgreen.withOpacity(0.7),
@@ -207,12 +232,17 @@ Widget listItemHike(dynamic docSnapshot) {
           style: TextStyle(color: Colors.white),
         ),
         subtitle: Text(
-            "Time: ${docSnapshot['duration']} \nAltimeters: ${docSnapshot['altimeters']}",
-            style: TextStyle(color: Colors.white)),
+            "Time: ${docSnapshot['duration']} Altimeters: ${docSnapshot['altimeters']} \n ${newtime}",
+            style: TextStyle(color: Colors.white, fontSize: 13)),
         trailing: Icon(
           Icons.check_box,
           color: Colors.white,
         ),
         onTap: () => () {}),
   ));
+}
+
+logOutInPrefs() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  prefs.setBool('isLoggedIn', false);
 }

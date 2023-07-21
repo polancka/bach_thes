@@ -563,3 +563,290 @@ realtime getting data from FirebaseFirestoreWidget build(BuildContext context) {
       }
   );
 }
+----------------------------
+old profile page (late initalization error)
+import 'package:bach_thes/controllers/profile_page_controller.dart';
+import 'package:bach_thes/models/current_user.dart';
+import 'package:bach_thes/models/hike.dart';
+import 'package:bach_thes/models/hiker.dart';
+import 'package:bach_thes/views/widgets/booklet_widget.dart';
+import 'package:bach_thes/views/widgets/mountain_card.dart';
+import 'package:bach_thes/views/widgets/reusable_widgets.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:bach_thes/utils/styles.dart';
+import 'package:percent_indicator/percent_indicator.dart';
+import 'package:bach_thes/views/widgets/hike_card.dart';
+import 'main_page.dart';
+import 'package:bach_thes/models/hiker.dart';
+import 'package:bach_thes/globals.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+
+/* UI for showing users profile page. it shows their picture, username, 
+level, number of points on a progress bar and their booklet. The booklet itself
+ consists of recorderd hikes and achieved peaks and badges. Both parts of the 
+ booklet are clickable. They lead to new pages with all possible peaks.*/
+
+class ProfilePage extends StatefulWidget {
+  @override
+  State<ProfilePage> createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  var currentUserTwo = FirebaseAuth.instance.currentUser?.uid.toString();
+  late Future<Album> fetchTriglavJSON;
+  List recentHikes = [];
+
+  final List achievedPeaks = [];
+
+  final List achievedBadges = [];
+
+  String percentProgress = '';
+  double decimalProgress = 0.0;
+
+  returnListHikes(String? currentUserTwo) async {
+    var recordedHikesQuery = await FirebaseFirestore.instance
+        .collection('RecordedHikes')
+        .where('hikerId', isEqualTo: currentUserTwo)
+        .get();
+
+    setState(() {
+      recentHikes = List.from(recordedHikesQuery.docs);
+    });
+    //print(recentHikes);
+  }
+
+  String returnPercentProgress() {
+    //returns the percentage in 20% form
+    String percentprogres = '';
+    int remaining = int.parse(currentHiker.points) % 100;
+    percentprogres = remaining.toString();
+    return percentprogres;
+  }
+
+  double returnDecimalProgress() {
+    double decimalProgress = 0.0;
+    int remaining = int.parse(currentHiker.points) % 100;
+    decimalProgress = remaining / 100;
+    return decimalProgress;
+  }
+
+  getHiker() async {
+    var profiles = await FirebaseFirestore.instance
+        .collection('Hikers')
+        .where('id', isEqualTo: currentUserTwo)
+        .get();
+    var profilestwo = profiles.docs;
+    for (var userSnapshot in profilestwo) {
+      setState(() {
+        print("getting hiker");
+        currentHiker = Hiker(
+            id: userSnapshot['id'].toString(),
+            username: userSnapshot['username'].toString(),
+            email: userSnapshot['email'].toString(),
+            profilePicture: userSnapshot['pictureUrl'].toString(),
+            level: userSnapshot['level'].toString(),
+            points: userSnapshot['points'],
+            bookletId: userSnapshot['bookletId'].toString(),
+            scoreboardParticipation:
+                userSnapshot['scoreboardParticipation'].toString(),
+            achievedPeaks: List.from(userSnapshot['achievedPeaks']),
+            numberOfHikes: userSnapshot['numberOfHikes'],
+            timeTogheter: userSnapshot['timeTogheter'],
+            altimetersTogheter: userSnapshot['altimetersTogheter']);
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    getHiker();
+
+    var newHiker = TestHiker(1, "Ana");
+    returnListHikes(currentUserTwo);
+    setState(() {
+      percentProgress = returnPercentProgress();
+      decimalProgress = returnDecimalProgress();
+    });
+    fetchTriglavJSON = fetchTriglav();
+    super.initState();
+  }
+
+  Future<Album> fetchTriglav() async {
+    final response =
+        await http.get(Uri.parse('https://mapzs.pzs.si/api/pois/1'));
+    if (response.statusCode == 200) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON.
+      return Album.fromJson(jsonDecode(response.body));
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception('Failed to load album');
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        body: Column(
+      children: [
+        SizedBox(
+          height: 25,
+        ),
+        FutureBuilder<Album>(
+          future: fetchTriglavJSON,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return Text(snapshot.data!.name);
+            } else if (snapshot.hasError) {
+              return Text('${snapshot.error}');
+            }
+
+            // By default, show a loading spinner.
+            return const CircularProgressIndicator();
+          },
+        ),
+        CircleAvatar(
+            backgroundColor: Styles.lightgreen,
+            radius: 50,
+            child: CircleAvatar(
+              backgroundColor: Colors.white,
+              backgroundImage: AssetImage('lib/utils/images/user_logo.png'),
+              radius: 40,
+            )),
+        //logoWidget(currentHiker.profilePicture),
+        SizedBox(
+          height: 20,
+        ),
+        Center(
+            child: Container(
+          child: Text("${currentHiker.username}", style: Styles.headerLarge),
+        )),
+        SizedBox(
+          height: 20,
+        ),
+        //level
+        Center(
+            child: Container(
+          child: Text("Level ${currentHiker.level}",
+              style: TextStyle(fontSize: 15)),
+        )),
+
+        SizedBox(height: 10),
+        Center(
+            child: Container(
+          child: Text("${currentHiker.points}/${currentHiker.level}00 points",
+              style: TextStyle(fontSize: 15)),
+        )),
+
+        //progress bar with points
+        Padding(
+          padding: EdgeInsets.all(15.0),
+          child: LinearPercentIndicator(
+            width: MediaQuery.of(context).size.width - 50,
+            animation: true,
+            lineHeight: 20.0,
+            animationDuration: 2500,
+            percent: decimalProgress,
+            center: Text("${percentProgress}%",
+                style: TextStyle(color: Colors.white)),
+            barRadius: Radius.circular(20),
+            progressColor: Styles.deepgreen,
+          ),
+        ),
+        SizedBox(
+          height: 25,
+        ),
+        Center(
+            child:
+                Text("My most recent hikes", style: TextStyle(fontSize: 18))),
+
+        //most recent hikes (top 3 or display "You don't have any recent hikes yet")
+        Center(
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Container(
+              width: MediaQuery.of(context).size.width * 0.9,
+              decoration: BoxDecoration(
+                color: Styles.offwhite,
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: renderLatestHikes(recentHikes),
+                  )),
+            ),
+          ),
+        )
+      ],
+    ));
+  }
+}
+
+class Album {
+  final int id;
+  final String name;
+
+  const Album({
+    required this.id,
+    required this.name,
+  });
+
+  factory Album.fromJson(Map<String, dynamic> json) {
+    return Album(id: json['id'], name: json['name']);
+  }
+}
+
+/*getHikerInfo() async {
+  var currentUserOne = FirebaseAuth.instance.currentUser?.uid.toString();
+  var data = FirebaseFirestore.instance
+      .collection('Hikers')
+      .where('id', isEqualTo: currentUserOne);
+
+  String usernamee = data.get('email' as GetOptions?).toString();
+
+  //Hiker currentHiker
+}
+
+Future<QuerySnapshot> getHikerData() async {
+  var currentUserOne = FirebaseAuth.instance.currentUser?.uid.toString();
+  return await FirebaseFirestore.instance
+      .collection("Hikers")
+      .where('id', isEqualTo: currentUserOne)
+      .get();
+}*/
+
+/*return Scaffold(
+      body: Column(
+        children: [
+          //background top picture
+          Image.asset("lib/utils/images/profile_back.png"),
+          SizedBox(height: 20),
+          //user avatar
+          //usrt name
+          //user level
+          //user progress bar with points
+          //user Booklet (user id)
+          BookletWidget()
+        ],
+      ),
+    );*/
+
+class TestHiker {
+  int id;
+  String name;
+
+  TestHiker(this.id, this.name);
+
+  int getHikerId() {
+    return this.id;
+  }
+
+  String getHikerName() {
+    return this.name;
+  }
+}

@@ -59,7 +59,7 @@ class _HomePageState extends State<HomePage> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text("Welcome ${currentHiker.username}!",
+                        Text("Welcome user!",
                             style: TextStyle(
                                 color: Styles.deepgreen,
                                 fontWeight: FontWeight.bold,

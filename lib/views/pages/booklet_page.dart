@@ -7,6 +7,7 @@ import 'package:bach_thes/models/peak.dart';
 import 'package:bach_thes/utils/styles.dart';
 import 'package:bach_thes/models/hiker.dart';
 import 'package:bach_thes/controllers/navigation_controller.dart';
+//TODO: implement logic for getting achieved peaks
 
 class BookletPage extends StatefulWidget {
   const BookletPage({super.key});
@@ -20,7 +21,7 @@ class _BookletPageState extends State<BookletPage> {
   List karawanks = [];
   List julianAlps = [];
   List kamnikSavinjaAlps = [];
-  List<String> achievedPeaks = currentHiker.achievedPeaks;
+  List<String> achievedPeaks = [];
   List _julian = [];
   List _karawanks = [];
   List _kamnikSavinja = [];
