@@ -28,11 +28,10 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  int currentIndex = 3;
+  int currentIndex = 0;
 
   //function that collects the data from firebase about the current user
   getHiker() async {
-    //TODO send all hiker parameters into set current hiker
     var profiles = await FirebaseFirestore.instance
         .collection('Hikers')
         .where('id', isEqualTo: FirebaseAuth.instance.currentUser?.uid)
@@ -134,5 +133,6 @@ class _MainPageState extends State<MainPage> {
     prefs.setInt('altimetersTogheter', altimetersTogheter);
     prefs.setBool('scoreboardParticipation', scoreboardParticipation);
     prefs.setBool('isLoggedIn', true);
+    print(prefs.getString('username'));
   }
 }

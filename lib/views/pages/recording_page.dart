@@ -6,6 +6,7 @@ import 'package:bach_thes/globals.dart';
 import 'package:bach_thes/models/hike.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'main_page.dart';
 
 class RecordingPage extends StatefulWidget {
   const RecordingPage({super.key});
@@ -23,7 +24,7 @@ class _RecordingPageState extends State<RecordingPage> {
   var isRecording = false;
   final timeStamp = DateTime.now();
   var endPointName = "";
-  var currentId = "";
+  var currentId;
 
   //TODO: figure out the date and time, figure out counting seconds and altimeters
   //TODO: why is location wrong, locking the textfield after "start recording"
@@ -33,13 +34,14 @@ class _RecordingPageState extends State<RecordingPage> {
 
   getUserId() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    currentId = FirebaseAuth.instance.currentUser!.uid;
+
     setState() {
-      currentId = prefs.getString('id')!;
+      prefs.setString('id', currentId);
     }
   }
 
   stopRecording() {
-    print("in stop recording");
     setState(() {
       isRecording = false;
       endPointName = endPointNameController.text;
@@ -55,7 +57,6 @@ class _RecordingPageState extends State<RecordingPage> {
   }
 
   startRecording() {
-    print("in start recording");
     setState(() {
       isRecording = true;
     });
@@ -86,16 +87,11 @@ class _RecordingPageState extends State<RecordingPage> {
       longitude = _locationData.longitude;
       latitude = _locationData.latitude;
     });
-    print(_locationData.latitude);
-    print(_locationData.longitude);
-    print(_locationData.altitude);
   }
 
   @override
   void initState() {
-    // TODO: implement initState
     getUserId();
-    print(currentId);
     getCurrentPosition();
   }
 

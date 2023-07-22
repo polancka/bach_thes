@@ -14,7 +14,7 @@ class AllRecordingsPage extends StatefulWidget {
 }
 
 class _AllRecordingsPageState extends State<AllRecordingsPage> {
-  var currentUserID = FirebaseAuth.instance.currentUser?.uid.toString();
+  var currentUserID = FirebaseAuth.instance.currentUser!.uid;
   var myRecordedHikes = [];
 
   getMyHikes() async {
@@ -22,9 +22,12 @@ class _AllRecordingsPageState extends State<AllRecordingsPage> {
         .collection('RecordedHikes')
         .where('hikerId', isEqualTo: currentUserID)
         .get();
+    print(recordedHikesQuery.docs.toString());
     setState(() {
       myRecordedHikes = List.from(recordedHikesQuery.docs);
     });
+    print(myRecordedHikes.toString());
+    print(currentUserID);
   }
 
   List<Widget> renderMyHikes(List<dynamic> listOfHikes) {

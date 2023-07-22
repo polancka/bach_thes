@@ -49,6 +49,8 @@ class _ProfilePageState extends State<ProfilePage> {
       username = prefs.getString('username');
       level = prefs.getInt('level')!;
     });
+    print(prefs.getString('username'));
+    print(username);
   }
 
   returnListHikes(String? currentUserTwo) async {
@@ -88,6 +90,8 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
+    print(currentUserTwo.toString());
+
     var percPoints = getPercent(points);
     return Scaffold(
         body: Container(
