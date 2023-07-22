@@ -28,7 +28,7 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  int currentIndex = 0;
+  int currentIndex = 1;
 
   //function that collects the data from firebase about the current user
   getHiker() async {
@@ -52,6 +52,12 @@ class _MainPageState extends State<MainPage> {
   void initState() {
     getHiker();
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
   }
 
   List pages = [ProfilePage(), SearchPeaks(), BookletPage(), StatisticsPage()];
@@ -133,6 +139,5 @@ class _MainPageState extends State<MainPage> {
     prefs.setInt('altimetersTogheter', altimetersTogheter);
     prefs.setBool('scoreboardParticipation', scoreboardParticipation);
     prefs.setBool('isLoggedIn', true);
-    print(prefs.getString('username'));
   }
 }

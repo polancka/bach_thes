@@ -15,6 +15,10 @@ import 'package:bach_thes/views/pages/forgoten_password_page.dart';
 import 'views/pages/map_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'views/pages/recording_page.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+
+final FlutterLocalNotificationsPlugin flutterLoacalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
 
 Future<void> main() async {
   //ensure widget binding before running the aplication

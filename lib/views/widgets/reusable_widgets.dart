@@ -2,6 +2,7 @@ import 'package:bach_thes/controllers/login_controller.dart';
 import 'package:bach_thes/controllers/navigation_controller.dart';
 import 'package:bach_thes/controllers/registration_controller.dart';
 import 'package:bach_thes/globals.dart';
+import 'package:bach_thes/models/hiker.dart';
 import 'package:bach_thes/views/pages/login_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -186,7 +187,7 @@ Drawer myDrawer(BuildContext context) {
                   ),
                   onTap: () async {
                     //logOutInPrefs();
-                    //clear user cache
+                    clearSharedPreferences();
                     //Navigator.pushAndRemoveUntil(context, newRoute, (route) => false
                     await FirebaseAuth.instance.signOut().then((value) =>
                         Navigator.of(context).pushAndRemoveUntil(
@@ -218,6 +219,13 @@ Widget listItemHike(dynamic docSnapshot) {
   DateTime docDateTime = DateTime.parse(time.toString());
   var newtime = DateFormat(dateFormat).format(docDateTime);
 
+  String formatTime(int secs) {
+    var hours = (secs ~/ 3600).toString().padLeft(2, '0');
+    var minutes = ((secs % 3600) ~/ 60).toString().padLeft(2, '0');
+    var seconds = (secs % 60).toString().padLeft(2, '0');
+    return "$hours:$minutes:$seconds";
+  }
+
   return Container(
       child: Card(
     color: Styles.deepgreen.withOpacity(0.7),
@@ -232,7 +240,7 @@ Widget listItemHike(dynamic docSnapshot) {
           style: TextStyle(color: Colors.white),
         ),
         subtitle: Text(
-            "Time: ${docSnapshot['duration']} Altimeters: ${docSnapshot['altimeters']} \n ${newtime}",
+            "Time: ${formatTime(docSnapshot['duration'])}        Altimeters: ${docSnapshot['altimeters']} \n ${newtime}",
             style: TextStyle(color: Colors.white, fontSize: 13)),
         trailing: Icon(
           Icons.check_box,

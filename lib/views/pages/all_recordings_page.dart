@@ -22,12 +22,9 @@ class _AllRecordingsPageState extends State<AllRecordingsPage> {
         .collection('RecordedHikes')
         .where('hikerId', isEqualTo: currentUserID)
         .get();
-    print(recordedHikesQuery.docs.toString());
     setState(() {
       myRecordedHikes = List.from(recordedHikesQuery.docs);
     });
-    print(myRecordedHikes.toString());
-    print(currentUserID);
   }
 
   List<Widget> renderMyHikes(List<dynamic> listOfHikes) {

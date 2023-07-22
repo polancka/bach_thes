@@ -7,7 +7,7 @@ class Hike {
   final String id;
   final dateAndTime;
   final int duration;
-  final int altimeters;
+  final double altimeters;
   final String endPointName;
   Hike(
       {required this.id,
@@ -18,7 +18,7 @@ class Hike {
 }
 
 Future<void> addNewRecordedHike(String id, DateTime dateAndTime,
-    int durationInSeconds, int altimeters, String endPointName) async {
+    int durationInSeconds, double altimeters, String endPointName) async {
   await db.collection("RecordedHikes").add({
     'hikerId': id,
     'dateAndTime': dateAndTime,

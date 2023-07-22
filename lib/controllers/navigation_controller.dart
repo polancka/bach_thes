@@ -1,5 +1,3 @@
-import 'package:bach_thes/models/path.dart';
-import 'package:bach_thes/models/registration_model.dart';
 import 'package:bach_thes/views/pages/add_new_path_page.dart';
 import 'package:bach_thes/views/pages/add_new_peak_page.dart';
 import 'package:bach_thes/views/pages/all_recordings_page.dart';
@@ -54,6 +52,7 @@ class MyNavigator {
   }
 
   void navigateToMainPage() {
+    Navigator.pop(context);
     Navigator.push(
         //adds the page to the stack, MaterialPageRoute determines to which screen it goes
         context,
