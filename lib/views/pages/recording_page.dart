@@ -1,15 +1,16 @@
+//TODO: figure out the date and time, figure out counting seconds and altimeters
+//TODO: why is location wrong, locking the textfield after "start recording"
+//tracking geopoints and saving them?
 import 'dart:async';
-
-import 'package:bach_thes/controllers/navigation_controller.dart';
 import 'package:bach_thes/views/widgets/reusable_widgets.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:location/location.dart';
 import 'package:bach_thes/utils/styles.dart';
-import 'package:bach_thes/globals.dart';
-import 'package:bach_thes/models/hike.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'main_page.dart';
+//import 'package:background_location/background_location.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:intl/intl.dart';
 
 class RecordingPage extends StatefulWidget {
   const RecordingPage({super.key});
@@ -19,175 +20,244 @@ class RecordingPage extends StatefulWidget {
 }
 
 class _RecordingPageState extends State<RecordingPage> {
-  double? longitude = 0.0;
-  double? latitude = 0.0;
-  double altimetersDone = 1;
-  int secondsElapsed = 1;
-  late Duration duration;
-  var buttonText;
-  var isRecording = false;
-  final timeStamp = DateTime.now();
-  var endPointName = "";
-  var currentId;
-  var altBeg;
-  var altMid;
-  var altFin;
-  late DateTime secBeg;
-  late DateTime secMid;
-  late DateTime secFin;
-  bool isCurrentlyRecording = false;
-  var beginAltimeters;
-  var finishAltimeters;
-
+  Timer? _timer;
+  bool _isRecording = false;
+  List<Position> _locationPoints = [];
+  String _timePassed = '00:00:00';
+  double _altimetersDone = 0.0;
+  double _distanceDone = 0.0;
   Stopwatch _stopwatch = Stopwatch();
-  late Timer _timer;
-
-  //TODO: figure out the date and time, figure out counting seconds and altimeters
-  //TODO: why is location wrong, locking the textfield after "start recording"
-  //tracking geopoints and saving them?
+  FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
+  CollectionReference _recordedHikesCollection =
+      FirebaseFirestore.instance.collection('RecordedHikesTwo');
+  var longitude = 0.0;
+  var latitude = 0.0;
+  Position? _currentPosition;
 
   //when u input name, lock the field, or have a dropdown menu to choose from all peaks
   TextEditingController endPointNameController = new TextEditingController();
 
-  int calculatePoints(int miliseconds) {
-    //hike must last more than 10minutes
-    if (miliseconds < 600000) {
-      return 0;
-    }
-    var pointsToAdd = 10; //10 points for recording a hike
-    pointsToAdd = pointsToAdd +
-        (altimetersDone.floor() % 100) * 2; // 2 points for every 100 altimeters
-    pointsToAdd = pointsToAdd +
-        (secondsElapsed % 60) * 5; // 5 points for every hour of hiking
-
-    return pointsToAdd;
-  }
-
-  checkIfRecording() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      isCurrentlyRecording = prefs.getBool('isRecording')!;
-    });
-  }
-
-  calculateTimerToShow() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    //implement logic for calculating the correct time on screen
-    duration = DateTime.now().difference(secBeg);
-    print(duration);
-  }
-
-  String formatTime(int milliseconds) {
-    var secs = milliseconds ~/ 1000;
-    var hours = (secs ~/ 3600).toString().padLeft(2, '0');
-    var minutes = ((secs % 3600) ~/ 60).toString().padLeft(2, '0');
-    var seconds = (secs % 60).toString().padLeft(2, '0');
-    return "$hours:$minutes:$seconds";
-  }
-
-  getUserId() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    currentId = FirebaseAuth.instance.currentUser!.uid;
-    setState() {
-      prefs.setString('id', currentId);
-    }
-  }
-
-  stopRecording() async {
-    _stopwatch.stop();
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      isRecording = false;
-      endPointName = endPointNameController.text;
-      secFin = DateTime.now();
-    });
-    prefs.setBool('isRecording', false);
-    //cTODO: check if last location is near a peak in the database
-
-    //calculate altimeters done
-    var finishAltimeters = await getCurrentPosition();
-    altimetersDone = finishAltimeters - beginAltimeters;
-    //save to database under correct ID
-    addNewRecordedHike(currentId, DateTime.now(),
-        _stopwatch.elapsedMilliseconds ~/ 1000, altimetersDone, endPointName);
-
-    //calculate points to add
-    var earnedPoints = calculatePoints(_stopwatch.elapsedMilliseconds);
-
-    //navigate to screen with congrats  --> there the new poitns are added to the database
-    MyNavigator(context).navigateToPointsPage("recording a hike", earnedPoints);
-
-    //return back to profile page
-    _stopwatch.reset();
-  }
-
-  startRecording() async {
-    _stopwatch.start();
-    setState(() {
-      beginAltimeters = getCurrentPosition();
-      secBeg = DateTime.now();
-      isRecording = true;
-    });
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setInt('secBeg', secBeg.microsecondsSinceEpoch);
-    prefs.setBool('isRecording', true);
-    print(prefs.getInt('secBeg'));
-  }
-
-  Future<double> getCurrentPosition() async {
-    Location location = new Location();
-    LocationData _locationData;
-    bool serviceEnabled;
-    PermissionStatus permission;
-
-    // Test if location services are enabled.
-    serviceEnabled = await location.serviceEnabled();
-    if (!serviceEnabled) {
-      return Future.error('Location services are disabled.');
-    }
-
-    permission = await location.hasPermission();
-    if (permission == PermissionStatus.denied) {
-      permission = await location.requestPermission();
-      if (permission != PermissionStatus.granted) {
-        //return nothing
-      }
-    }
-
-    _locationData = await location.getLocation();
-    setState(() {
-      longitude = _locationData.longitude;
-      latitude = _locationData.latitude;
-    });
-
-    return _locationData.altitude!;
-  }
-
   @override
   void initState() {
-    _stopwatch = Stopwatch();
-    _timer = new Timer.periodic(new Duration(milliseconds: 30), (timer) {
-      setState(() {});
-    });
-
-    //if we are already recording (isrecording is true in shared preferences), save the date and calulctae what to show
-    checkIfRecording();
-    if (isCurrentlyRecording) {
-      setState(() {
-        secMid = DateTime.now();
-      });
-    }
-    getUserId();
+    super.initState();
+    //initBackgroundTracking();
+    //_startFetchingLocationPeriodically();
   }
 
   @override
   void dispose() {
-    _timer.cancel();
+    //stopLocationTracking();
+    //_stopFetchingLocationPeriodically();
     super.dispose();
+  }
+
+  void _startFetchingLocationPeriodically() {
+    // Start fetching location every 10 seconds
+    //when using on an acutal phone switch to
+    /**final LocationSettings locationSettings = LocationSettings(
+        accuracy: LocationAccuracy.high,
+        distanceFilter: 100,
+          );
+      StreamSubscription<Position> positionStream = Geolocator.getPositionStream(locationSettings: locationSettings).listen(
+      (Position? position) {
+        print(position == null ? 'Unknown' : '${position.latitude.toString()}, ${position.longitude.toString()}');
+      }); */
+    _timer = Timer.periodic(Duration(seconds: 10), (timer) {
+      _getCurrentLocation();
+    });
+  }
+
+  void _stopFetchingLocationPeriodically() {
+    _timer?.cancel();
+  }
+
+  void _getCurrentLocation() async {
+    try {
+      Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.bestForNavigation,
+      );
+
+      setState(() {
+        _locationPoints.add(position);
+      });
+      print(_locationPoints);
+    } catch (e) {
+      print("Error while fetching location: $e");
+    }
+  }
+
+  Future<Position> getCurrentPosition() async {
+    //print("in current position");
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    // Test if location services are enabled.
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      // Location services are not enabled don't continue
+      // accessing the position and request users of the
+      // App to enable the location services.
+      return Future.error('Location services are disabled.');
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        // Permissions are denied, next time you could try
+        // requesting permissions again (this is also where
+        // Android's shouldShowRequestPermissionRationale
+        // returned true. According to Android guidelines
+        // your App should show an explanatory UI now.
+        return Future.error('Location permissions are denied');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      // Permissions are denied forever, handle appropriately.
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
+
+    // When we reach here, permissions are granted and we can
+    // continue accessing the position of the device.
+    return await Geolocator.getCurrentPosition();
+  }
+
+  addLocationPoint() async {
+    Position thisPosition = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.best);
+    setState(() {
+      _locationPoints.add(thisPosition);
+    });
+  }
+
+  void _startTimer() {
+    /*final LocationSettings locationSettings = LocationSettings(
+      accuracy: LocationAccuracy.high,
+      distanceFilter: 100,
+    );
+    StreamSubscription<Position> positionStream =
+        Geolocator.getPositionStream(locationSettings: locationSettings)
+            .listen((Position? position) {
+      print(position == null
+          ? 'Unknown'
+          : '${position.latitude.toString()}, ${position.longitude.toString()}');
+    });*/
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) async {
+      setState(() {
+        _timePassed = getFormattedTime();
+      });
+    });
+  }
+
+  void _stopTimer() {
+    _timer?.cancel();
+  }
+
+  Future<void> _onFetch() async {
+    if (_isRecording) {
+      Position currentPosition = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.best);
+
+      if (currentPosition != null) {
+        setState(() {
+          _locationPoints.add(currentPosition);
+          _distanceDone += currentPosition.speed ?? 0.0;
+          _altimetersDone += currentPosition.altitude ?? 0.0;
+          _showNotification(_timePassed);
+        });
+      }
+    }
+
+    //BackgroundFetch.finish(taskId);
+  }
+
+  String getFormattedTime() {
+    int milliseconds = _stopwatch.elapsedMilliseconds;
+    int seconds = (milliseconds / 1000).truncate();
+    int minutes = (seconds / 60).truncate();
+    int hours = (minutes / 60).truncate();
+
+    String formattedTime =
+        '${hours.toString().padLeft(2, '0')}:${(minutes % 60).toString().padLeft(2, '0')}:${(seconds % 60).toString().padLeft(2, '0')}';
+
+    return formattedTime;
+  }
+
+  void _saveRecording(List<Position> locationPoints) async {
+    String formattedTime = getFormattedTime();
+    String formattedDate =
+        DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now());
+
+    // Create a new document in Firestore with the recording details
+    await _recordedHikesCollection.add({
+      'userId': FirebaseAuth.instance.currentUser?.uid.toString(),
+      'endPointName': "Test name",
+      'timePassed': _timePassed,
+      'totalDistanceInMeters': _distanceDone,
+      'totalAltitudeInMeters': _altimetersDone,
+      'dateTime': formattedDate,
+      'locationPoints': _locationPoints
+          .map((point) => {
+                'latitude': point.latitude,
+                'longitude': point.longitude,
+              })
+          .toList(),
+    });
+  }
+
+  void startLocationTracking() async {
+    //var status = await BackgroundFetch.start();
+    // if (status == BackgroundFetch.STATUS_AVAILABLE) {
+
+    _stopwatch.start();
+    _startTimer();
+    _startFetchingLocationPeriodically();
+    setState(() {
+      _isRecording = true;
+    });
+  }
+
+  void stopLocationTracking() {
+    //await BackgroundFetch.stop();
+    _stopwatch.stop();
+    _stopTimer();
+    _stopFetchingLocationPeriodically();
+    //_showNotification(_timePassed);
+    setState(() {
+      _isRecording = false;
+      _stopwatch.reset();
+    });
+    _saveRecording(_locationPoints);
+  }
+
+  void _showNotification(String time) {
+    const androidPlatformChannelSpecifics = AndroidNotificationDetails(
+      'location_channel',
+      'Location updates',
+      importance: Importance.high,
+      priority: Priority.high,
+    );
+
+    _flutterLocalNotificationsPlugin.show(0, 'Current Location', 'Time: $time',
+        const NotificationDetails(android: androidPlatformChannelSpecifics));
+  }
+
+  Future<void> initBackgroundTracking() async {
+    //CALL ONFETCH FUNCTION
+    final notificationSettingsAndroid =
+        AndroidInitializationSettings('app_icon');
+    final notificationSettings = InitializationSettings(
+      android: notificationSettingsAndroid,
+    );
+    _flutterLocalNotificationsPlugin.initialize(notificationSettings);
   }
 
   @override
   Widget build(BuildContext context) {
+    print(_stopwatch.elapsedMilliseconds);
     return Scaffold(
         appBar: myAppBar("Hike recording"),
         body: Container(
@@ -203,13 +273,12 @@ class _RecordingPageState extends State<RecordingPage> {
                     child: TextField(controller: endPointNameController)),
                 SizedBox(height: 25),
                 Container(
-                    child: isRecording
+                    child: _isRecording
                         ? Image.asset("lib/utils/images/Hiker.gif",
                             height: 125.0, width: 125)
                         : Text("")),
-                Text("Current position: ${longitude}, ${latitude} "),
-                Text(formatTime(_stopwatch.elapsedMilliseconds)),
-                Text("Altimeters done: ${altimetersDone}"),
+                Text(_timePassed),
+                Text("Altimeters done: ${_altimetersDone}"),
                 SizedBox(
                   height: 40,
                 ),
@@ -218,9 +287,11 @@ class _RecordingPageState extends State<RecordingPage> {
                       backgroundColor: MaterialStateColor.resolveWith(
                           (states) => Styles.deepgreen)),
                   onPressed: () {
-                    isRecording ? stopRecording() : startRecording();
+                    _isRecording
+                        ? stopLocationTracking()
+                        : startLocationTracking();
                   },
-                  child: isRecording
+                  child: _isRecording
                       ? Text("Stop recording",
                           style: TextStyle(color: Colors.white))
                       : Text("Start recording",

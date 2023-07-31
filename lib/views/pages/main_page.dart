@@ -35,17 +35,24 @@ class _MainPageState extends State<MainPage> {
     var profiles = await FirebaseFirestore.instance
         .collection('Hikers')
         .where('id', isEqualTo: FirebaseAuth.instance.currentUser?.uid)
-        .get()
-        .then((value) => setCurrentHiker(
-            value.docs.first['id'],
-            value.docs.first['username'],
-            value.docs.first['email'],
-            value.docs.first['level'],
-            value.docs.first['points'],
-            value.docs.first['numberOfHikes'],
-            value.docs.first['altimetersTogheter'],
-            value.docs.first['timeTogheter'],
-            value.docs.first['scoreboardParticipation']));
+        .get();
+
+    var arrayOfBadges =
+        profiles.docs.first['badges']; // array is now List<dynamic>
+    List<String> stringsOfBadges = List<String>.from(arrayOfBadges);
+    print(stringsOfBadges);
+
+    setCurrentHiker(
+        profiles.docs.first['id'],
+        profiles.docs.first['username'],
+        profiles.docs.first['email'],
+        profiles.docs.first['level'],
+        profiles.docs.first['points'],
+        profiles.docs.first['numberOfHikes'],
+        profiles.docs.first['altimetersTogheter'],
+        profiles.docs.first['timeTogheter'],
+        profiles.docs.first['scoreboardParticipation'],
+        stringsOfBadges);
   }
 
   @override
@@ -127,7 +134,8 @@ class _MainPageState extends State<MainPage> {
       int numberOfHikes,
       int altimetersTogheter,
       int timeTogheter,
-      bool scoreboardParticipation) async {
+      bool scoreboardParticipation,
+      List<String> badges) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('id', id);
     prefs.setString('username', username);
@@ -139,5 +147,6 @@ class _MainPageState extends State<MainPage> {
     prefs.setInt('altimetersTogheter', altimetersTogheter);
     prefs.setBool('scoreboardParticipation', scoreboardParticipation);
     prefs.setBool('isLoggedIn', true);
+    prefs.setStringList('badges', badges);
   }
 }

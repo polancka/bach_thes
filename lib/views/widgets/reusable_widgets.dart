@@ -160,9 +160,13 @@ Drawer myDrawer(BuildContext context) {
                 },
               ),
               ListTile(
-                  leading: Icon(Icons.star, color: Colors.white),
-                  title: Text("My badges",
-                      style: TextStyle(color: Colors.white, fontSize: 15))),
+                leading: Icon(Icons.star, color: Colors.white),
+                title: Text("My badges",
+                    style: TextStyle(color: Colors.white, fontSize: 15)),
+                onTap: () {
+                  MyNavigator(context).navigateToBadgesPage();
+                },
+              ),
               ListTile(
                   leading: Icon(
                     Icons.settings,

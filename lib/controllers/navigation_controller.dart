@@ -12,6 +12,8 @@ import 'package:bach_thes/views/pages/home_page.dart';
 import 'package:bach_thes/views/pages/login_page.dart';
 import 'package:bach_thes/views/pages/registration_page.dart';
 import 'package:bach_thes/views/pages/pointsAlert.dart';
+
+import '../views/pages/badges_page.dart';
 //Class that provides navigation to any of the pages of the application
 
 class MyNavigator {
@@ -95,5 +97,10 @@ class MyNavigator {
   void navigateToAllRecordingsPage() {
     Navigator.push(context,
         MaterialPageRoute(builder: ((context) => AllRecordingsPage())));
+  }
+
+  void navigateToBadgesPage() {
+    Navigator.push(
+        context, MaterialPageRoute(builder: ((context) => BadgesPage())));
   }
 }
