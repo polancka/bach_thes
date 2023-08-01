@@ -51,6 +51,7 @@ dependencies:
   location: ^5.0.0
   background_location: ^0.11.8
   geolocator: ^9.0.2
+  flutter_map: any
   flutter_background: ^1.2.0
  
 

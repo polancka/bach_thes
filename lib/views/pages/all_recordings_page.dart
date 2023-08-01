@@ -19,7 +19,7 @@ class _AllRecordingsPageState extends State<AllRecordingsPage> {
 
   getMyHikes() async {
     var recordedHikesQuery = await FirebaseFirestore.instance
-        .collection('RecordedHikes')
+        .collection('RecordedHikesTwo')
         .where('hikerId', isEqualTo: currentUserID)
         .get();
     setState(() {
