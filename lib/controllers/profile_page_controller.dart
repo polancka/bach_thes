@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:bach_thes/utils/styles.dart';
 
 //implement logic for querying the Hikes database based on userID and Date of hike
-List<Widget> renderLatestHikes(List<dynamic> listOfHikes) {
+List<Widget> renderLatestHikes(
+    List<dynamic> listOfHikes, BuildContext context) {
   List<Widget> latestHikes = List<Widget>.empty(growable: true);
   for (var docSnapshot in listOfHikes) {
     //print(docSnapshot.toString());
-    latestHikes.add(listItemHike(docSnapshot));
+    latestHikes.add(listItemHike(docSnapshot, context));
   }
 
   return latestHikes;

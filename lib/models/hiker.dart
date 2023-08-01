@@ -53,6 +53,42 @@ updateNumberOfHikes(String id) async {
       onError: (e) => print("Error updating document $e"));
 }
 
+updateNumberOfAltimeters(String id, double newalts) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  var currentAltimeters = prefs.getInt('altimetersTogheter');
+  var newAltimeters = currentAltimeters! + newalts;
+  prefs.setDouble('altimetersTogheter', newAltimeters);
+
+  var wantedDocuments = await FirebaseFirestore.instance
+      .collection('Hikers')
+      .where('id', isEqualTo: id)
+      .get();
+  var docRef = wantedDocuments.docs.first.id;
+
+  final docRefUpdate = db.collection('Hikers').doc("${docRef}");
+  docRefUpdate.update({"altimetersTogheter": newAltimeters}).then(
+      (value) => print("DocumentSnapshot successfully updated!"),
+      onError: (e) => print("Error updating document $e"));
+}
+
+updateTimeHiking(String id, int newTime) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  var currentTime = prefs.getInt('timeTogheter');
+  var newTimeTogheter = currentTime! + newTime;
+  prefs.setInt('timeTogheter', newTimeTogheter);
+
+  var wantedDocuments = await FirebaseFirestore.instance
+      .collection('Hikers')
+      .where('id', isEqualTo: id)
+      .get();
+  var docRef = wantedDocuments.docs.first.id;
+
+  final docRefUpdate = db.collection('Hikers').doc("${docRef}");
+  docRefUpdate.update({"timeTogheter": newTimeTogheter}).then(
+      (value) => print("DocumentSnapshot successfully updated!"),
+      onError: (e) => print("Error updating document $e"));
+}
+
 updateNewPoints(int points, String id) async {
   var wantedDocuments = await FirebaseFirestore.instance
       .collection('Hikers')

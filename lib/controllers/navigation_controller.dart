@@ -4,8 +4,10 @@ import 'package:bach_thes/views/pages/all_recordings_page.dart';
 import 'package:bach_thes/views/pages/list_of_peaks.dart';
 import 'package:bach_thes/views/pages/main_page.dart';
 import 'package:bach_thes/views/pages/path_detail.dart';
+import 'package:bach_thes/views/pages/recording_detail_page.dart';
 import 'package:bach_thes/views/pages/recording_page.dart';
 import 'package:bach_thes/views/pages/settings_page.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:bach_thes/views/pages/forgoten_password_page.dart';
 import 'package:bach_thes/views/pages/home_page.dart';
@@ -102,5 +104,13 @@ class MyNavigator {
   void navigateToBadgesPage() {
     Navigator.push(
         context, MaterialPageRoute(builder: ((context) => BadgesPage())));
+  }
+
+  void navigateToRecordingDetailPage(dynamic docSnapshot) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: ((context) =>
+                RecordingDetailPage(docSnapshot: docSnapshot))));
   }
 }

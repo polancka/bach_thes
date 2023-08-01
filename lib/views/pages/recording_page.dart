@@ -12,6 +12,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:intl/intl.dart';
+import 'package:bach_thes/models/hiker.dart';
 
 class RecordingPage extends StatefulWidget {
   const RecordingPage({super.key});
@@ -32,10 +33,11 @@ class _RecordingPageState extends State<RecordingPage> {
   //FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
   //FlutterLocalNotificationsPlugin();
   CollectionReference _recordedHikesCollection =
-      FirebaseFirestore.instance.collection('RecordedHikesTwo');
+      FirebaseFirestore.instance.collection('RHikes');
   var longitude = 0.0;
   var latitude = 0.0;
   Position? _currentPosition;
+  String currentUserId = FirebaseAuth.instance.currentUser!.uid.toString();
 
   //when u input name, lock the field, or have a dropdown menu to choose from all peaks
   TextEditingController endPointNameController = new TextEditingController();
@@ -57,6 +59,7 @@ class _RecordingPageState extends State<RecordingPage> {
         print(position == null ? 'Unknown' : '${position.latitude.toString()}, ${position.longitude.toString()}');
       }); */
     _timertwo = Timer.periodic(Duration(seconds: 10), (timer) {
+      print("Going into getCurrentLocation");
       _getCurrentLocation();
     });
   }
@@ -66,8 +69,10 @@ class _RecordingPageState extends State<RecordingPage> {
   }
 
   void _getCurrentLocation() async {
+    print("in current location");
     try {
       Position position = await Geolocator.getCurrentPosition();
+      print(position);
 
       setState(() {
         _locationPoints.add(position);
@@ -86,6 +91,8 @@ class _RecordingPageState extends State<RecordingPage> {
     } catch (e) {
       print("Error while fetching location: $e");
     }
+
+    print("------ _locationPoints: ${_locationPoints}");
   }
 
   Future<Position> getCurrentPosition() async {
@@ -140,8 +147,7 @@ class _RecordingPageState extends State<RecordingPage> {
 
   void _saveRecording(List<Position> locationPoints) async {
     String formattedTime = getFormattedTime();
-    String formattedDate =
-        DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now());
+    String formattedDate = DateFormat('dd-MM-yyy HH:mm').format(DateTime.now());
 
     // Create a new document in Firestore with the recording details
     await _recordedHikesCollection.add({
@@ -161,8 +167,6 @@ class _RecordingPageState extends State<RecordingPage> {
   }
 
   void startLocationTracking() async {
-    //var status = await BackgroundFetch.start();
-    // if (status == BackgroundFetch.STATUS_AVAILABLE) {
     _stopwatch.start();
     _startTimer();
     Position firstPosition = await getCurrentPosition();
@@ -178,12 +182,15 @@ class _RecordingPageState extends State<RecordingPage> {
     _stopwatch.stop();
     _stopTimer();
     _stopFetchingLocationPeriodically();
+    _saveRecording(_locationPoints);
+    updateNumberOfHikes(currentUserId);
+    updateTimeHiking(currentUserId, _stopwatch.elapsed.inMinutes);
+    updateNumberOfAltimeters(currentUserId, _altimetersDone);
     setState(() {
       _isRecording = false;
       _stopwatch.reset();
       _locationPoints.clear();
     });
-    _saveRecording(_locationPoints);
   }
 
   @override

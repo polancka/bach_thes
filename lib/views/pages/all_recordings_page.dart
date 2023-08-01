@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:bach_thes/views/widgets/reusable_widgets.dart';
-
+import 'package:geolocator/geolocator.dart';
 import '../../utils/styles.dart';
 //THIS IS WHERE ALL THE USERS RECORDINGS ARE SHOWN
 
@@ -16,10 +16,11 @@ class AllRecordingsPage extends StatefulWidget {
 class _AllRecordingsPageState extends State<AllRecordingsPage> {
   var currentUserID = FirebaseAuth.instance.currentUser!.uid;
   var myRecordedHikes = [];
+  List<dynamic> _geoPoints = [];
 
   getMyHikes() async {
     var recordedHikesQuery = await FirebaseFirestore.instance
-        .collection('RecordedHikesTwo')
+        .collection('RHikes')
         .where('hikerId', isEqualTo: currentUserID)
         .get();
     setState(() {
@@ -31,7 +32,7 @@ class _AllRecordingsPageState extends State<AllRecordingsPage> {
     List<Widget> latestHikes = List<Widget>.empty(growable: true);
     for (var docSnapshot in listOfHikes) {
       //print(docSnapshot.toString());
-      latestHikes.add(listItemHike(docSnapshot));
+      latestHikes.add(listItemHike(docSnapshot, context));
     }
 
     return latestHikes;

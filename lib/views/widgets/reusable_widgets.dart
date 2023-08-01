@@ -217,11 +217,11 @@ AppBar myAppBar(String text) {
       ));
 }
 
-Widget listItemHike(dynamic docSnapshot) {
+Widget listItemHike(dynamic docSnapshot, BuildContext context) {
   String dateFormat = 'MM/dd/yy';
-  var time = (docSnapshot['dateAndTime'] as Timestamp).toDate();
-  DateTime docDateTime = DateTime.parse(time.toString());
-  var newtime = DateFormat(dateFormat).format(docDateTime);
+  var time = docSnapshot['dateAndTime'];
+  //DateTime docDateTime = DateTime.parse(time.toString());
+  //var newtime = DateFormat(dateFormat).format(docDateTime);
 
   String formatTime(int secs) {
     var hours = (secs ~/ 3600).toString().padLeft(2, '0');
@@ -232,26 +232,31 @@ Widget listItemHike(dynamic docSnapshot) {
 
   return Container(
       child: Card(
-    color: Styles.deepgreen.withOpacity(0.7),
-    shape: ContinuousRectangleBorder(borderRadius: BorderRadius.circular(20)),
-    child: ListTile(
-        /*leading: Icon(
+          color: Styles.deepgreen.withOpacity(0.7),
+          shape: ContinuousRectangleBorder(
+              borderRadius: BorderRadius.circular(20)),
+          child: Column(children: [
+            ListTile(
+                /*leading: Icon(
           Icons.check_box,
           color: Colors.white,
         ),*/
-        title: Text(
-          "Hike to ${docSnapshot['endPointName']}",
-          style: TextStyle(color: Colors.white),
-        ),
-        subtitle: Text(
-            "Time: ${formatTime(docSnapshot['duration'])}        Altimeters: ${docSnapshot['altimeters']} \n ${newtime}",
-            style: TextStyle(color: Colors.white, fontSize: 13)),
-        trailing: Icon(
-          Icons.check_box,
-          color: Colors.white,
-        ),
-        onTap: () => () {}),
-  ));
+                title: Text(
+                  "Hike to ${docSnapshot['endPointName']}",
+                  style: TextStyle(color: Colors.white),
+                ),
+                subtitle: Text(
+                    "Time: ${docSnapshot['duration']}        Altimeters: ${docSnapshot['altimeters']} \n ${time}",
+                    style: TextStyle(color: Colors.white, fontSize: 13)),
+                trailing: Icon(
+                  Icons.check_box,
+                  color: Colors.white,
+                ),
+                onTap: () {
+                  MyNavigator(context)
+                      .navigateToRecordingDetailPage(docSnapshot);
+                }),
+          ])));
 }
 
 logOutInPrefs() async {

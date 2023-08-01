@@ -49,14 +49,13 @@ class _ProfilePageState extends State<ProfilePage> {
       username = prefs.getString('username');
       level = prefs.getInt('level')!;
     });
-    print(prefs.getString('username'));
-    print(username);
   }
 
   returnListHikes(String? currentUserTwo) async {
     var recordedHikesQuery = await FirebaseFirestore.instance
-        .collection('RecordedHikes')
+        .collection('RHikes')
         .where('hikerId', isEqualTo: currentUserTwo)
+        .orderBy('dateAndTime')
         .limit(3)
         .get();
 
@@ -90,8 +89,6 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    print(currentUserTwo.toString());
-
     var percPoints = getPercent(points);
     return Scaffold(
         body: Container(
@@ -168,7 +165,7 @@ class _ProfilePageState extends State<ProfilePage> {
               child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
-                    children: renderLatestHikes(recentHikes),
+                    children: renderLatestHikes(recentHikes, context),
                   )),
             ),
           ),

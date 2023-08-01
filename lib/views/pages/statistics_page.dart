@@ -36,7 +36,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
       //add time ??
       timeTogheter = prefs.getInt('timeTogheter')!;
       numberOfHikes = prefs.getInt('numberOfHikes');
-      altimetersTogheter = prefs.getInt('altimetersTogheter');
+      altimetersTogheter = prefs.getDouble('altimetersTogheter');
     });
 
     return "complete";
