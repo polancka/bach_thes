@@ -1119,3 +1119,39 @@ class _RecordingPageState extends State<RecordingPage>
   }
 }
 
+------------------
+Widget myMap(List<LatLng> points) {
+  if (points.isEmpty) {
+    return Text('No location points found for this hike.');
+  }
+
+  return FlutterMap(
+    options: MapOptions(
+      center: points.first,
+      zoom: 15.0,
+    ),
+    children: [
+      TileLayer(
+        urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+        subdomains: ['a', 'b', 'c'],
+      ),
+      PolylineLayer(
+        polylines: [
+          Polyline(
+            points: points,
+            color: Colors.blue,
+            strokeWidth: 3.0,
+          ),
+        ],
+      ),
+      MarkerLayer(
+        markers: [
+          Marker(
+            point: points.last,
+            builder: (ctx) => Icon(Icons.location_on, color: Colors.red),
+          ),
+        ],
+      ),
+    ],
+  );
+}
