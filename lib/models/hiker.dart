@@ -15,7 +15,7 @@ class Hiker {
   final String scoreboardParticipation;
   final int numberOfHikes;
   final int timeTogheter;
-  final int altimetersTogheter;
+  final double altimetersTogheter;
   final List<String> badges;
   Hiker(
       {required this.id,
@@ -149,7 +149,7 @@ Future<DocumentReference> addHiker(String email, String username, String? userId
     'achievedPeaks': [],
     'numberOfHikes': 0,
     'timeTogheter': 0,
-    'altimetersTogheter': 0,
+    'altimetersTogheter': 0.0,
     'badges': [
       "false",
       "false",

@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:bach_thes/models/locationPoint.dart';
 
 import '../widgets/reusable_widgets.dart';
 
@@ -144,25 +145,4 @@ class _RecordingDetailPageState extends State<RecordingDetailPage> {
           ],
         ));
   }
-}
-
-class LocationPoint {
-  double latitude;
-  double longitude;
-
-  LocationPoint({required this.latitude, required this.longitude});
-
-  LocationPoint.fromJson(Map<String, dynamic> json)
-      : longitude = json['longitude'],
-        latitude = json['latitude'];
-
-  latSetter(double lat) {
-    this.latitude = lat;
-  }
-
-  lonSetter(double lon) {
-    this.longitude = lon;
-  }
-
-  // Optional: Create a factory method to convert from a Map
 }

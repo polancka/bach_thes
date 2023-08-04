@@ -8,7 +8,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 class PointsPage extends StatefulWidget {
   String action;
   int points;
-  PointsPage({required this.action, required this.points});
+  List<String> badges;
+  PointsPage(
+      {required this.action, required this.points, required this.badges});
 
   @override
   State<PointsPage> createState() => _PointsPageState();
@@ -17,6 +19,7 @@ class PointsPage extends StatefulWidget {
 class _PointsPageState extends State<PointsPage> {
   bool isNewLevel = false;
   var newLevel = 0;
+  bool _newBadge = false;
 
   updatePoints() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -42,11 +45,20 @@ class _PointsPageState extends State<PointsPage> {
     }
   }
 
+  checkForNewBadge(List<String> badges) {
+    if (badges.isNotEmpty) {
+      setState(() {
+        _newBadge = true;
+      });
+    }
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     updatePoints();
     checkForLevelUpdate();
+    checkForNewBadge(widget.badges);
   }
 
   @override
@@ -58,7 +70,6 @@ class _PointsPageState extends State<PointsPage> {
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
         decoration: const BoxDecoration(
-            color: Colors.purple,
             image: DecorationImage(
                 image: AssetImage('lib/utils/images/points_conf.png'),
                 fit: BoxFit.cover)),
@@ -71,7 +82,9 @@ class _PointsPageState extends State<PointsPage> {
               onPressed: () {
                 setState(() {
                   isNewLevel = false;
-                  MyNavigator(context).navigateToMainPage();
+                  _newBadge
+                      ? MyNavigator(context).navigateToBadgeAlert(widget.badges)
+                      : MyNavigator(context).navigateToMainPage();
                 });
               },
             ),

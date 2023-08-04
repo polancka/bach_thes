@@ -17,6 +17,7 @@ class _AllRecordingsPageState extends State<AllRecordingsPage> {
   var currentUserID = FirebaseAuth.instance.currentUser!.uid;
   var myRecordedHikes = [];
   List<dynamic> _geoPoints = [];
+  bool _hasHikes = false;
 
   getMyHikes() async {
     var recordedHikesQuery = await FirebaseFirestore.instance
@@ -26,6 +27,9 @@ class _AllRecordingsPageState extends State<AllRecordingsPage> {
         .get();
     setState(() {
       myRecordedHikes = List.from(recordedHikesQuery.docs);
+      if (myRecordedHikes.isNotEmpty) {
+        _hasHikes = true;
+      }
     });
   }
 
@@ -65,7 +69,14 @@ class _AllRecordingsPageState extends State<AllRecordingsPage> {
                   child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Column(
-                        children: renderMyHikes(myRecordedHikes),
+                        children: _hasHikes
+                            ? renderMyHikes(myRecordedHikes)
+                            : [
+                                Text(
+                                  "No recorded hikes yet! \n Record some hikes and come back :) ",
+                                  textAlign: TextAlign.center,
+                                )
+                              ],
                       )),
                 ),
               ),

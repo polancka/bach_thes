@@ -38,6 +38,7 @@ class _ProfilePageState extends State<ProfilePage> {
   var username;
   var points = 1;
   var level = 1;
+  bool _hasHikes = false;
 
   String percentProgress = '';
   double decimalProgress = 0.0;
@@ -61,6 +62,9 @@ class _ProfilePageState extends State<ProfilePage> {
 
     setState(() {
       recentHikes = List.from(recordedHikesQuery.docs);
+      if (recentHikes.isNotEmpty) {
+        _hasHikes = true;
+      }
     });
     //print(recentHikes);
   }
@@ -165,7 +169,14 @@ class _ProfilePageState extends State<ProfilePage> {
               child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
-                    children: renderLatestHikes(recentHikes, context),
+                    children: _hasHikes
+                        ? renderLatestHikes(recentHikes, context)
+                        : [
+                            Text(
+                              "No recorded hikes yet! \n Record some hikes and come back :) ",
+                              textAlign: TextAlign.center,
+                            )
+                          ],
                   )),
             ),
           ),

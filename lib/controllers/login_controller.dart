@@ -6,6 +6,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:bach_thes/main.dart';
 
 //Login controller checks if the data inputed in the login fields match the ones in Firebase Authentication base
 //TODO: add error message
@@ -24,7 +25,7 @@ class LoginController {
       //succesful login
 
       SharedPreferences pref = await SharedPreferences.getInstance();
-      pref.setString("email", "useremail@gmail.com");
+      //pref.setString("email", "useremail@gmail.com");
       //print(pref.get("email"));
       /*Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) {
         return MainPage();

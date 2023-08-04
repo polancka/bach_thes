@@ -14,6 +14,7 @@ import 'package:bach_thes/views/pages/home_page.dart';
 import 'package:bach_thes/views/pages/login_page.dart';
 import 'package:bach_thes/views/pages/registration_page.dart';
 import 'package:bach_thes/views/pages/pointsAlert.dart';
+import 'package:bach_thes/views/pages/badgeAlert.dart';
 
 import '../views/pages/badges_page.dart';
 //Class that provides navigation to any of the pages of the application
@@ -84,11 +85,15 @@ class MyNavigator {
         context, MaterialPageRoute(builder: (context) => addNewPeakPage()));
   }
 
-  void navigateToPointsPage(String action, int points) {
+  void navigateToPointsPage(String action, int points, List<String> badges) {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => PointsPage(action: action, points: points)));
+            builder: (context) => PointsPage(
+                  action: action,
+                  points: points,
+                  badges: badges,
+                )));
   }
 
   void navigateToRecordingPage() {
@@ -112,5 +117,12 @@ class MyNavigator {
         MaterialPageRoute(
             builder: ((context) =>
                 RecordingDetailPage(docSnapshot: docSnapshot))));
+  }
+
+  void navigateToBadgeAlert(List<String> badges) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: ((context) => BadgeAlert(newBadges: badges))));
   }
 }

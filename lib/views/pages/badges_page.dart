@@ -39,15 +39,16 @@ class _BadgesPageState extends State<BadgesPage> {
   ];
   List<String> listOfBadges = [];
 
-  getSharedPrefsBadges() async {
+  Future<String> getSharedPrefsBadges() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       listOfBadges = prefs.getStringList('badges')!;
     });
+    return "complete";
   }
 
   List<Widget> renderBadgeTiles(int startingIndex, int endIndex) {
-    getSharedPrefsBadges();
+    Future<String> testString = getSharedPrefsBadges();
     List<Widget> allBadges = [];
 
     for (int i = startingIndex; i <= endIndex; i++) {
