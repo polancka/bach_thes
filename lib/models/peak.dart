@@ -10,8 +10,8 @@ class Peak {
   final int altitude;
   final String description;
   final String urlThumbnail;
-  final String longitude;
-  final String latitude;
+  final double longitude;
+  final double latitude;
   final String mountainChain;
   final String sortValue;
 
@@ -44,8 +44,8 @@ Future<void> addNewPeak(
     int _altitude,
     String _description,
     String _urlThumbnail,
-    String _longitude,
-    String _latitude,
+    double _longitude,
+    double _latitude,
     String _mountainChain,
     String _sortValue) async {
   await FirebaseFirestore.instance.collection("Peaks").add({

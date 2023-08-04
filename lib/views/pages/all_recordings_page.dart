@@ -22,6 +22,7 @@ class _AllRecordingsPageState extends State<AllRecordingsPage> {
     var recordedHikesQuery = await FirebaseFirestore.instance
         .collection('RHikes')
         .where('hikerId', isEqualTo: currentUserID)
+        .orderBy('dateAndTime', descending: true)
         .get();
     setState(() {
       myRecordedHikes = List.from(recordedHikesQuery.docs);
@@ -48,7 +49,9 @@ class _AllRecordingsPageState extends State<AllRecordingsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: myAppBar("My hike recordings"),
-        body: Column(
+        body: Container(
+            child: SingleChildScrollView(
+                child: Column(
           children: [
             Center(
               child: Padding(
@@ -68,6 +71,6 @@ class _AllRecordingsPageState extends State<AllRecordingsPage> {
               ),
             )
           ],
-        ));
+        ))));
   }
 }

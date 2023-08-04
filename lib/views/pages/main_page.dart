@@ -132,7 +132,7 @@ class _MainPageState extends State<MainPage> {
       int level,
       int points,
       int numberOfHikes,
-      int altimetersTogheter,
+      double altimetersTogheter,
       int timeTogheter,
       bool scoreboardParticipation,
       List<String> badges) async {
@@ -144,7 +144,7 @@ class _MainPageState extends State<MainPage> {
     prefs.setInt('points', points);
     prefs.setInt('numberOfHikes', numberOfHikes);
     prefs.setInt('timeTogheter', timeTogheter);
-    prefs.setInt('altimetersTogheter', altimetersTogheter);
+    prefs.setDouble('altimetersTogheter', altimetersTogheter);
     prefs.setBool('scoreboardParticipation', scoreboardParticipation);
     prefs.setBool('isLoggedIn', true);
     prefs.setStringList('badges', badges);

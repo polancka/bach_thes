@@ -168,14 +168,15 @@ class _addNewPeakPageState extends State<addNewPeakPage> {
                       onPressed: () {
                         if (_formPeakKey.currentState!.validate()) {
                           // If the form is valid, input into database
+                          //defualt lat and lang are currently 0.0 and 0.0 because this page will not be used in production
                           addNewPeak(
                               nextPeakIndex,
                               _name.text,
                               int.parse(_altitude.text),
                               _description.text,
                               _urlThumbnail.text,
-                              _longitude.text,
-                              _latitude.text,
+                              0.0,
+                              0.0,
                               _mountainChain.text,
                               _name.text.toLowerCase());
                           incrementPeakIndex(nextPeakIndex);

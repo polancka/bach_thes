@@ -55,7 +55,7 @@ class _ProfilePageState extends State<ProfilePage> {
     var recordedHikesQuery = await FirebaseFirestore.instance
         .collection('RHikes')
         .where('hikerId', isEqualTo: currentUserTwo)
-        .orderBy('dateAndTime')
+        .orderBy('dateAndTime', descending: true)
         .limit(3)
         .get();
 
