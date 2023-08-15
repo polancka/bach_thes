@@ -245,9 +245,8 @@ Widget listItemHike(dynamic docSnapshot, BuildContext context) {
                   "Hike to ${docSnapshot['endPointName']}",
                   style: TextStyle(color: Colors.white),
                 ),
-                subtitle: Text(
-                    "Time: ${docSnapshot['duration']}        Altimeters: ${docSnapshot['altimeters']} \n ${time}",
-                    style: TextStyle(color: Colors.white, fontSize: 13)),
+                subtitle: Text("${time}",
+                    style: TextStyle(color: Colors.white, fontSize: 14)),
                 trailing: Icon(
                   Icons.check_box,
                   color: Colors.white,

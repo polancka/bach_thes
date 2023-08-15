@@ -1,4 +1,5 @@
 import 'package:bach_thes/views/pages/addToDatabase.dart';
+import 'package:bach_thes/views/pages/badgeAlert.dart';
 import 'package:bach_thes/views/pages/list_of_peaks.dart';
 import 'package:bach_thes/views/pages/main_page.dart';
 import 'package:bach_thes/views/pages/pointsAlert.dart';
@@ -48,8 +49,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: LoginPage(),
-    );
+        debugShowCheckedModeBanner: false, home: LoginPage());
   }
 }

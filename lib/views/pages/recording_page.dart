@@ -1,6 +1,5 @@
 //TODO: figure out the date and time, figure out counting seconds and altimeters
-//TODO: why is location wrong, locking the textfield after "start recording"
-//tracking geopoints and saving them?
+
 import 'dart:async';
 import 'dart:core';
 import 'package:bach_thes/controllers/navigation_controller.dart';
@@ -12,7 +11,8 @@ import 'package:bach_thes/utils/styles.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_background/flutter_background.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:background_location/background_location.dart';
+
+//import 'package:background_location/background_location.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:intl/intl.dart';
@@ -21,7 +21,7 @@ import 'package:latlong2/latlong.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:bach_thes/models/locationPoint.dart';
 import 'package:flutter/services.dart';
-import 'package:location/location.dart' as locpack;
+import 'package:location/location.dart' as loc;
 import 'package:bach_thes/controllers/badge_controller.dart' as bc;
 
 class RecordingPage extends StatefulWidget {
@@ -56,37 +56,71 @@ class _RecordingPageState extends State<RecordingPage>
   LatLng endPointCoordinates = LatLng(0.0, 0.0);
   bool isPeakAchieved = false;
   AppLifecycleState? _notification;
-  locpack.Location _location = locpack.Location();
+  loc.Location _location = loc.Location();
   List<String> badges = [];
 
   FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
   List<DateTime> _events = [];
   int _status = 0;
+  var _endPointAltitude = 0;
+  var currentAltitude = 0.0;
+  loc.Location testLocation = loc.Location();
 
   @override
   void initState() {
-    WidgetsBinding.instance?.addObserver(this);
-    getStartingPosition();
+    WidgetsBinding.instance.addObserver(this);
+    setStartingPosition();
+    //getCurrentPosition();
     _getAllPeaksNames();
     super.initState();
   }
 
-  /* Future<void> _onFetch(String taskId) async {
-    if (_isRecording) {
-      Position currentPosition = await Geolocator.getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.bestForNavigation);
+  void setStartingPosition() {
+    GeolocatorPlatform.instance
+        .getCurrentPosition()
+        .then((Position firstPosition) {
+      setState(() {
+        _locationPoints.add(firstPosition);
+      });
+      print("THIS IS LOCATION POINTS IN STARTING POSITION: $_locationPoints");
+    });
+  }
 
-      if (currentPosition != null) {
-        setState(() {
-          _totalDistanceInMeters += currentPosition.speed ?? 0.0;
-          _totalAltitudeInMeters += currentPosition.altitude ?? 0.0;
-          _showNotification(
-              currentPosition.latitude, currentPosition.longitude);
-        });
+  Future<Position> getCurrentPosition() async {
+    //asks for permissions and stores current position into currentMarker variable
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      return Future.error('Location services are disabled.');
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return Future.error('Location permissions are denied');
       }
     }
-  }*/
+
+    if (permission == LocationPermission.deniedForever) {
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
+
+    Position currentPos = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.bestForNavigation,
+        forceAndroidLocationManager: true);
+
+    setState(() {
+      currentMarker.latitude = currentPos.latitude;
+      currentMarker.longitude = currentPos.longitude;
+    });
+
+    return currentPos;
+  }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
@@ -118,31 +152,13 @@ class _RecordingPageState extends State<RecordingPage>
   }
 
   _stopBackTracking() {
-    BackgroundLocation.stopLocationService();
+    //figure it out for the background
+    //BackgroundLocation.stopLocationService();
   }
 
   ///
 
-  getStartingPosition() async {
-    Geolocator.getCurrentPosition(
-            desiredAccuracy: LocationAccuracy.bestForNavigation,
-            forceAndroidLocationManager: true)
-        .then((Position position) {
-      setState(() {
-        currentMarker.latitude = position.latitude;
-        currentMarker.longitude = position.longitude;
-      });
-
-      print(
-          "IN STARTING POSITION: ${currentMarker.latitude} + ${currentMarker.longitude}");
-    }).catchError((e) {
-      print(e);
-    });
-  }
-
-  void _startFetchingLocationPeriodically() {
-    // Start fetching location every 10 seconds
-    //when using on an acutal phone switch to
+  void _startFetchingLocationPeriodically() async {
     final LocationSettings locationSettings = LocationSettings(
       accuracy: LocationAccuracy.high,
       distanceFilter: 50,
@@ -150,80 +166,53 @@ class _RecordingPageState extends State<RecordingPage>
     StreamSubscription<Position> positionStream =
         Geolocator.getPositionStream(locationSettings: locationSettings)
             .listen((Position? position) {
-      _getCurrentLocation();
+      print("!!! -- ${position!.altitude}");
+      //whole code instead of calling the fucntion _getCurrentLocation
+      try {
+        setState(() {
+          //TODO: FIX: distance and altimeters are not adding up properly!!
+          if (_locationPoints.length > 1) {
+            _distanceDone += GeolocatorPlatform.instance.distanceBetween(
+                _locationPoints[_locationPoints.length - 1].latitude,
+                _locationPoints[_locationPoints.length - 1].longitude,
+                position!.latitude,
+                position!.longitude);
+
+            print(
+                "distance between is ${GeolocatorPlatform.instance.distanceBetween(_locationPoints[_locationPoints.length - 1].latitude, _locationPoints[_locationPoints.length - 1].longitude, position.latitude, position.longitude)}");
+            print("distance is $_distanceDone");
+            _altimetersDone +=
+                (_locationPoints[_locationPoints.length - 1].altitude -
+                        position.altitude)
+                    .abs();
+          } else {
+            print("The length of the list i 0 or 1");
+          }
+          _locationPoints.add(position);
+        });
+        if (!isPeakAchieved) {
+          print("checking for peak .....");
+          if (GeolocatorPlatform.instance.bearingBetween(
+                  _locationPoints.last.latitude,
+                  _locationPoints.last.longitude,
+                  endPointCoordinates.latitude,
+                  endPointCoordinates.longitude) <
+              150) {
+            //we have reached the end! Save the endPoint as an achieved peak, but dont end the recording,
+            //add the achieved peak to Hiker atribute achieved peaks or whatever is feeding the booklet
+            setState(() {
+              isPeakAchieved = true;
+            });
+          }
+        }
+      } catch (e) {
+        print("Error while fetching location: $e");
+      }
     });
   }
 
   void _stopFetchingLocationPeriodically() {
     _timer?.cancel();
-  }
-
-  void _getCurrentLocation() async {
-    print("in current location");
-    try {
-      Position position = await Geolocator.getCurrentPosition();
-      print(position);
-
-      setState(() {
-        _locationPoints.add(position);
-        //TODO: FIX: distance and altimeters are not adding up properly!!
-        if (_locationPoints.length > 1) {
-          _distanceDone += Geolocator.distanceBetween(
-              _locationPoints[_locationPoints.length - 1].latitude,
-              _locationPoints[_locationPoints.length - 1].longitude,
-              position.latitude,
-              position.longitude);
-          print("distance is $_distanceDone");
-          _altimetersDone +=
-              (_locationPoints[_locationPoints.length - 1].altitude -
-                      position.altitude)
-                  .abs();
-        } else {
-          print("The length of the list i 0 or 1");
-        }
-      });
-      if (!isPeakAchieved) {
-        print("Peak not achieved yet");
-        if (Geolocator.distanceBetween(position.latitude, position.longitude,
-                endPointCoordinates.latitude, endPointCoordinates.longitude) <
-            30) {
-          print("PEAK ACHIEVED !!!!!!");
-          //we have reached the end! Save the endPoint as an achieved peak, but dont end the recording,
-          //add the achieved peak to Hiker atribute achieved peaks or whatever is feeding the booklet
-          setState(() {
-            isPeakAchieved = true;
-          });
-        }
-      }
-    } catch (e) {
-      print("Error while fetching location: $e");
-    }
-    //print("------ _locationPoints: ${_locationPoints}");
-  }
-
-  Future<Position> getCurrentPosition() async {
-    bool serviceEnabled;
-    LocationPermission permission;
-
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      return Future.error('Location services are disabled.');
-    }
-
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        return Future.error('Location permissions are denied');
-      }
-    }
-
-    if (permission == LocationPermission.deniedForever) {
-      return Future.error(
-          'Location permissions are permanently denied, we cannot request permissions.');
-    }
-
-    return await Geolocator.getCurrentPosition();
   }
 
   void _startTimer() {
@@ -258,6 +247,8 @@ class _RecordingPageState extends State<RecordingPage>
     await _recordedHikesCollection.add({
       'hikerId': FirebaseAuth.instance.currentUser?.uid.toString(),
       'endPointName': endPointRecording,
+      'endPointAltitude': _endPointAltitude,
+      'acheived': isPeakAchieved,
       'duration': _timePassed,
       'totalDistanceInMeters': _distanceDone,
       'altimeters': _altimetersDone,
@@ -268,17 +259,6 @@ class _RecordingPageState extends State<RecordingPage>
                 'longitude': point.longitude,
               })
           .toList(),
-    });
-  }
-
-  void startLocationTracking() async {
-    _stopwatch.start();
-    _startTimer();
-    Position firstPosition = await getCurrentPosition();
-    _locationPoints.add(firstPosition);
-    _startFetchingLocationPeriodically();
-    setState(() {
-      _isRecording = true;
     });
   }
 
@@ -297,6 +277,17 @@ class _RecordingPageState extends State<RecordingPage>
     return pointsToAdd;
   }
 
+  void startLocationTracking() async {
+    Position? firstPosition = await getCurrentPosition();
+    _locationPoints.add(firstPosition!);
+    setState(() {
+      _isRecording = true;
+    });
+    _stopwatch.start();
+    _startTimer();
+    _startFetchingLocationPeriodically();
+  }
+
   void stopLocationTracking() {
     //await BackgroundFetch.stop();
     _stopwatch.stop();
@@ -307,6 +298,7 @@ class _RecordingPageState extends State<RecordingPage>
     updateTimeHiking(currentUserId, _stopwatch.elapsed.inMinutes);
     updateNumberOfAltimeters(currentUserId, _altimetersDone);
     setState(() {
+      //TODO: uncomment
       badges = bc.checkForNewBadges(currentUserId);
       secondsPassed = _stopwatch.elapsed.inSeconds;
       _isRecording = false;
@@ -353,9 +345,9 @@ class _RecordingPageState extends State<RecordingPage>
         .get()
         .then((doc) {
       setState(() {
-        endPointCoordinates.latitude = double.parse(doc.docs.first['latitude']);
-        endPointCoordinates.longitude =
-            double.parse(doc.docs.first['longitude']);
+        endPointCoordinates.latitude = doc.docs.first['latitude'];
+        endPointCoordinates.longitude = doc.docs.first['longitude'];
+        _endPointAltitude = doc.docs.first['altitude'];
       });
       print(endPointCoordinates.latitude);
     });
@@ -372,13 +364,15 @@ class _RecordingPageState extends State<RecordingPage>
   @override
   void dispose() {
     //BackgroundLocation.stopLocationService();
-    WidgetsBinding.instance?.removeObserver(this);
+    _timer!.cancel();
+    _timerLocation!.cancel();
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    print("IN BUILD: ${currentMarker.latitude}");
+    //print("IN BUILD: ${currentMarker.latitude}");
     return Scaffold(
         appBar: myAppBar("Hike recording"),
         body: Container(
@@ -415,8 +409,14 @@ class _RecordingPageState extends State<RecordingPage>
                               (states) => Styles.deepgreen)),
                       onPressed: () {
                         _isRecording
-                            ? stopLocationTracking()
-                            : startLocationTracking();
+                            ? setState(() {
+                                _isRecording = false;
+                                stopLocationTracking();
+                              })
+                            : setState(() {
+                                _isRecording = true;
+                                startLocationTracking();
+                              });
                       },
                       child: _isRecording
                           ? Text("Stop recording",

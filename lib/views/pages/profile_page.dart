@@ -17,6 +17,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'main_page.dart';
 import 'package:bach_thes/models/hiker.dart';
 import 'package:bach_thes/globals.dart';
+import 'package:location/location.dart';
 
 //TODO: change current hiker to getting data from shared prefernces
 
@@ -42,6 +43,13 @@ class _ProfilePageState extends State<ProfilePage> {
 
   String percentProgress = '';
   double decimalProgress = 0.0;
+
+  printAltitude() async {
+    Location location = new Location();
+    LocationData locationData;
+    locationData = await location.getLocation();
+    print(locationData.altitude);
+  }
 
   getHikerData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -88,6 +96,7 @@ class _ProfilePageState extends State<ProfilePage> {
   void initState() {
     getHikerData();
     returnListHikes(currentUserTwo);
+    printAltitude();
     super.initState();
   }
 

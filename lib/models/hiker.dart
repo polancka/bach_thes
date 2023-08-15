@@ -55,7 +55,7 @@ updateNumberOfHikes(String id) async {
 
 updateNumberOfAltimeters(String id, double newalts) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  var currentAltimeters = prefs.getInt('altimetersTogheter');
+  var currentAltimeters = prefs.getDouble('altimetersTogheter');
   var newAltimeters = currentAltimeters! + newalts;
   prefs.setDouble('altimetersTogheter', newAltimeters);
 

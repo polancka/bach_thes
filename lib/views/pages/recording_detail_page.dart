@@ -20,18 +20,19 @@ class _RecordingDetailPageState extends State<RecordingDetailPage> {
 
   List<LatLng> toLocationList() {
     List<dynamic> wholeString = widget.docSnapshot['locationPoints'];
+
     List<LocationPoint> finalPoints = <LocationPoint>[];
     wholeString.forEach((element) {
       finalPoints.add(LocationPoint.fromJson(element));
     });
 
-    print("LocationPoints: $finalPoints");
+    //print("LocationPoints: $finalPoints");
 
     List<LatLng> latLngList = finalPoints.map((locationPoint) {
       return LatLng(locationPoint.latitude, locationPoint.longitude);
     }).toList();
 
-    print("latlnglsit: $latLngList");
+    //print("latlnglsit: $latLngList");
     setState(() {
       _locPoints = latLngList;
     });
@@ -42,7 +43,6 @@ class _RecordingDetailPageState extends State<RecordingDetailPage> {
   @override
   void initState() {
     toLocationList();
-
     super.initState();
   }
 
@@ -53,7 +53,7 @@ class _RecordingDetailPageState extends State<RecordingDetailPage> {
         setState(() {});
       }
     });
-    print("points in myMap widhet: $points");
+    //print("points in myMap widhet: $points");
     if (points.isEmpty) {
       return Text('No location points found for this hike.');
     }
@@ -105,6 +105,15 @@ class _RecordingDetailPageState extends State<RecordingDetailPage> {
 
   @override
   Widget build(BuildContext context) {
+    var kms = widget.docSnapshot['totalDistanceInMeters'] / 1000;
+    String metersDetail = kms.toString();
+    String meters = metersDetail.substring(0, metersDetail.indexOf('.') + 2);
+    var _altimeters = widget.docSnapshot['altimeters'].toString();
+    String _altTruncated =
+        _altimeters.substring(0, _altimeters.indexOf('.') + 2);
+
+    //add the same for altimeters
+
     return Scaffold(
         appBar: myAppBar(
             "Hike to ${widget.docSnapshot['endPointName'].toString()}"),
@@ -123,20 +132,48 @@ class _RecordingDetailPageState extends State<RecordingDetailPage> {
                       padding: const EdgeInsets.all(8.0),
                       child: Column(
                         children: [
+                          Text("Hike statistics",
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold)),
+                          SizedBox(height: 10),
                           Text(
-                              "Time and date: ${widget.docSnapshot['dateAndTime'].toString()}"),
+                              "${widget.docSnapshot['dateAndTime'].toString()}",
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w600)),
                           SizedBox(
-                            height: 15,
-                          ),
-                          Text(
-                              "Hike lasted for: ${widget.docSnapshot['duration'].toString()}"),
-                          SizedBox(
-                            height: 15,
+                            height: 5,
                           ),
                           Container(
                               height: 300,
                               alignment: Alignment.center,
-                              child: myMap(_locPoints))
+                              child: myMap(_locPoints)),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Text(
+                              "Hike lasted for: ${widget.docSnapshot['duration'].toString()}",
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w500)),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Text("Distance: ${meters}km ",
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w500)),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Text("Altimeters: ${_altTruncated}m",
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w500)),
+                          SizedBox(
+                            height: 5,
+                          ),
                         ],
                       )),
                 ),

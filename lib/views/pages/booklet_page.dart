@@ -2,6 +2,7 @@ import 'package:bach_thes/controllers/list_of_peaks_controller.dart';
 import 'package:bach_thes/globals.dart';
 import 'package:bach_thes/views/widgets/reusable_widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:bach_thes/models/peak.dart';
 import 'package:bach_thes/utils/styles.dart';
@@ -25,6 +26,22 @@ class _BookletPageState extends State<BookletPage> {
   List _julian = [];
   List _karawanks = [];
   List _kamnikSavinja = [];
+  String currentUserId = FirebaseAuth.instance.currentUser!.uid.toString();
+
+  getAchievedPeaks() async {
+    print("in getachueved peaks");
+    var achievedPeaksQuery = await FirebaseFirestore.instance
+        .collection('RHikes')
+        .where('hikerId', isEqualTo: currentUserId)
+        .where('acheived', isEqualTo: true)
+        .get();
+
+    print(achievedPeaksQuery.docs.length);
+
+    for (var hike in achievedPeaksQuery.docs) {
+      achievedPeaks.add(hike['endPointName']);
+    }
+  }
 
   getPeaks() async {
     var _allPeaks = await FirebaseFirestore.instance.collection('Peaks').get();
@@ -86,6 +103,7 @@ class _BookletPageState extends State<BookletPage> {
   void initState() {
     super.initState();
     getPeaks();
+    getAchievedPeaks();
   }
 
   @override
