@@ -2,6 +2,8 @@ import 'package:bach_thes/models/path.dart';
 import 'package:bach_thes/utils/styles.dart';
 import 'package:bach_thes/views/widgets/reusable_widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:bach_thes/controllers/navigation_controller.dart';
 
 class addNewPathPage extends StatefulWidget {
   final int id;
@@ -20,12 +22,36 @@ class _addNewPathPageState extends State<addNewPathPage> {
   final _altitude = TextEditingController();
   final _altimeters = TextEditingController();
   final _altimetersOnTheWay = TextEditingController();
-  final _difficulty = TextEditingController();
+
   final _duration = TextEditingController();
   final _description = TextEditingController();
+  var nextPathIndex = 0;
+
+  getPathIndex() async {
+    var pathIndex =
+        await FirebaseFirestore.instance.collection("Indexes").get();
+    int currentPathIndex = int.parse(pathIndex.docs.first['pathIndex']);
+    setState(() {
+      nextPathIndex = currentPathIndex + 1;
+    });
+
+    var collection = await FirebaseFirestore.instance
+        .collection('Indexes')
+        .doc('2SZAPriyUMk2SegoD9Io')
+        .update({'pathIndex': nextPathIndex}).then(
+            (value) => print("DocumentSnapshot successfully updated!"),
+            onError: (e) => print("Error updating document $e"));
+  }
+
+  @override
+  void initState() {
+    getPathIndex();
+  }
 
   @override
   Widget build(BuildContext context) {
+    var difficulty = "";
+    var mountainChain = "";
     return Scaffold(
         appBar: myAppBar("Add a new path to ${widget.name}"),
         body: Form(
@@ -105,21 +131,117 @@ class _addNewPathPageState extends State<addNewPathPage> {
                     value: 1,
                     items: const [
                       DropdownMenuItem(
-                        child: Text("Lahka označena pot"),
+                        child: Text("Easy marked path"),
                         value: 1,
                       ),
                       DropdownMenuItem(
-                          child: Text("Zmerna označena pot"), value: 2),
+                          child: Text("Moderate marked path"), value: 2),
                       DropdownMenuItem(
-                          child: Text("Zahtevna označena pot"), value: 3),
+                          child: Text("Difficult marked path"), value: 3),
                       DropdownMenuItem(
-                          child: Text("Zelo zahtevna označena pot"), value: 4),
-                      DropdownMenuItem(child: Text("Brezpotje"), value: 5),
+                          child: Text("Very difficult marked path"), value: 4),
+                      DropdownMenuItem(child: Text("Roadless area"), value: 5),
                       DropdownMenuItem(
-                          child: Text("Lahka neoznačena steza"), value: 6),
+                          child: Text("Easy unmarked path"), value: 6),
                     ],
-                    onChanged: (value) => value,
+                    onChanged: (value) {
+                      setState(() {
+                        switch (value) {
+                          case 1:
+                            difficulty = "Easy marked path";
+                            break;
+                          case 2:
+                            difficulty = "Moderate marked path";
+                            break;
+                          case 3:
+                            difficulty = "Difficult marked path";
+                            break;
+                          case 4:
+                            difficulty = "Very difficult marked path";
+                            break;
+                          case 5:
+                            difficulty = "Roadless area";
+                            break;
+                          case 6:
+                            difficulty = "Easy unmarked path";
+                            break;
+                        }
+                      });
+                    },
                   ),
+                  //mountainChain
+                  DropdownButtonFormField(
+                    isExpanded: true,
+                    isDense: true,
+                    value: 1,
+                    items: const [
+                      DropdownMenuItem(
+                        child: Text("Julian Alps"),
+                        value: 1,
+                      ),
+                      DropdownMenuItem(child: Text("Karawanks"), value: 2),
+                      DropdownMenuItem(
+                          child: Text("Kamnik Savinja Alps"), value: 3),
+                      DropdownMenuItem(
+                          child: Text(
+                              "Gorice, Notranjsko and Snežnik mountain range"),
+                          value: 4),
+                      DropdownMenuItem(
+                          child: Text("Pohorje, Dravinjske gorice and Haloze"),
+                          value: 5),
+                      DropdownMenuItem(
+                          child: Text("Ljubljana and Polhograd mountain range"),
+                          value: 6),
+                      DropdownMenuItem(
+                          child: Text(
+                              "Jelovica, Škofja Loka and Cerklje mountain range"),
+                          value: 7),
+                      DropdownMenuItem(child: Text("Prekmurje"), value: 8),
+                      DropdownMenuItem(
+                          child: Text(
+                              "Strojna, Košenjak, Kozjak and Slovenske gorice"),
+                          value: 9),
+                    ],
+                    onChanged: (value) {
+                      setState(() {
+                        switch (value) {
+                          case 1:
+                            mountainChain = "Julian Alps";
+                            break;
+                          case 2:
+                            mountainChain = "Karawanks";
+                            break;
+                          case 3:
+                            mountainChain = "Kamnik Savinja Alps";
+                            break;
+                          case 4:
+                            mountainChain =
+                                "Gorice, Notranjsko and Snežnik mountain range";
+                            break;
+                          case 5:
+                            mountainChain =
+                                "Pohorje, Dravinjske gorice and Haloze";
+                            break;
+                          case 6:
+                            mountainChain =
+                                "Ljubljana and Polhograd mountain range";
+                            break;
+                          case 7:
+                            mountainChain =
+                                "Jelovica, Škofja Loka and Cerklje mountain range";
+                            break;
+                          case 8:
+                            mountainChain = "Prekmurje";
+                            break;
+                          case 9:
+                            mountainChain =
+                                "Strojna, Košenjak, Kozjak and Slovenske gorice";
+                            break;
+                        }
+                      });
+                    },
+                  ),
+
                   //duration
                   TextFormField(
                     controller: _duration,
@@ -130,7 +252,7 @@ class _addNewPathPageState extends State<addNewPathPage> {
                       return null;
                     },
                     decoration: InputDecoration(
-                        labelText: "How long does the hike take?"),
+                        labelText: "How long does the hike take (in minutes)?"),
                   ),
                   //description
                   TextFormField(
@@ -156,16 +278,18 @@ class _addNewPathPageState extends State<addNewPathPage> {
                               widget.id,
                               _pathName.text,
                               _startingPoint.text,
-                              0,
+                              nextPathIndex,
                               int.parse(_altitude.text),
                               widget.name,
                               int.parse(_altimeters.text),
                               int.parse(_altimetersOnTheWay.text),
-                              _difficulty.text,
-                              _duration.text,
-                              _description.text);
+                              difficulty,
+                              int.parse(_duration.text),
+                              _description.text,
+                              mountainChain);
                         }
-                        Navigator.pop(context);
+                        MyNavigator(context)
+                            .navigateToPointsPage("adding a new path", 15, []);
                       },
                       child: const Text("Save"))
                 ]),

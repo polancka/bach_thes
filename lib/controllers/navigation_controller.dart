@@ -4,6 +4,7 @@ import 'package:bach_thes/views/pages/all_recordings_page.dart';
 import 'package:bach_thes/views/pages/list_of_peaks.dart';
 import 'package:bach_thes/views/pages/main_page.dart';
 import 'package:bach_thes/views/pages/path_detail.dart';
+import 'package:bach_thes/views/pages/random_hike_page.dart';
 import 'package:bach_thes/views/pages/recording_detail_page.dart';
 import 'package:bach_thes/views/pages/recording_page.dart';
 import 'package:bach_thes/views/pages/settings_page.dart';
@@ -124,5 +125,10 @@ class MyNavigator {
         context,
         MaterialPageRoute(
             builder: ((context) => BadgeAlert(newBadges: badges))));
+  }
+
+  void navigateToRandomHikePage() {
+    Navigator.push(
+        context, MaterialPageRoute(builder: ((context) => RandomHikePage())));
   }
 }

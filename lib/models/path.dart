@@ -14,8 +14,9 @@ class Path {
   final int altimeters;
   final int altimetersOnTheWay;
   final String difficulty;
-  final String duration;
+  final int duration;
   final String description;
+  final String mountainChain;
   Path(
       {required this.id,
       required this.pathName,
@@ -27,22 +28,23 @@ class Path {
       required this.altimetersOnTheWay,
       required this.difficulty,
       required this.duration,
-      required this.description});
+      required this.description,
+      required this.mountainChain});
 }
 
 Future<void> addNewPath(
-  int id,
-  String pathName,
-  String startingPointName,
-  int startingPointId,
-  int startingPointAltitude,
-  String finishPointName,
-  int altimeters,
-  int altimetersOnTheWay,
-  String difficulty,
-  String duration,
-  String description,
-) async {
+    int id,
+    String pathName,
+    String startingPointName,
+    int startingPointId,
+    int startingPointAltitude,
+    String finishPointName,
+    int altimeters,
+    int altimetersOnTheWay,
+    String difficulty,
+    int duration,
+    String description,
+    String mountainChain) async {
   await FirebaseFirestore.instance.collection("Paths").add({
     'id': id,
     'pathName': pathName,
@@ -55,5 +57,6 @@ Future<void> addNewPath(
     'difficulty': difficulty,
     'duration': duration,
     'description': description,
+    'mountainChain': mountainChain,
   });
 }

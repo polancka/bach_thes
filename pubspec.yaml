@@ -54,6 +54,8 @@ dependencies:
   flutter_map: any
   flutter_background: ^1.2.0
   dropdown_search: ^3.0.1
+  eraser: ^2.0.1
+  permission_handler: ^10.4.3
 
 
 dev_dependencies:

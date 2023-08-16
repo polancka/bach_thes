@@ -168,6 +168,14 @@ Drawer myDrawer(BuildContext context) {
                 },
               ),
               ListTile(
+                leading: Icon(Icons.bolt_outlined, color: Colors.white),
+                title: Text("Random hike suggestion",
+                    style: TextStyle(color: Colors.white, fontSize: 15)),
+                onTap: () {
+                  MyNavigator(context).navigateToRandomHikePage();
+                },
+              ),
+              ListTile(
                   leading: Icon(
                     Icons.settings,
                     color: Colors.white,

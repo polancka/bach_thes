@@ -12,8 +12,14 @@ class PathDetail extends StatelessWidget {
   final dynamic path;
   PathDetail(this.path);
 
+  var hours = 0;
+  var minutes = 0;
+
   @override
   Widget build(BuildContext context) {
+    hours = path['duration'] ~/ 60;
+    minutes = path['duration'] % 60;
+
     return SafeArea(
         child: Scaffold(
             extendBodyBehindAppBar: false,
@@ -86,6 +92,22 @@ class PathDetail extends StatelessWidget {
                           Container(
                             child: Text(
                               "${path['altimetersOnTheWay']} altimeters on the way",
+                              style: TextStyle(
+                                  fontSize: 13, fontWeight: FontWeight.w600),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                            child: Text(
+                              "Duration: $hours h $minutes min",
                               style: TextStyle(
                                   fontSize: 13, fontWeight: FontWeight.w600),
                             ),

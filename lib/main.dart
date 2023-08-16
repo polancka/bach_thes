@@ -17,6 +17,7 @@ import 'views/pages/map_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'views/pages/recording_page.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 final FlutterLocalNotificationsPlugin flutterLoacalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
@@ -39,6 +40,12 @@ Future<void> main() async {
     debugShowCheckedModeBanner: false,
     home: prefs.getBool('isLoggedIn') == true ? MainPage() : LoginPage(),
   ));*/
+
+  await Permission.notification.isDenied.then((value) {
+    if (value) {
+      Permission.notification.request();
+    }
+  });
 
   return runApp(const MyApp());
 }

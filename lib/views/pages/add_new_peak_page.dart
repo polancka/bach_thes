@@ -4,6 +4,7 @@ import 'package:bach_thes/utils/styles.dart';
 import 'package:bach_thes/views/widgets/reusable_widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:bach_thes/controllers/navigation_controller.dart';
 
 class addNewPeakPage extends StatefulWidget {
   const addNewPeakPage({super.key});
@@ -18,15 +19,22 @@ class _addNewPeakPageState extends State<addNewPeakPage> {
   getPeakIndex() async {
     var peakIndex =
         await FirebaseFirestore.instance.collection("Indexes").get();
-    int currentPeakIndex = int.parse(peakIndex.docs.first['peakIndex']);
-    setState(() {});
-    nextPeakIndex = currentPeakIndex;
+    int currentPeakIndex = peakIndex.docs.first['peakIndex'];
+    setState(() {
+      nextPeakIndex = currentPeakIndex + 1;
+    });
     // dodaj povečanje indeksa v bazi
+
+    var collection = await FirebaseFirestore.instance
+        .collection('Indexes')
+        .doc('2SZAPriyUMk2SegoD9Io')
+        .update({'peakIndex': nextPeakIndex}).then(
+            (value) => print("DocumentSnapshot successfully updated!"),
+            onError: (e) => print("Error updating document $e"));
   }
 
   @override
   void initState() {
-    // TODO: implement initState
     getPeakIndex();
   }
 
@@ -42,6 +50,7 @@ class _addNewPeakPageState extends State<addNewPeakPage> {
 
   @override
   Widget build(BuildContext context) {
+    var mountainChain = "";
     return Scaffold(
         appBar: myAppBar("Add a new peak"),
         body: Form(
@@ -158,7 +167,44 @@ class _addNewPeakPageState extends State<addNewPeakPage> {
                               "Strojna, Košenjak, Kozjak and Slovenske gorice"),
                           value: 9),
                     ],
-                    onChanged: (value) => value,
+                    onChanged: (value) {
+                      setState(() {
+                        switch (value) {
+                          case 1:
+                            mountainChain = "Julian Alps";
+                            break;
+                          case 2:
+                            mountainChain = "Karawanks";
+                            break;
+                          case 3:
+                            mountainChain = "Kamnik Savinja Alps";
+                            break;
+                          case 4:
+                            mountainChain =
+                                "Gorice, Notranjsko and Snežnik mountain range";
+                            break;
+                          case 5:
+                            mountainChain =
+                                "Pohorje, Dravinjske gorice and Haloze";
+                            break;
+                          case 6:
+                            mountainChain =
+                                "Ljubljana and Polhograd mountain range";
+                            break;
+                          case 7:
+                            mountainChain =
+                                "Jelovica, Škofja Loka and Cerklje mountain range";
+                            break;
+                          case 8:
+                            mountainChain = "Prekmurje";
+                            break;
+                          case 9:
+                            mountainChain =
+                                "Strojna, Košenjak, Kozjak and Slovenske gorice";
+                            break;
+                        }
+                      });
+                    },
                   ),
                   ElevatedButton(
                       style: ButtonStyle(backgroundColor:
@@ -175,12 +221,13 @@ class _addNewPeakPageState extends State<addNewPeakPage> {
                               int.parse(_altitude.text),
                               _description.text,
                               _urlThumbnail.text,
-                              0.0,
-                              0.0,
-                              _mountainChain.text,
+                              double.parse(_longitude.text),
+                              double.parse(_latitude.text),
+                              mountainChain,
                               _name.text.toLowerCase());
                           incrementPeakIndex(nextPeakIndex);
-                          Navigator.pop(context);
+                          MyNavigator(context).navigateToPointsPage(
+                              "adding a new peak", 15, []);
                         }
                       },
                       child: const Text("Save"))
