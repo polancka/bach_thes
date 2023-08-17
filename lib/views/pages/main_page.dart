@@ -42,6 +42,10 @@ class _MainPageState extends State<MainPage> {
     List<String> stringsOfBadges = List<String>.from(arrayOfBadges);
     print(stringsOfBadges);
 
+    var arrayOfRecentSearches = profiles.docs.first['recentSearches'];
+    List<String> recentSearches = List<String>.from(arrayOfRecentSearches);
+
+    print(recentSearches);
     setCurrentHiker(
         profiles.docs.first['id'],
         profiles.docs.first['username'],
@@ -52,7 +56,8 @@ class _MainPageState extends State<MainPage> {
         profiles.docs.first['altimetersTogheter'],
         profiles.docs.first['timeTogheter'],
         profiles.docs.first['scoreboardParticipation'],
-        stringsOfBadges);
+        stringsOfBadges,
+        recentSearches);
   }
 
   @override
@@ -135,7 +140,8 @@ class _MainPageState extends State<MainPage> {
       double altimetersTogheter,
       int timeTogheter,
       bool scoreboardParticipation,
-      List<String> badges) async {
+      List<String> badges,
+      List<String> recentSearches) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('id', id);
     prefs.setString('username', username);
@@ -148,5 +154,6 @@ class _MainPageState extends State<MainPage> {
     prefs.setBool('scoreboardParticipation', scoreboardParticipation);
     prefs.setBool('isLoggedIn', true);
     prefs.setStringList('badges', badges);
+    prefs.setStringList('recentSearches', recentSearches);
   }
 }

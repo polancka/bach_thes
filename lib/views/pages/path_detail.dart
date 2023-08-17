@@ -60,7 +60,7 @@ class PathDetail extends StatelessWidget {
                         children: [
                           Container(
                             child: Text(
-                              "${path['difficulty']}",
+                              "${path['difficulty']} to ${path['finishPointName']}",
                               style: TextStyle(fontSize: 14),
                             ),
                           ),

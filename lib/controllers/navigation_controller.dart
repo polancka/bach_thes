@@ -5,6 +5,7 @@ import 'package:bach_thes/views/pages/list_of_peaks.dart';
 import 'package:bach_thes/views/pages/main_page.dart';
 import 'package:bach_thes/views/pages/path_detail.dart';
 import 'package:bach_thes/views/pages/random_hike_page.dart';
+import 'package:bach_thes/views/pages/random_hike_results_page.dart';
 import 'package:bach_thes/views/pages/recording_detail_page.dart';
 import 'package:bach_thes/views/pages/recording_page.dart';
 import 'package:bach_thes/views/pages/settings_page.dart';
@@ -128,7 +129,19 @@ class MyNavigator {
   }
 
   void navigateToRandomHikePage() {
+    Navigator.pop(context);
     Navigator.push(
         context, MaterialPageRoute(builder: ((context) => RandomHikePage())));
+  }
+
+  void navigateToRandomHikeResultsPage(
+      int duration, String difficulty, String mountainChain) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: ((context) => RandomHikeResultPage(
+                duration: duration,
+                difficulty: difficulty,
+                mountainChain: mountainChain))));
   }
 }

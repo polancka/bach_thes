@@ -17,6 +17,7 @@ class Hiker {
   final int timeTogheter;
   final double altimetersTogheter;
   final List<String> badges;
+  final List<String> recentSearches;
   Hiker(
       {required this.id,
       required this.username,
@@ -28,7 +29,8 @@ class Hiker {
       required this.numberOfHikes,
       required this.timeTogheter,
       required this.altimetersTogheter,
-      required this.badges});
+      required this.badges,
+      required this.recentSearches});
 
   String getParticipation() {
     return this.scoreboardParticipation;
@@ -115,6 +117,19 @@ updateNewLevel(int newLevel, String id) async {
       onError: (e) => print("Error updating document $e"));
 }
 
+updateRecentSearches(String id, List<String> allSearches) async {
+  var wantedDocuments = await FirebaseFirestore.instance
+      .collection('Hikers')
+      .where('id', isEqualTo: id)
+      .get();
+  var docRef = wantedDocuments.docs.first.id;
+
+  final docRefUpdate = db.collection('Hikers').doc("${docRef}");
+  docRefUpdate.update({"recentSearches": allSearches}).then(
+      (value) => print("DocumentSnapshot successfully updated!"),
+      onError: (e) => print("Error updating document $e"));
+}
+
 changeParticipation(bool isParticipating, String id) async {
   var wantedDocuments = await FirebaseFirestore.instance
       .collection('Hikers')
@@ -171,7 +186,8 @@ Future<DocumentReference> addHiker(String email, String username, String? userId
       "false",
       "false",
       "false"
-    ]
+    ],
+    'recentSearches': [],
   });
 
   //add reference number for the booklet
