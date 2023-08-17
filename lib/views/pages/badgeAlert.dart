@@ -37,7 +37,7 @@ class _BadgeAlertState extends State<BadgeAlert> {
               },
             ),
             SizedBox(
-              height: 55,
+              height: 15,
             ),
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -52,7 +52,7 @@ class _BadgeAlertState extends State<BadgeAlert> {
                             fontWeight: FontWeight.w700))),
               ],
             ),
-            SizedBox(height: 45),
+            SizedBox(height: 15),
             Padding(
                 padding: EdgeInsets.all(25),
                 child: Row(
@@ -64,7 +64,7 @@ class _BadgeAlertState extends State<BadgeAlert> {
                             decoration: BoxDecoration(color: Colors.white),
                             child: Align(
                               alignment: Alignment.center,
-                              child: Text("You have unlocked a new badge! ",
+                              child: Text("You have unlocked\n a new badge! ",
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                     color: Styles.deepgreen,
@@ -74,9 +74,14 @@ class _BadgeAlertState extends State<BadgeAlert> {
                             ))),
                   ],
                 )),
-            SizedBox(height: 15),
+            SizedBox(height: 5),
             Image.asset('lib/utils/images/trophy.gif'),
-            Text("${widget.newBadges[0]}")
+            Text("${widget.newBadges[0]}",
+                style: TextStyle(
+                  color: Styles.deepgreen,
+                  fontSize: 30,
+                  fontWeight: FontWeight.w500,
+                ))
           ],
         ),
       ),

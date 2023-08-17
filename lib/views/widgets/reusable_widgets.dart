@@ -181,6 +181,20 @@ Drawer myDrawer(BuildContext context) {
                     color: Colors.white,
                   ),
                   title: Text(
+                    "TEST",
+                    style: TextStyle(color: Colors.white, fontSize: 15),
+                  ),
+                  onTap: () {
+                    //open settings
+                    MyNavigator(context)
+                        .navigateToBadgeAlert(["ana", "banana"]);
+                  }),
+              ListTile(
+                  leading: Icon(
+                    Icons.settings,
+                    color: Colors.white,
+                  ),
+                  title: Text(
                     "Settings",
                     style: TextStyle(color: Colors.white, fontSize: 15),
                   ),

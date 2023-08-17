@@ -45,20 +45,25 @@ class _MainPageState extends State<MainPage> {
     var arrayOfRecentSearches = profiles.docs.first['recentSearches'];
     List<String> recentSearches = List<String>.from(arrayOfRecentSearches);
 
+    var arrayOfMountainChain = profiles.docs.first['mountainChain'];
+    List<String> mountainChain = List<String>.from(arrayOfMountainChain);
+
     print(recentSearches);
     setCurrentHiker(
-        profiles.docs.first['id'],
-        profiles.docs.first['username'],
-        profiles.docs.first['email'],
-        profiles.docs.first['level'],
-        profiles.docs.first['points'],
-        profiles.docs.first['numberOfHikes'],
-        profiles.docs.first['altimetersTogheter'],
-        profiles.docs.first['timeTogheter'],
-        profiles.docs.first['scoreboardParticipation'],
-        stringsOfBadges,
-        recentSearches,
-        profiles.docs.first['distanceTogheter']);
+      profiles.docs.first['id'],
+      profiles.docs.first['username'],
+      profiles.docs.first['email'],
+      profiles.docs.first['level'],
+      profiles.docs.first['points'],
+      profiles.docs.first['numberOfHikes'],
+      profiles.docs.first['altimetersTogheter'],
+      profiles.docs.first['timeTogheter'],
+      profiles.docs.first['scoreboardParticipation'],
+      stringsOfBadges,
+      recentSearches,
+      profiles.docs.first['distanceTogheter'],
+      mountainChain,
+    );
   }
 
   @override
@@ -143,7 +148,8 @@ class _MainPageState extends State<MainPage> {
       bool scoreboardParticipation,
       List<String> badges,
       List<String> recentSearches,
-      double distanceTogheter) async {
+      double distanceTogheter,
+      List<String> mountainChain) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('id', id);
     prefs.setString('username', username);
@@ -158,5 +164,6 @@ class _MainPageState extends State<MainPage> {
     prefs.setStringList('badges', badges);
     prefs.setStringList('recentSearches', recentSearches);
     prefs.setDouble('distanceTogheter', distanceTogheter);
+    prefs.setStringList('mountainChain', mountainChain);
   }
 }

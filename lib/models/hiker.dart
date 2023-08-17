@@ -1,4 +1,5 @@
 import 'dart:ffi';
+import 'dart:js_util';
 
 import 'package:bach_thes/globals.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -19,6 +20,7 @@ class Hiker {
   final List<String> badges;
   final List<String> recentSearches;
   final double distanceTogheter;
+  final List<String> mountainChain;
   Hiker(
       {required this.id,
       required this.username,
@@ -32,7 +34,8 @@ class Hiker {
       required this.altimetersTogheter,
       required this.badges,
       required this.recentSearches,
-      required this.distanceTogheter});
+      required this.distanceTogheter,
+      required this.mountainChain});
 
   String getParticipation() {
     return this.scoreboardParticipation;
@@ -163,6 +166,37 @@ changeParticipation(bool isParticipating, String id) async {
       onError: (e) => print("Error updating document $e"));
 }
 
+updateBadges(String id, List<String> badges) async {
+  var wantedDocuments = await FirebaseFirestore.instance
+      .collection('Hikers')
+      .where('id', isEqualTo: id)
+      .get();
+  var docRef = wantedDocuments.docs.first.id;
+
+  final docRefUpdate = db.collection('Hikers').doc("${docRef}");
+  docRefUpdate.update({"badges": badges}).then(
+      (value) => print("DocumentSnapshot successfully updated!"),
+      onError: (e) => print("Error updating document $e"));
+}
+
+updateMountainChain(String id, String mountainChain) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  List<String> oldMountainChain = prefs.getStringList('mountainChain')!;
+  oldMountainChain.add(mountainChain);
+  prefs.setStringList('mountainChain', oldMountainChain);
+
+  var wantedDocuments = await FirebaseFirestore.instance
+      .collection('Hikers')
+      .where('id', isEqualTo: id)
+      .get();
+  var docRef = wantedDocuments.docs.first.id;
+
+  final docRefUpdate = db.collection('Hikers').doc("${docRef}");
+  docRefUpdate.update({"mountainChain": oldMountainChain}).then(
+      (value) => print("DocumentSnapshot successfully updated!"),
+      onError: (e) => print("Error updating document $e"));
+}
+
 clearSharedPreferences() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   await prefs.clear();
@@ -209,6 +243,7 @@ Future<DocumentReference> addHiker(String email, String username, String? userId
     ],
     'recentSearches': [],
     'distanceTogheter': 0,
+    'mountainChain': [],
   });
 
   //add reference number for the booklet
