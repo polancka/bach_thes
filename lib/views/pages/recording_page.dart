@@ -290,8 +290,6 @@ class _RecordingPageState extends State<RecordingPage>
   }
 
   void startLocationTracking() async {
-    Position? firstPosition = await getCurrentPosition();
-    _locationPoints.add(firstPosition);
     setState(() {
       _isRecording = true;
     });
@@ -309,6 +307,7 @@ class _RecordingPageState extends State<RecordingPage>
     updateNumberOfHikes(currentUserId);
     updateTimeHiking(currentUserId, _stopwatch.elapsed.inMinutes);
     updateNumberOfAltimeters(currentUserId, _altimetersDone);
+    updateDistanceTogheter(currentUserId, _distanceDone);
     setState(() {
       //TODO: uncomment
       badges = bc.checkForNewBadges(currentUserId);

@@ -57,7 +57,8 @@ class _MainPageState extends State<MainPage> {
         profiles.docs.first['timeTogheter'],
         profiles.docs.first['scoreboardParticipation'],
         stringsOfBadges,
-        recentSearches);
+        recentSearches,
+        profiles.docs.first['distanceTogheter']);
   }
 
   @override
@@ -141,7 +142,8 @@ class _MainPageState extends State<MainPage> {
       int timeTogheter,
       bool scoreboardParticipation,
       List<String> badges,
-      List<String> recentSearches) async {
+      List<String> recentSearches,
+      double distanceTogheter) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('id', id);
     prefs.setString('username', username);
@@ -155,5 +157,6 @@ class _MainPageState extends State<MainPage> {
     prefs.setBool('isLoggedIn', true);
     prefs.setStringList('badges', badges);
     prefs.setStringList('recentSearches', recentSearches);
+    prefs.setDouble('distanceTogheter', distanceTogheter);
   }
 }

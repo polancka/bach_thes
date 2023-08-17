@@ -18,6 +18,7 @@ class Hiker {
   final double altimetersTogheter;
   final List<String> badges;
   final List<String> recentSearches;
+  final double distanceTogheter;
   Hiker(
       {required this.id,
       required this.username,
@@ -30,7 +31,8 @@ class Hiker {
       required this.timeTogheter,
       required this.altimetersTogheter,
       required this.badges,
-      required this.recentSearches});
+      required this.recentSearches,
+      required this.distanceTogheter});
 
   String getParticipation() {
     return this.scoreboardParticipation;
@@ -69,6 +71,24 @@ updateNumberOfAltimeters(String id, double newalts) async {
 
   final docRefUpdate = db.collection('Hikers').doc("${docRef}");
   docRefUpdate.update({"altimetersTogheter": newAltimeters}).then(
+      (value) => print("DocumentSnapshot successfully updated!"),
+      onError: (e) => print("Error updating document $e"));
+}
+
+updateDistanceTogheter(String id, double newestDistance) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  var currentDistance = prefs.getDouble('distanceTogheter');
+  var newDistance = currentDistance! + newestDistance;
+  prefs.setDouble('distanceTogheter', newDistance);
+
+  var wantedDocuments = await FirebaseFirestore.instance
+      .collection('Hikers')
+      .where('id', isEqualTo: id)
+      .get();
+  var docRef = wantedDocuments.docs.first.id;
+
+  final docRefUpdate = db.collection('Hikers').doc("${docRef}");
+  docRefUpdate.update({"distanceTogheter": newDistance}).then(
       (value) => print("DocumentSnapshot successfully updated!"),
       onError: (e) => print("Error updating document $e"));
 }
@@ -188,6 +208,7 @@ Future<DocumentReference> addHiker(String email, String username, String? userId
       "false"
     ],
     'recentSearches': [],
+    'distanceTogheter': 0,
   });
 
   //add reference number for the booklet

@@ -29,6 +29,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
       1; //initialized to a random value to avoid dividing by zero
   var numberOfHikes;
   var altimetersTogheter;
+  var distanceTogheter;
 
   getSharedPref() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -37,6 +38,8 @@ class _StatisticsPageState extends State<StatisticsPage> {
       timeTogheter = prefs.getInt('timeTogheter')!;
       numberOfHikes = prefs.getInt('numberOfHikes');
       altimetersTogheter = prefs.getDouble('altimetersTogheter');
+      distanceTogheter = prefs.getDouble('distanceTogheter');
+      print(distanceTogheter);
     });
 
     return "complete";
@@ -113,7 +116,21 @@ class _StatisticsPageState extends State<StatisticsPage> {
       Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
-        children: [Text("Hiking altimeters combined: ${altimetersTogheter}m")],
+        children: [
+          Text(
+              "Hiking altimeters combined: ${(altimetersTogheter).toString().substring(0, altimetersTogheter.toString().indexOf('.') + 2)} m")
+        ],
+      ),
+      SizedBox(
+        height: 10,
+      ),
+      Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+              "Distance hiked: ${(distanceTogheter).toString().substring(0, distanceTogheter.toString().indexOf('.') + 2)} m")
+        ],
       ),
       SizedBox(
         height: 35,
