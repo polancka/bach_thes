@@ -4,17 +4,28 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 Future<List<String>> checkWhatIsNew(String userID) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  var thisHiker = await FirebaseFirestore.instance
+  var thisHikerQuery = await FirebaseFirestore.instance
       .collection('Hikers')
-      .where('hikerId', isEqualTo: userID)
+      .where('id', isEqualTo: userID)
       .get();
+
+  int nHikes = thisHikerQuery.docs.first['numberOfHikes'] + 1;
+
+  double altimeters = thisHikerQuery.docs.first['altimetersTogheter'];
+
+  List<String> mountainChains = prefs.getStringList('mountainChain')!;
 
   //search DB RHikes for every hike from this hiker, collect names of peaks into List<String> and pass it to check for new
   List<String> peaks = [];
+  var achievedPeaksQuery = await FirebaseFirestore.instance
+      .collection('RHikes')
+      .where('hikerId', isEqualTo: userID)
+      .where('acheived', isEqualTo: true)
+      .get();
 
-  var nHikes = thisHiker.docs.first['numberOfHikes'];
-  var altimeters = thisHiker.docs.first['altimeters'];
-  var mountainChains = prefs.getStringList('mountainChain');
+  for (var hike in achievedPeaksQuery.docs) {
+    peaks.add(hike['endPointName']);
+  }
 
   List<String> oldBadges = prefs.getStringList('badges')!;
   List<String> newBadges =
@@ -23,8 +34,8 @@ Future<List<String>> checkWhatIsNew(String userID) async {
   updatePrefBadges(newBadges);
   List<int> indexesOfNew = compareOldAndNew(oldBadges, newBadges);
   List<String> badgesString = returnStringsOfIndexes(indexesOfNew);
-  //TODO: dont forget to save new string of badges to prefs and database
-  return badgesString;
+
+  return badgesString; // this list needs to get to recording page somehow!
 }
 
 updatePrefBadges(List<String> newBadges) async {
@@ -62,9 +73,10 @@ List<String> getAltimetersBadges(double altimeters) {
     return ["true", "true", "false", "false"];
   } else if (altimeters < 4500) {
     return ["true", "true", "true", "false"];
-  } else {
+  } else if (altimeters >= 4500) {
     return ["true", "true", "true", "true"];
   }
+  return ["false", "false", "false", "false"];
 }
 
 List<String> getRegionBadges(List<String> mountainChains) {
@@ -138,7 +150,7 @@ List<String> checkForNew(int nHikes, double altimeters,
   List<String> numberHikesBadges = getNumberHikesBadges(nHikes);
   List<String> regionsBadges = getRegionBadges(mountainChains);
   List<String> newConqBadges = getNewPeaks(peaks);
-  List<String> specialBadges = [];
+  List<String> specialBadges = ["false", "false", "false"];
   List<String> altimBadges = getAltimetersBadges(altimeters);
 
   allNewBadges.addAll(numberHikesBadges);
@@ -147,13 +159,44 @@ List<String> checkForNew(int nHikes, double altimeters,
   allNewBadges.addAll(specialBadges);
   allNewBadges.addAll(altimBadges);
 
+  print("this is new badges: $allNewBadges");
+
   return allNewBadges;
 }
 
 List<int> compareOldAndNew(List<String> oldBadges, List<String> newBadges) {
-  return [];
+  List<int> diffs = [];
+  for (int i = 0; i < oldBadges.length; i++) {
+    if (oldBadges[i] != newBadges[i]) {
+      diffs.add(i);
+    }
+  }
+  return diffs;
 }
 
 List<String> returnStringsOfIndexes(List<int> indexes) {
-  return [];
+  List<String> namesNewBadges = [];
+  var badgeNames = [
+    "5 hikes",
+    "10 hikes",
+    "25 hikes",
+    "40 hikes",
+    "65 hikes",
+    "Hike in every region",
+    "5 hikes in one region",
+    "10 hikes in one region",
+    "3 new peaks",
+    "7 new peaks",
+    "12 new peaks",
+    "15 new peaks",
+    "21 new peaks",
+    "1000 altimeters",
+    "2500 altimeters",
+    "3500 altimeters",
+    "4500 altimeters",
+  ];
+  for (int i = 0; i < indexes.length; i++) {
+    namesNewBadges.add(badgeNames[indexes[i]]);
+  }
+  return namesNewBadges;
 }

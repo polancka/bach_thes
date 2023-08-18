@@ -22,22 +22,37 @@ class _BadgesPageState extends State<BadgesPage> {
     "40 hikes",
     "65 hikes",
     "Hike in every region",
+    "5 hikes in one region",
     "10 hikes in one region",
-    "All peaks in one region",
     "3 new peaks",
     "7 new peaks",
     "12 new peaks",
     "15 new peaks",
     "21 new peaks",
-    "First peak over 1000m",
-    "First peak over 2000m",
-    "3 peaks over 2000m",
     "1000 altimeters",
     "2500 altimeters",
     "3500 altimeters",
-    "4500 altimeters"
+    "4500 altimeters",
   ];
-  List<String> listOfBadges = [];
+  List<String> listOfBadges = [
+    "false",
+    "false",
+    "false",
+    "false",
+    "false",
+    "false",
+    "false",
+    "false",
+    "false",
+    "false",
+    "false",
+    "false",
+    "false",
+    "false",
+    "false",
+    "false",
+    "false"
+  ];
 
   Future<String> getSharedPrefsBadges() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -48,10 +63,11 @@ class _BadgesPageState extends State<BadgesPage> {
   }
 
   List<Widget> renderBadgeTiles(int startingIndex, int endIndex) {
-    Future<String> testString = getSharedPrefsBadges();
     List<Widget> allBadges = [];
 
     for (int i = startingIndex; i <= endIndex; i++) {
+      //print(" $i iteration : $listOfBadges[i]");
+      print(listOfBadges);
       if (listOfBadges[i] == "true") {
         allBadges.add(GridTile(child: colorfulBadgeTile(badgeNames[i])));
       } else {
@@ -123,6 +139,13 @@ class _BadgesPageState extends State<BadgesPage> {
         ),
       ),
     );
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    getSharedPrefsBadges();
+    print(listOfBadges);
   }
 
   @override
@@ -205,29 +228,6 @@ class _BadgesPageState extends State<BadgesPage> {
               ),
               Center(
                   child: Text(
-                "Special achievements",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
-              )),
-              SizedBox(
-                height: 10,
-              ),
-              Container(
-                  child: IgnorePointer(
-                      child: GridView.count(
-                crossAxisSpacing: 10.0,
-                mainAxisSpacing: 10.0,
-                shrinkWrap: true,
-                // Create a grid with 2 columns. If you change the scrollDirection to
-                // horizontal, this produces 2 rows.
-                crossAxisCount: 4,
-                // Generate 100 widgets that display their index in the List.
-                children: renderBadgeTiles(13, 15),
-              ))),
-              SizedBox(
-                height: 10,
-              ),
-              Center(
-                  child: Text(
                 "Altimeters",
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
               )),
@@ -244,7 +244,7 @@ class _BadgesPageState extends State<BadgesPage> {
                 // horizontal, this produces 2 rows.
                 crossAxisCount: 4,
                 // Generate 100 widgets that display their index in the List.
-                children: renderBadgeTiles(16, 19),
+                children: renderBadgeTiles(13, 16),
               ))),
             ],
           ),

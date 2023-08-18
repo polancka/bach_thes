@@ -1,9 +1,5 @@
-import 'dart:ffi';
-import 'dart:js_util';
-
 import 'package:bach_thes/globals.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Hiker {
@@ -237,9 +233,6 @@ Future<DocumentReference> addHiker(String email, String username, String? userId
       "false",
       "false",
       "false",
-      "false",
-      "false",
-      "false"
     ],
     'recentSearches': [],
     'distanceTogheter': 0,

@@ -186,8 +186,9 @@ Drawer myDrawer(BuildContext context) {
                   ),
                   onTap: () {
                     //open settings
-                    MyNavigator(context)
-                        .navigateToBadgeAlert(["ana", "banana"]);
+                    MyNavigator(context).navigateToBadgeAlert([
+                      "1000 altimeters",
+                    ]);
                   }),
               ListTile(
                   leading: Icon(

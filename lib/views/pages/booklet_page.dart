@@ -22,10 +22,23 @@ class _BookletPageState extends State<BookletPage> {
   List karawanks = [];
   List julianAlps = [];
   List kamnikSavinjaAlps = [];
+  List prekmurje = [];
+  List sloGorice = [];
+  List pohorje = [];
+  List cerklje = [];
+  List ljubljana = [];
+  List gorice = [];
+
   List<String> achievedPeaks = [];
   List _julian = [];
   List _karawanks = [];
   List _kamnikSavinja = [];
+  List _prekmurje = [];
+  List _sloGorice = [];
+  List _pohorje = [];
+  List _cerklje = [];
+  List _ljubljana = [];
+  List _gorice = [];
   String currentUserId = FirebaseAuth.instance.currentUser!.uid.toString();
 
   getAchievedPeaks() async {
@@ -65,6 +78,42 @@ class _BookletPageState extends State<BookletPage> {
             _kamnikSavinja.add(docSnap);
           }
           break;
+
+        case "Gorice, Notranjsko and Snežnik mountain range":
+          {
+            _gorice.add(docSnap);
+          }
+          break;
+
+        case "Pohorje, Dravinjske gorice and Haloze":
+          {
+            _pohorje.add(docSnap);
+          }
+          break;
+
+        case "Ljubljana and Polhograd mountain range":
+          {
+            _ljubljana.add(docSnap);
+          }
+          break;
+
+        case "Jelovica, Škofja Loka and Cerklje mountain range":
+          {
+            _cerklje.add(docSnap);
+          }
+          break;
+
+        case "Prekmurje":
+          {
+            _prekmurje.add(docSnap);
+          }
+          break;
+
+        case "Strojna, Košenjak, Kozjak and Slovenske gorice":
+          {
+            _sloGorice.add(docSnap);
+          }
+          break;
       }
     }
 
@@ -73,6 +122,12 @@ class _BookletPageState extends State<BookletPage> {
       karawanks = List.from(_karawanks);
       julianAlps = List.from(_julian);
       kamnikSavinjaAlps = List.from(_kamnikSavinja);
+      prekmurje = List.from(_prekmurje);
+      sloGorice = List.from(_sloGorice);
+      pohorje = List.from(_pohorje);
+      cerklje = List.from(_cerklje);
+      ljubljana = List.from(_ljubljana);
+      gorice = List.from(_gorice);
     });
 
     return "complete";
@@ -179,6 +234,150 @@ class _BookletPageState extends State<BookletPage> {
             crossAxisCount: 4,
             // Generate 100 widgets that display their index in the List.
             children: renderGridTiles(karawanks, achievedPeaks),
+          ))),
+          SizedBox(
+            height: 10,
+          ),
+          Center(
+              child: Text(
+            "Gorice, Notranjsko and Snežnik mountain range",
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+          )),
+          SizedBox(
+            height: 10,
+          ),
+          Container(
+              child: IgnorePointer(
+                  child: GridView.count(
+            crossAxisSpacing: 10.0,
+            mainAxisSpacing: 10.0,
+            shrinkWrap: true,
+            // Create a grid with 2 columns. If you change the scrollDirection to
+            // horizontal, this produces 2 rows.
+            crossAxisCount: 4,
+            // Generate 100 widgets that display their index in the List.
+            children: renderGridTiles(gorice, achievedPeaks),
+          ))),
+          SizedBox(
+            height: 10,
+          ),
+          Center(
+              child: Text(
+            "Pohorje, Dravinjske gorice and Haloze",
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+          )),
+          SizedBox(
+            height: 10,
+          ),
+          Container(
+              child: IgnorePointer(
+                  child: GridView.count(
+            crossAxisSpacing: 10.0,
+            mainAxisSpacing: 10.0,
+            shrinkWrap: true,
+            // Create a grid with 2 columns. If you change the scrollDirection to
+            // horizontal, this produces 2 rows.
+            crossAxisCount: 4,
+            // Generate 100 widgets that display their index in the List.
+            children: renderGridTiles(pohorje, achievedPeaks),
+          ))),
+          SizedBox(
+            height: 10,
+          ),
+          Center(
+              child: Text(
+            "Ljubljana and Polhograd mountain range",
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+          )),
+          SizedBox(
+            height: 10,
+          ),
+          Container(
+              child: IgnorePointer(
+                  child: GridView.count(
+            crossAxisSpacing: 10.0,
+            mainAxisSpacing: 10.0,
+            shrinkWrap: true,
+            // Create a grid with 2 columns. If you change the scrollDirection to
+            // horizontal, this produces 2 rows.
+            crossAxisCount: 4,
+            // Generate 100 widgets that display their index in the List.
+            children: renderGridTiles(ljubljana, achievedPeaks),
+          ))),
+          SizedBox(
+            height: 10,
+          ),
+          Center(
+              child: Text(
+            "Jelovica, Škofja Loka and Cerklje mountain range",
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+          )),
+          SizedBox(
+            height: 10,
+          ),
+          Container(
+              child: IgnorePointer(
+                  child: GridView.count(
+            crossAxisSpacing: 10.0,
+            mainAxisSpacing: 10.0,
+            shrinkWrap: true,
+            // Create a grid with 2 columns. If you change the scrollDirection to
+            // horizontal, this produces 2 rows.
+            crossAxisCount: 4,
+            // Generate 100 widgets that display their index in the List.
+            children: renderGridTiles(cerklje, achievedPeaks),
+          ))),
+          SizedBox(
+            height: 10,
+          ),
+          Center(
+              child: Text(
+            "Prekmurje",
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+          )),
+          SizedBox(
+            height: 10,
+          ),
+          Container(
+              child: IgnorePointer(
+                  child: GridView.count(
+            crossAxisSpacing: 10.0,
+            mainAxisSpacing: 10.0,
+            shrinkWrap: true,
+            // Create a grid with 2 columns. If you change the scrollDirection to
+            // horizontal, this produces 2 rows.
+            crossAxisCount: 4,
+            // Generate 100 widgets that display their index in the List.
+            children: renderGridTiles(prekmurje, achievedPeaks),
+          ))),
+          SizedBox(
+            height: 10,
+          ),
+          Center(
+              child: Text(
+            "Strojna, Košenjak, Kozjak and Slovenske gorice",
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+          )),
+          SizedBox(
+            height: 10,
+          ),
+          Container(
+              child: IgnorePointer(
+                  child: GridView.count(
+            crossAxisSpacing: 10.0,
+            mainAxisSpacing: 10.0,
+            shrinkWrap: true,
+            // Create a grid with 2 columns. If you change the scrollDirection to
+            // horizontal, this produces 2 rows.
+            crossAxisCount: 4,
+            // Generate 100 widgets that display their index in the List.
+            children: renderGridTiles(sloGorice, achievedPeaks),
           ))),
         ],
       ),

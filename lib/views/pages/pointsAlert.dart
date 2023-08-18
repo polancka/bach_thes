@@ -82,7 +82,7 @@ class _PointsPageState extends State<PointsPage> {
               onPressed: () {
                 setState(() {
                   isNewLevel = false;
-                  _newBadge
+                  widget.badges.isNotEmpty
                       ? MyNavigator(context).navigateToBadgeAlert(widget.badges)
                       : MyNavigator(context).navigateToMainPage();
                 });

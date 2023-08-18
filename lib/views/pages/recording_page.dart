@@ -3,18 +3,14 @@
 import 'dart:async';
 import 'dart:core';
 import 'package:bach_thes/controllers/navigation_controller.dart';
-import 'package:bach_thes/models/localNotificationService.dart';
 import 'package:bach_thes/views/widgets/reusable_widgets.dart';
 import 'package:background_location/background_location.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:eraser/eraser.dart';
 import 'package:flutter/material.dart';
 import 'package:bach_thes/utils/styles.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_background/flutter_background.dart';
 import 'package:flutter_map/flutter_map.dart';
-
-//import 'package:background_location/background_location.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:intl/intl.dart';
@@ -25,6 +21,7 @@ import 'package:bach_thes/models/locationPoint.dart';
 import 'package:flutter/services.dart';
 import 'package:location/location.dart' as loc;
 import 'package:bach_thes/controllers/badge_controller.dart' as bc;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class RecordingPage extends StatefulWidget {
   const RecordingPage({super.key});
@@ -308,11 +305,13 @@ class _RecordingPageState extends State<RecordingPage>
     updateTimeHiking(currentUserId, _stopwatch.elapsed.inMinutes);
     updateNumberOfAltimeters(currentUserId, _altimetersDone);
     updateDistanceTogheter(currentUserId, _distanceDone);
-    updateMountainChain(currentUserId, newChain);
+    if (isPeakAchieved) {
+      updateMountainChain(currentUserId, newChain);
+    }
+    functionForBadges(currentUserId);
     setState(() {
       //TODO: uncomment
       //fix this! wrong type
-      //badges = bc.checkWhatIsNew(currentUserId);
       secondsPassed = _stopwatch.elapsed.inSeconds;
       _isRecording = false;
       _stopwatch.reset();
@@ -324,6 +323,14 @@ class _RecordingPageState extends State<RecordingPage>
     //go to pointAlert page!
     MyNavigator(context)
         .navigateToPointsPage("recording a hike", points, badges);
+  }
+
+  functionForBadges(String userID) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      badges = prefs.getStringList('badges')!;
+    });
+    print("FUNCTION FOR BADGES $badges");
   }
 
   LatLng locationPointToLatLng(LocationPoint point) {
