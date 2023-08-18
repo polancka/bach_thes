@@ -329,6 +329,7 @@ class _RecordingPageState extends State<RecordingPage>
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       badges = prefs.getStringList('badges')!;
+      //this gets you the badges [ t f f t f f ], but you need the list of strings that has names of the new badges!
     });
     print("FUNCTION FOR BADGES $badges");
   }
