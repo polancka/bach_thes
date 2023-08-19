@@ -235,7 +235,7 @@ Future<DocumentReference> addHiker(String email, String username, String? userId
       "false",
     ],
     'recentSearches': [],
-    'distanceTogheter': 0,
+    'distanceTogheter': 0.0,
     'mountainChain': [],
   });
 

@@ -2,7 +2,8 @@ import 'package:bach_thes/models/hiker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-Future<List<String>> checkWhatIsNew(String userID) async {
+checkWhatIsNew(String userID, String actionRecording, int points) async {
+  print("IN BADGE CONTROLLER: CHECKWHATISNEW");
   SharedPreferences prefs = await SharedPreferences.getInstance();
   var thisHikerQuery = await FirebaseFirestore.instance
       .collection('Hikers')
@@ -18,24 +19,30 @@ Future<List<String>> checkWhatIsNew(String userID) async {
   //search DB RHikes for every hike from this hiker, collect names of peaks into List<String> and pass it to check for new
   List<String> peaks = [];
   var achievedPeaksQuery = await FirebaseFirestore.instance
-      .collection('RHikes')
-      .where('hikerId', isEqualTo: userID)
-      .where('acheived', isEqualTo: true)
+      .collection('Hikers')
+      .where('id', isEqualTo: userID)
       .get();
 
-  for (var hike in achievedPeaksQuery.docs) {
-    peaks.add(hike['endPointName']);
-  }
+  peaks = List.from(achievedPeaksQuery.docs.first['achievedPeaks']);
 
   List<String> oldBadges = prefs.getStringList('badges')!;
   List<String> newBadges =
-      checkForNew(nHikes, altimeters, mountainChains!, peaks);
+      checkForNew(nHikes, altimeters, mountainChains, peaks);
   updateBadges(userID, newBadges);
   updatePrefBadges(newBadges);
   List<int> indexesOfNew = compareOldAndNew(oldBadges, newBadges);
   List<String> badgesString = returnStringsOfIndexes(indexesOfNew);
 
-  return badgesString; // this list needs to get to recording page somehow!
+  if (badgesString.isNotEmpty) {
+    prefs.setStringList('newBadges', badgesString).then(
+      (value) {
+        print("THIS IS NEW BADGES IN BADGE CONTROLLER: $value");
+      },
+    );
+    prefs.setBool('checkForNewBadges', true).then((value) {
+      print("CHECK FOR NEW BADGES HAS BEEN SET IN PREFS: $value");
+    });
+  }
 }
 
 updatePrefBadges(List<String> newBadges) async {
@@ -128,6 +135,7 @@ getNewPeaks(List<String> peaks) {
           map..update(item, (count) => count + 1, ifAbsent: () => 1));
 
   List<String> uniqueNames = result.keys.toList();
+
   if (uniqueNames.length < 2) {
     return ["false", "false", "false", "false", "false"];
   } else if (uniqueNames.length > 20) {
@@ -150,16 +158,12 @@ List<String> checkForNew(int nHikes, double altimeters,
   List<String> numberHikesBadges = getNumberHikesBadges(nHikes);
   List<String> regionsBadges = getRegionBadges(mountainChains);
   List<String> newConqBadges = getNewPeaks(peaks);
-  List<String> specialBadges = ["false", "false", "false"];
   List<String> altimBadges = getAltimetersBadges(altimeters);
 
   allNewBadges.addAll(numberHikesBadges);
   allNewBadges.addAll(regionsBadges);
   allNewBadges.addAll(newConqBadges);
-  allNewBadges.addAll(specialBadges);
   allNewBadges.addAll(altimBadges);
-
-  print("this is new badges: $allNewBadges");
 
   return allNewBadges;
 }

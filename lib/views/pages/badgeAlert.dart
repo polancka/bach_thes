@@ -15,6 +15,7 @@ class _BadgeAlertState extends State<BadgeAlert> {
   bool moreThanOneBadge = false;
   @override
   void initState() {
+    print("THIS IS BADGES IN INITSTATE: ${widget.newBadges}");
     // TODO: implement initState
     if (widget.newBadges.length > 1) {
       setState(() {
@@ -28,6 +29,7 @@ class _BadgeAlertState extends State<BadgeAlert> {
   }
 
   Widget renderTrophyTiles(String badge) {
+    print("IN RENDERING TROPHY TILE");
     return Container(
       padding: EdgeInsets.all(15),
       height: 150,
@@ -48,6 +50,14 @@ class _BadgeAlertState extends State<BadgeAlert> {
         ],
       ),
     );
+  }
+
+  List<Widget> renderAllTrophyTiles(List<String> allNewBadges) {
+    List<Widget> allBadges = [];
+    for (int i = 0; i < allNewBadges.length; i++) {
+      allBadges.add(renderTrophyTiles(allNewBadges[i]));
+    }
+    return allBadges;
   }
 
   @override
@@ -125,13 +135,9 @@ class _BadgeAlertState extends State<BadgeAlert> {
                   ? Container(
                       height: 300,
                       child: GridView.count(
-                        crossAxisCount: widget.newBadges.length,
-                        // Generate 100 widgets that display their index in the List.
-                        children:
-                            List.generate(widget.newBadges.length, (index) {
-                          return renderTrophyTiles(widget.newBadges[index]);
-                        }),
-                      ),
+                          crossAxisCount: widget.newBadges.length,
+                          // Generate 100 widgets that display their index in the List.
+                          children: renderAllTrophyTiles(widget.newBadges)),
                     )
                   : Container(
                       height: 350,

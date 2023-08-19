@@ -226,8 +226,8 @@ class _addNewPeakPageState extends State<addNewPeakPage> {
                               mountainChain,
                               _name.text.toLowerCase());
                           incrementPeakIndex(nextPeakIndex);
-                          MyNavigator(context).navigateToPointsPage(
-                              "adding a new peak", 15, []);
+                          MyNavigator(context)
+                              .navigateToPointsPage("adding a new peak", 15);
                         }
                       },
                       child: const Text("Save"))

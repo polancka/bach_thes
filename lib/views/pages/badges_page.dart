@@ -66,8 +66,6 @@ class _BadgesPageState extends State<BadgesPage> {
     List<Widget> allBadges = [];
 
     for (int i = startingIndex; i <= endIndex; i++) {
-      //print(" $i iteration : $listOfBadges[i]");
-      print(listOfBadges);
       if (listOfBadges[i] == "true") {
         allBadges.add(GridTile(child: colorfulBadgeTile(badgeNames[i])));
       } else {
@@ -145,7 +143,6 @@ class _BadgesPageState extends State<BadgesPage> {
   void initState() {
     // TODO: implement initState
     getSharedPrefsBadges();
-    print(listOfBadges);
   }
 
   @override

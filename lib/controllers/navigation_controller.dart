@@ -87,14 +87,13 @@ class MyNavigator {
         context, MaterialPageRoute(builder: (context) => addNewPeakPage()));
   }
 
-  void navigateToPointsPage(String action, int points, List<String> badges) {
+  void navigateToPointsPage(String action, int points) {
     Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) => PointsPage(
                   action: action,
                   points: points,
-                  badges: badges,
                 )));
   }
 

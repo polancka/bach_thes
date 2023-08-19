@@ -308,10 +308,8 @@ class _RecordingPageState extends State<RecordingPage>
     if (isPeakAchieved) {
       updateMountainChain(currentUserId, newChain);
     }
-    functionForBadges(currentUserId);
+    //functionForBadges();
     setState(() {
-      //TODO: uncomment
-      //fix this! wrong type
       secondsPassed = _stopwatch.elapsed.inSeconds;
       _isRecording = false;
       _stopwatch.reset();
@@ -320,19 +318,17 @@ class _RecordingPageState extends State<RecordingPage>
 
     var points = calculatePoints(secondsPassed);
 
-    //go to pointAlert page!
-    MyNavigator(context)
-        .navigateToPointsPage("recording a hike", points, badges);
+    bc.checkWhatIsNew(currentUserId, "recording a hike", points);
+    MyNavigator(context).navigateToPointsPage("recording a hike", points);
   }
 
-  functionForBadges(String userID) async {
+  /*functionForBadges() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
-      badges = prefs.getStringList('badges')!;
-      //this gets you the badges [ t f f t f f ], but you need the list of strings that has names of the new badges!
+      badges = prefs.getStringList('newBadges')!;
     });
     print("FUNCTION FOR BADGES $badges");
-  }
+  }*/
 
   LatLng locationPointToLatLng(LocationPoint point) {
     LatLng latLngPoint = LatLng(point.latitude, point.longitude);

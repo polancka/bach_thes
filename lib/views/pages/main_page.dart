@@ -66,9 +66,26 @@ class _MainPageState extends State<MainPage> {
     );
   }
 
+  checkPrefsForBadges() async {
+    print("IN MAIN: CHECK PREFS FOR NEW BADGES -------");
+    List<String> finalBadges = [];
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (prefs.getBool('checkForNewBadges') == true) {
+      print("CHECKING FOR NEW BADGES IN MAIN");
+      finalBadges = prefs.getStringList('newBadges')!;
+      prefs.setBool('checkForNewBadges', false);
+      prefs.remove('newBadges');
+    }
+
+    if (finalBadges.length > 0) {
+      MyNavigator(context).navigateToBadgeAlert(finalBadges);
+    }
+  }
+
   @override
   void initState() {
     getHiker();
+    checkPrefsForBadges();
     super.initState();
   }
 

@@ -47,6 +47,9 @@ Future<void> main() async {
     }
   });
 
+  prefs.setBool('checkForNewBadges', false);
+  prefs.remove('newBadges');
+
   return runApp(const MyApp());
 }
 

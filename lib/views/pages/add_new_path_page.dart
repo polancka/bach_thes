@@ -289,7 +289,7 @@ class _addNewPathPageState extends State<addNewPathPage> {
                               mountainChain);
                         }
                         MyNavigator(context)
-                            .navigateToPointsPage("adding a new path", 15, []);
+                            .navigateToPointsPage("adding a new path", 15);
                       },
                       child: const Text("Save"))
                 ]),
