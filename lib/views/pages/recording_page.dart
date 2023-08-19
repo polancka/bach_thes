@@ -279,7 +279,6 @@ class _RecordingPageState extends State<RecordingPage>
   }
 
   void stopLocationTracking() {
-    //await BackgroundFetch.stop();
     _stopwatch.stop();
     _stopTimer();
     _stopFetchingLocationPeriodically();
@@ -297,6 +296,7 @@ class _RecordingPageState extends State<RecordingPage>
       _isRecording = false;
       _stopwatch.reset();
       _locationPoints.clear();
+      isPeakAchieved = false;
     });
 
     var points = calculatePoints(secondsPassed);
@@ -354,9 +354,6 @@ class _RecordingPageState extends State<RecordingPage>
 
   @override
   void dispose() {
-    setState(() {
-      isPeakAchieved = false;
-    });
     _timer!.cancel();
     _timerLocation!.cancel();
     WidgetsBinding.instance.removeObserver(this);

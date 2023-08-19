@@ -19,6 +19,7 @@ class addNewPeakPage extends StatefulWidget {
 
 class _addNewPeakPageState extends State<addNewPeakPage> {
   int? nextPeakIndex;
+  var mountainChain = "";
 
   getPeakIndex() async {
     var peakIndex =
@@ -54,7 +55,6 @@ class _addNewPeakPageState extends State<addNewPeakPage> {
 
   @override
   Widget build(BuildContext context) {
-    var mountainChain = "";
     return Scaffold(
         appBar: myAppBar("Add a new peak"),
         body: Form(
@@ -142,7 +142,6 @@ class _addNewPeakPageState extends State<addNewPeakPage> {
                   DropdownButtonFormField(
                     isExpanded: true,
                     isDense: true,
-                    value: 1,
                     items: const [
                       DropdownMenuItem(
                         child: Text("Julian Alps"),

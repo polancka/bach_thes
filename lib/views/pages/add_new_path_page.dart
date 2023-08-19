@@ -30,11 +30,13 @@ class _addNewPathPageState extends State<addNewPathPage> {
   final _duration = TextEditingController();
   final _description = TextEditingController();
   var nextPathIndex = 0;
+  var difficulty = "";
+  var mountainChain = "";
 
   getPathIndex() async {
     var pathIndex =
         await FirebaseFirestore.instance.collection("Indexes").get();
-    int currentPathIndex = int.parse(pathIndex.docs.first['pathIndex']);
+    int currentPathIndex = pathIndex.docs.first['pathIndex'];
     setState(() {
       nextPathIndex = currentPathIndex + 1;
     });
@@ -54,8 +56,6 @@ class _addNewPathPageState extends State<addNewPathPage> {
 
   @override
   Widget build(BuildContext context) {
-    var difficulty = "";
-    var mountainChain = "";
     return Scaffold(
         appBar: myAppBar("Add a new path to ${widget.name}"),
         body: Form(
@@ -132,7 +132,6 @@ class _addNewPathPageState extends State<addNewPathPage> {
                   DropdownButtonFormField(
                     isExpanded: true,
                     isDense: true,
-                    value: 1,
                     items: const [
                       DropdownMenuItem(
                         child: Text("Easy marked path"),
@@ -177,7 +176,6 @@ class _addNewPathPageState extends State<addNewPathPage> {
                   DropdownButtonFormField(
                     isExpanded: true,
                     isDense: true,
-                    value: 1,
                     items: const [
                       DropdownMenuItem(
                         child: Text("Julian Alps"),
