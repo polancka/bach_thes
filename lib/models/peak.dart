@@ -1,8 +1,7 @@
-import 'dart:ffi';
-
-import 'package:bach_thes/models/path.dart';
-import 'package:bach_thes/models/place.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+
+//This class stores information about each peak. The data is gathered from Firebase Firestore database
+//collection 'Peaks'. It also includes function for adding a new peak to the database.
 
 class Peak {
   final int id;
@@ -27,15 +26,6 @@ class Peak {
       required this.sortValue});
 
   var db = FirebaseFirestore.instance;
-}
-
-Future<String> fetchPeaks() async {
-  await FirebaseFirestore.instance.collection("Peaks").get().then((event) {
-    for (var doc in event.docs) {
-      print("${doc.id} => ${doc.data()}");
-    }
-  });
-  return "Hello";
 }
 
 Future<void> addNewPeak(

@@ -6,6 +6,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:bach_thes/controllers/navigation_controller.dart';
 
+//This page serves as UI for adding a new peak to the databse.
+//User fills out all the information, the path gets stored in Firebase Firestor collection 'Peaks'
+//and user recieves points as a reward.
+
 class addNewPeakPage extends StatefulWidget {
   const addNewPeakPage({super.key});
 

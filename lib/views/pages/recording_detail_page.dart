@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:bach_thes/models/locationPoint.dart';
-
 import '../widgets/reusable_widgets.dart';
+
+//This page provides more detail on the hike recording.
+//It provides some basic statistics and map of the path.
 
 class RecordingDetailPage extends StatefulWidget {
   DocumentSnapshot docSnapshot;
@@ -26,13 +28,10 @@ class _RecordingDetailPageState extends State<RecordingDetailPage> {
       finalPoints.add(LocationPoint.fromJson(element));
     });
 
-    //print("LocationPoints: $finalPoints");
-
     List<LatLng> latLngList = finalPoints.map((locationPoint) {
       return LatLng(locationPoint.latitude, locationPoint.longitude);
     }).toList();
 
-    //print("latlnglsit: $latLngList");
     setState(() {
       _locPoints = latLngList;
     });
@@ -53,7 +52,6 @@ class _RecordingDetailPageState extends State<RecordingDetailPage> {
         setState(() {});
       }
     });
-    //print("points in myMap widhet: $points");
     if (points.isEmpty) {
       return Text('No location points found for this hike.');
     }
@@ -83,7 +81,7 @@ class _RecordingDetailPageState extends State<RecordingDetailPage> {
           markers: [
             Marker(
               point: points.last,
-              builder: (ctx) => Icon(
+              builder: (ctx) => const Icon(
                 Icons.location_on_outlined,
                 color: Colors.black,
                 semanticLabel: "Finish",
@@ -91,7 +89,7 @@ class _RecordingDetailPageState extends State<RecordingDetailPage> {
             ),
             Marker(
               point: points.first,
-              builder: (ctx) => Icon(
+              builder: (ctx) => const Icon(
                 Icons.location_on_outlined,
                 color: Colors.black,
                 semanticLabel: "Start",
@@ -112,8 +110,6 @@ class _RecordingDetailPageState extends State<RecordingDetailPage> {
     String _altTruncated =
         _altimeters.substring(0, _altimeters.indexOf('.') + 2);
 
-    //add the same for altimeters
-
     return Scaffold(
         appBar: myAppBar(
             "Hike to ${widget.docSnapshot['endPointName'].toString()}"),
@@ -132,46 +128,45 @@ class _RecordingDetailPageState extends State<RecordingDetailPage> {
                       padding: const EdgeInsets.all(8.0),
                       child: Column(
                         children: [
-                          Text("Hike statistics",
+                          const Text("Hike statistics",
                               style: TextStyle(
                                   color: Colors.black,
                                   fontWeight: FontWeight.bold)),
-                          SizedBox(height: 10),
-                          Text(
-                              "${widget.docSnapshot['dateAndTime'].toString()}",
-                              style: TextStyle(
+                          const SizedBox(height: 10),
+                          Text(widget.docSnapshot['dateAndTime'].toString(),
+                              style: const TextStyle(
                                   color: Colors.black,
                                   fontWeight: FontWeight.w600)),
-                          SizedBox(
+                          const SizedBox(
                             height: 5,
                           ),
                           Container(
                               height: 300,
                               alignment: Alignment.center,
                               child: myMap(_locPoints)),
-                          SizedBox(
+                          const SizedBox(
                             height: 5,
                           ),
                           Text(
                               "Hike lasted for: ${widget.docSnapshot['duration'].toString()}",
-                              style: TextStyle(
+                              style: const TextStyle(
                                   color: Colors.black,
                                   fontWeight: FontWeight.w500)),
-                          SizedBox(
+                          const SizedBox(
                             height: 5,
                           ),
                           Text("Distance: ${meters}km ",
-                              style: TextStyle(
+                              style: const TextStyle(
                                   color: Colors.black,
                                   fontWeight: FontWeight.w500)),
-                          SizedBox(
+                          const SizedBox(
                             height: 5,
                           ),
                           Text("Altimeters: ${_altTruncated}m",
-                              style: TextStyle(
+                              style: const TextStyle(
                                   color: Colors.black,
                                   fontWeight: FontWeight.w500)),
-                          SizedBox(
+                          const SizedBox(
                             height: 5,
                           ),
                         ],

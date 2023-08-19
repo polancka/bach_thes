@@ -1,9 +1,7 @@
-import 'package:bach_thes/models/place.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-//finish point Peak could be added additionally
-//all attributes are String so that they can be estracted from Firebase more easily
-
+//This class stores information about each path. The data is gathered from Firebase Firestore database
+//collection 'Paths'. It also includes function for adding a new path to the database.
 class Path {
   final int id;
   final String pathName;

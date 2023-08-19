@@ -1,16 +1,13 @@
 import 'package:bach_thes/controllers/login_controller.dart';
 import 'package:bach_thes/controllers/navigation_controller.dart';
 import 'package:bach_thes/controllers/registration_controller.dart';
-import 'package:bach_thes/globals.dart';
 import 'package:bach_thes/models/hiker.dart';
 import 'package:bach_thes/views/pages/login_page.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:bach_thes/utils/styles.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:intl/intl.dart';
+
 /* Different widgets that are used multiple times or by multiple pages */
 
 Image logoWidget(String imageUrl) {
@@ -175,21 +172,6 @@ Drawer myDrawer(BuildContext context) {
                   MyNavigator(context).navigateToRandomHikePage();
                 },
               ),
-              ListTile(
-                  leading: Icon(
-                    Icons.settings,
-                    color: Colors.white,
-                  ),
-                  title: Text(
-                    "TEST",
-                    style: TextStyle(color: Colors.white, fontSize: 15),
-                  ),
-                  onTap: () {
-                    //open settings
-                    MyNavigator(context).navigateToBadgeAlert([
-                      "1000 altimeters",
-                    ]);
-                  }),
               ListTile(
                   leading: Icon(
                     Icons.settings,

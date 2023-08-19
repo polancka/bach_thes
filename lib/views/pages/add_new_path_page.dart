@@ -5,6 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:bach_thes/controllers/navigation_controller.dart';
 
+//This page serves as UI for adding a new path to the databse.
+//User fills out all the information, the path gets stored in Firebase Firestor collection 'Paths'
+//and user recieves points as a reward.
+
 class addNewPathPage extends StatefulWidget {
   final int id;
   final String name;

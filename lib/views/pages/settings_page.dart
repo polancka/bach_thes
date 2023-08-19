@@ -4,8 +4,10 @@ import 'package:bach_thes/views/widgets/reusable_widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:bach_thes/globals.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+//This page is UI for the Settings. In the settings user can choose if they
+// want to participate in the Scoreboard challenge.
 
 class settingsPage extends StatefulWidget {
   const settingsPage({super.key});
@@ -24,7 +26,6 @@ class _settingsPageState extends State<settingsPage> {
     //change into database
     setState(() {
       isParticipating = prefs.getBool('scoreboardParticipation');
-      print(isParticipating.toString());
     });
     changeParticipation(participation, prefs.getString('id') ?? "");
   }

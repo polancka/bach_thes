@@ -1,16 +1,11 @@
-import 'dart:io';
-
-import 'package:bach_thes/globals.dart';
-import 'package:bach_thes/views/widgets/reusable_widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'main_page.dart';
-
 import '../../utils/styles.dart';
 
-//This page shows user statistics - how many hikes they have recorded, how many peaks they have achieved
-//and scoreboard
+//This page shows user statistics - how many hikes, altimeters, distance in
+//kms and time they have recorded. It also shows the scoreboard of top 10 hikers
+//(with highets points, if they want to participate).
 
 class StatisticsPage extends StatefulWidget {
   const StatisticsPage({super.key});
@@ -39,7 +34,6 @@ class _StatisticsPageState extends State<StatisticsPage> {
       numberOfHikes = prefs.getInt('numberOfHikes');
       altimetersTogheter = prefs.getDouble('altimetersTogheter');
       distanceTogheter = prefs.getDouble('distanceTogheter');
-      print(distanceTogheter);
     });
 
     return "complete";
@@ -62,7 +56,6 @@ class _StatisticsPageState extends State<StatisticsPage> {
 
   int getHours(int allMinutes) {
     var allhours = allMinutes ~/ 60;
-    print(allhours);
     return allhours;
   }
 

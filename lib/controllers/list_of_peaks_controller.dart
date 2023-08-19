@@ -1,12 +1,11 @@
-import 'dart:developer';
-
 import 'package:bach_thes/utils/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:bach_thes/views/pages/peak_detail.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 /*List_of_peaks_controller controls all logic connected to the display of the list of Slovenian Peaks.
-It implements the display of tiles that each represents a peak, in alphabet order. 
+It implements the display of tiles that each represents a peak, in alphabet order.
+ User can search for peaks using the search bar.
 The user can get more information with clicking on each of the tiles*/
 
 //Function to navigate to the page with details of the specific peak, whose tile was clicked
@@ -40,11 +39,3 @@ Widget buildListItem(BuildContext context, DocumentSnapshot document) {
             onTap: () => navigateToPeakDetail(context, document),
           )));
 }
-
-/*Future<void> readPeaks() async {
-  await FirebaseFirestore.instance.collection("Peaks").get().then((event) {
-    for (var doc in event.docs) {
-      log("${doc.id} => ${doc.data()}");
-    }
-  });
-}*/

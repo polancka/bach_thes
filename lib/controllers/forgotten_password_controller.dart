@@ -1,6 +1,4 @@
-import 'package:bach_thes/controllers/login_controller.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'dart:developer';
 
 //If the user forgots the password, he can have a resent link sent to his email address

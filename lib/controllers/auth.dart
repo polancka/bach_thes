@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 
-//Class that takes care of authentication anf connection to Firebase Authentication
+//Class that takes care of authentication  and connection to Firebase Authentication
 //It either signs in the user or creates a new user, using data provided
 
 class Auth {

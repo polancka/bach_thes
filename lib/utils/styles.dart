@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 
+//this class provides design parameters, used trough the app.
+//This way the color scheme and fonts are all the same and can be easily
+//changed in one place.
+
 class Styles {
   static const _textSizeLarge = 25.0;
   static const _textSizeDefault = 16.0;

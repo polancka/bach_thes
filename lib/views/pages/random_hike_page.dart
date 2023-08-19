@@ -1,11 +1,9 @@
-import 'package:bach_thes/models/current_user.dart';
 import 'package:bach_thes/models/hiker.dart';
 import 'package:bach_thes/views/widgets/reusable_widgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:bach_thes/controllers/navigation_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../utils/styles.dart';

@@ -9,17 +9,16 @@ import 'package:bach_thes/views/pages/random_hike_results_page.dart';
 import 'package:bach_thes/views/pages/recording_detail_page.dart';
 import 'package:bach_thes/views/pages/recording_page.dart';
 import 'package:bach_thes/views/pages/settings_page.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:bach_thes/views/pages/forgoten_password_page.dart';
-import 'package:bach_thes/views/pages/home_page.dart';
 import 'package:bach_thes/views/pages/login_page.dart';
 import 'package:bach_thes/views/pages/registration_page.dart';
 import 'package:bach_thes/views/pages/pointsAlert.dart';
 import 'package:bach_thes/views/pages/badgeAlert.dart';
-
 import '../views/pages/badges_page.dart';
-//Class that provides navigation to any of the pages of the application
+
+//Class that provides navigation to any of the pages of the application.
+//the navigation functions are tailored to the specific page in terms of sending attributes.
 
 class MyNavigator {
   BuildContext context;
@@ -34,11 +33,6 @@ class MyNavigator {
   NavigateToSearchPeaks() {
     Navigator.of(context)
         .push(MaterialPageRoute(builder: (context) => SearchPeaks()));
-  }
-
-  NavigateToHome() {
-    Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => HomePage()));
   }
 
   NavigateToRegistration() {

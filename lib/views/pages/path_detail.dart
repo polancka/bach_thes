@@ -1,12 +1,9 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:bach_thes/models/path.dart';
 import 'package:bach_thes/utils/styles.dart';
 import 'package:bach_thes/controllers/navigation_controller.dart';
 
-/* UI for displayinf more information about a chosen path. User wil also be able 
-to record his hike on this path by pressing the "Record" button. */
+/* UI for displayinf more information about a chosen path. User is also able 
+to record his hike on this path by pressing the "Record" button. That moves him to the "Recording page" */
 
 class PathDetail extends StatelessWidget {
   final dynamic path;

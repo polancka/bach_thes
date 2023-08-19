@@ -1,9 +1,6 @@
-import 'package:bach_thes/controllers/navigation_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:bach_thes/models/peak.dart';
 import 'package:bach_thes/controllers/peak_detail_controller.dart';
-import 'dart:developer';
 import 'package:bach_thes/utils/styles.dart';
 
 /* UI for more information about the chosen peak. It displays the photo, name,
@@ -28,7 +25,6 @@ class _PeakDetailState extends State<PeakDetail> {
 
     setState(() {
       _allPaths = List.from(paths.docs);
-      //print(_allPaths);
     });
 
     return "complete";

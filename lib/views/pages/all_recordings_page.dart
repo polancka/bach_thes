@@ -2,9 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:bach_thes/views/widgets/reusable_widgets.dart';
-import 'package:geolocator/geolocator.dart';
 import '../../utils/styles.dart';
-//THIS IS WHERE ALL THE USERS RECORDINGS ARE SHOWN
+
+//This page serves as UI for showing all hikes from the current user.
+//Hikes are gathered from Firebase Firestore collection 'RHikes'.
+//User can click on each recorded hike to get more information about said hike.
 
 class AllRecordingsPage extends StatefulWidget {
   const AllRecordingsPage({super.key});
@@ -36,7 +38,6 @@ class _AllRecordingsPageState extends State<AllRecordingsPage> {
   List<Widget> renderMyHikes(List<dynamic> listOfHikes) {
     List<Widget> latestHikes = List<Widget>.empty(growable: true);
     for (var docSnapshot in listOfHikes) {
-      //print(docSnapshot.toString());
       latestHikes.add(listItemHike(docSnapshot, context));
     }
 

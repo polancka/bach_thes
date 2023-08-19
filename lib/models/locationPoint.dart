@@ -1,3 +1,4 @@
+//This class serves as a transition class when translating Position points to LatLong points.
 class LocationPoint {
   double latitude;
   double longitude;

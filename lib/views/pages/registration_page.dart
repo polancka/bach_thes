@@ -1,13 +1,6 @@
-import 'package:bach_thes/controllers/registration_controller.dart';
-import 'package:bach_thes/models/registration_model.dart';
 import 'package:flutter/material.dart';
-import 'home_page.dart';
 import 'package:bach_thes/views/widgets/reusable_widgets.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:bach_thes/utils/styles.dart';
-
-//TODO:add authentication on email and password and pop up warnings if the password is too short
-//TODO: store the name and level in association with the profile
 
 //UI for registration page
 

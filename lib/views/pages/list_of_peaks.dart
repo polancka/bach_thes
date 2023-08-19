@@ -1,17 +1,11 @@
-import 'dart:developer';
-
 import 'package:bach_thes/controllers/navigation_controller.dart';
-import 'package:bach_thes/models/peak.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:bach_thes/models/mock_database/mock_peak.dart';
-import 'package:bach_thes/globals.dart';
 import 'package:bach_thes/controllers/list_of_peaks_controller.dart';
 import 'package:bach_thes/utils/styles.dart';
-import 'package:provider/provider.dart';
 
-//UI for the list of peaks shown during search (?) function
+//UI for searching Slovenian peaks. Peaks are gathered from Firebase Firestore collection 'Peaks'.
+// User can use the search bar to search trough peaks, by their names.
 
 class SearchPeaks extends StatefulWidget {
   const SearchPeaks({super.key});
@@ -44,7 +38,6 @@ class _SearchPeaksState extends State<SearchPeaks> {
     searcResultsList();
   }
 
-  //if possible at some point move this function to the list_of_peaks controller
   searcResultsList() {
     var showResults = [];
     if (_searchController.text != "") {

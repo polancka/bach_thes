@@ -1,17 +1,10 @@
-import 'package:bach_thes/controllers/login_controller.dart';
 import 'package:bach_thes/controllers/navigation_controller.dart';
-import 'package:bach_thes/views/pages/forgoten_password_page.dart';
 import 'package:flutter/material.dart';
-import 'package:bach_thes/views/pages/home_page.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:bach_thes/utils/styles.dart';
 import 'package:bach_thes/views/widgets/reusable_widgets.dart';
 
-//TODO: add (dis)appering text if the username or password is not correct
-//TODO: add dis(apearing) text if the user is not registered yet
-//TODO: close the keyboard on its own
-
-//UI for the login page, forgotten password and switching to registration
+//UI for the login page, forgotten password and switching to registration.
+//in case of an error, an error message is displayed to the user.
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});

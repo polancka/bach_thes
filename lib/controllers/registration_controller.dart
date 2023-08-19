@@ -1,13 +1,11 @@
 import 'package:bach_thes/controllers/navigation_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'dart:developer';
 import 'package:bach_thes/models/hiker.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 //Class that registers a new user - adds a new entry to the Firebase Authentication database
-//TODO : add validation and display error messages on error
+//On error, an error message is displayed to the user.
 
 class RegistrationController {
   String _email;
@@ -26,7 +24,6 @@ class RegistrationController {
       var currentUser = FirebaseAuth.instance.currentUser?.uid;
       Future<DocumentReference> thisHikerRef =
           addHiker(_email, _username, currentUser);
-      print(thisHikerRef);
       MyNavigator(context).navigateToMainPage();
     } on FirebaseAuthException catch (error) {
       validUser = false;

@@ -1,19 +1,13 @@
-import 'dart:developer';
 import 'package:bach_thes/controllers/navigation_controller.dart';
 import 'package:bach_thes/views/pages/booklet_page.dart';
-import 'package:bach_thes/views/pages/home_page.dart';
 import 'package:bach_thes/views/pages/list_of_peaks.dart';
-import 'package:bach_thes/views/pages/map_page.dart';
 import 'package:bach_thes/views/pages/profile_page.dart';
 import 'package:bach_thes/views/pages/statistics_page.dart';
 import 'package:bach_thes/views/widgets/reusable_widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:bach_thes/utils/styles.dart';
-import 'package:bach_thes/globals.dart';
-import 'package:bach_thes/models/hiker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /*Main page serves as a frame for navigating between pages using the bottom 
@@ -40,7 +34,6 @@ class _MainPageState extends State<MainPage> {
     var arrayOfBadges =
         profiles.docs.first['badges']; // array is now List<dynamic>
     List<String> stringsOfBadges = List<String>.from(arrayOfBadges);
-    print(stringsOfBadges);
 
     var arrayOfRecentSearches = profiles.docs.first['recentSearches'];
     List<String> recentSearches = List<String>.from(arrayOfRecentSearches);
@@ -48,7 +41,6 @@ class _MainPageState extends State<MainPage> {
     var arrayOfMountainChain = profiles.docs.first['mountainChain'];
     List<String> mountainChain = List<String>.from(arrayOfMountainChain);
 
-    print(recentSearches);
     setCurrentHiker(
       profiles.docs.first['id'],
       profiles.docs.first['username'],
@@ -67,11 +59,9 @@ class _MainPageState extends State<MainPage> {
   }
 
   checkPrefsForBadges() async {
-    print("IN MAIN: CHECK PREFS FOR NEW BADGES -------");
     List<String> finalBadges = [];
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (prefs.getBool('checkForNewBadges') == true) {
-      print("CHECKING FOR NEW BADGES IN MAIN");
       finalBadges = prefs.getStringList('newBadges')!;
       prefs.setBool('checkForNewBadges', false);
       prefs.remove('newBadges');
@@ -91,7 +81,6 @@ class _MainPageState extends State<MainPage> {
 
   @override
   void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
     super.didChangeDependencies();
   }
 
@@ -106,10 +95,7 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
-    //print(prefs.getString("email"));
-
     void onTap(int index) {
-      //print(currentIndex);
       setState(() {
         currentIndex = index;
       });

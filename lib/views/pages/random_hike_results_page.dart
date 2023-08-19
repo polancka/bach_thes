@@ -4,10 +4,12 @@ import 'package:bach_thes/views/widgets/reusable_widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../controllers/navigation_controller.dart';
+
+//This page displays the results of Random Hike Page. User can choose from all
+//the paths offered to them. More informationa re provided, when clicked
+//on the individual path tile.
 
 class RandomHikeResultPage extends StatefulWidget {
   int duration;
@@ -39,7 +41,6 @@ class _RandomHikeResultPageState extends State<RandomHikeResultPage> {
         .get();
 
     if (randomHikesQuery.docs.length > 0) {
-      //print(randomHikesQuery.docs.first['pathName']);
       setState(() {
         hasPaths = true;
         pathsToShow = List.from(randomHikesQuery.docs);
@@ -61,7 +62,6 @@ class _RandomHikeResultPageState extends State<RandomHikeResultPage> {
         hasPreviousSearches = true;
       });
       recentSearchesFromPrefs = prefs.getStringList('recentSearches')!;
-      //print(recentSearchesFromPrefs);
     }
     recentSearchesFromPrefs.add(name);
     prefs.setStringList('recentSearches', recentSearchesFromPrefs);
@@ -77,12 +77,12 @@ class _RandomHikeResultPageState extends State<RandomHikeResultPage> {
     for (var docSnapshot in allPaths) {
       result.add(Container(
           child: Card(
-              margin: EdgeInsets.all(3),
+              margin: const EdgeInsets.all(3),
               color: Styles.deepgreen.withOpacity(0.7),
               shape: ContinuousRectangleBorder(
                   borderRadius: BorderRadius.circular(20)),
               child: ListTile(
-                  leading: Icon(
+                  leading: const Icon(
                     Icons.hiking_outlined,
                     color: Colors.white,
                   ),
@@ -92,7 +92,7 @@ class _RandomHikeResultPageState extends State<RandomHikeResultPage> {
                   ),
                   subtitle: Text(docSnapshot['difficulty'],
                       style: TextStyle(color: Colors.white)),
-                  trailing: Icon(
+                  trailing: const Icon(
                     Icons.keyboard_double_arrow_right_outlined,
                     color: Colors.white,
                   ),
@@ -124,8 +124,8 @@ class _RandomHikeResultPageState extends State<RandomHikeResultPage> {
                   SizedBox(height: 15),
                   Container(
                     alignment: Alignment.center,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
+                    child: const Padding(
+                      padding: EdgeInsets.all(8.0),
                       child: Text(
                         "No paths match these parameters! Change the parameters and try again or try adding paths to our database!",
                         textAlign: TextAlign.center,

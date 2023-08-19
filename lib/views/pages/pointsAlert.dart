@@ -1,10 +1,13 @@
 import 'package:bach_thes/controllers/navigation_controller.dart';
 import 'package:bach_thes/models/hiker.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:bach_thes/utils/styles.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+//Page for alerting the user about new received points for a certain action.
+//it also updates the points in Shared Preferences and calls for an update in the
+//databases collection 'Hikers' (in Hiker.dart).
 
 class PointsPage extends StatefulWidget {
   String action;
@@ -46,7 +49,6 @@ class _PointsPageState extends State<PointsPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     updatePoints();
     checkForLevelUpdate();
   }

@@ -2,8 +2,12 @@ import 'package:bach_thes/models/hiker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+//Badge Controller checks which badges the user has already collected (fetches them from the Firebase database)
+//and checks if any new badges have been unlocked. The old badges and new badges are compared. If there are
+//any differences, the names of new unlocked badges are saved to Shared Preferences, along with a boolean value,
+//signaling that Badge alert should pop up.
+
 checkWhatIsNew(String userID, String actionRecording, int points) async {
-  print("IN BADGE CONTROLLER: CHECKWHATISNEW");
   SharedPreferences prefs = await SharedPreferences.getInstance();
   var thisHikerQuery = await FirebaseFirestore.instance
       .collection('Hikers')
@@ -11,18 +15,15 @@ checkWhatIsNew(String userID, String actionRecording, int points) async {
       .get();
 
   int nHikes = thisHikerQuery.docs.first['numberOfHikes'] + 1;
-
   double altimeters = thisHikerQuery.docs.first['altimetersTogheter'];
-
   List<String> mountainChains = prefs.getStringList('mountainChain')!;
 
-  //search DB RHikes for every hike from this hiker, collect names of peaks into List<String> and pass it to check for new
-  List<String> peaks = [];
   var achievedPeaksQuery = await FirebaseFirestore.instance
       .collection('Hikers')
       .where('id', isEqualTo: userID)
       .get();
 
+  List<String> peaks = []; //peaks achieved by this user stored here
   peaks = List.from(achievedPeaksQuery.docs.first['achievedPeaks']);
 
   List<String> oldBadges = prefs.getStringList('badges')!;
@@ -35,14 +36,37 @@ checkWhatIsNew(String userID, String actionRecording, int points) async {
 
   if (badgesString.isNotEmpty) {
     prefs.setStringList('newBadges', badgesString).then(
-      (value) {
-        print("THIS IS NEW BADGES IN BADGE CONTROLLER: $value");
-      },
-    );
-    prefs.setBool('checkForNewBadges', true).then((value) {
-      print("CHECK FOR NEW BADGES HAS BEEN SET IN PREFS: $value");
-    });
+          (value) {},
+        );
+    prefs.setBool('checkForNewBadges', true).then((value) {});
   }
+}
+
+//Checking if any new badges have been unlocked
+List<String> checkForNew(int nHikes, double altimeters,
+    List<String> mountainChains, List<String> peaks) {
+  List<String> allNewBadges = []; //for storing new state of collected badges
+  List<String> numberHikesBadges = getNumberHikesBadges(nHikes);
+  List<String> regionsBadges = getRegionBadges(mountainChains);
+  List<String> newConqBadges = getNewPeaks(peaks);
+  List<String> altimBadges = getAltimetersBadges(altimeters);
+
+  allNewBadges.addAll(numberHikesBadges);
+  allNewBadges.addAll(regionsBadges);
+  allNewBadges.addAll(newConqBadges);
+  allNewBadges.addAll(altimBadges);
+
+  return allNewBadges;
+}
+
+List<int> compareOldAndNew(List<String> oldBadges, List<String> newBadges) {
+  List<int> diffs = [];
+  for (int i = 0; i < oldBadges.length; i++) {
+    if (oldBadges[i] != newBadges[i]) {
+      diffs.add(i);
+    }
+  }
+  return diffs;
 }
 
 updatePrefBadges(List<String> newBadges) async {
@@ -149,33 +173,6 @@ getNewPeaks(List<String> peaks) {
   } else if (uniqueNames.length > 2) {
     return ["true", "false", "false", "false", "false"];
   }
-}
-
-List<String> checkForNew(int nHikes, double altimeters,
-    List<String> mountainChains, List<String> peaks) {
-  //check for every badge
-  List<String> allNewBadges = [];
-  List<String> numberHikesBadges = getNumberHikesBadges(nHikes);
-  List<String> regionsBadges = getRegionBadges(mountainChains);
-  List<String> newConqBadges = getNewPeaks(peaks);
-  List<String> altimBadges = getAltimetersBadges(altimeters);
-
-  allNewBadges.addAll(numberHikesBadges);
-  allNewBadges.addAll(regionsBadges);
-  allNewBadges.addAll(newConqBadges);
-  allNewBadges.addAll(altimBadges);
-
-  return allNewBadges;
-}
-
-List<int> compareOldAndNew(List<String> oldBadges, List<String> newBadges) {
-  List<int> diffs = [];
-  for (int i = 0; i < oldBadges.length; i++) {
-    if (oldBadges[i] != newBadges[i]) {
-      diffs.add(i);
-    }
-  }
-  return diffs;
 }
 
 List<String> returnStringsOfIndexes(List<int> indexes) {

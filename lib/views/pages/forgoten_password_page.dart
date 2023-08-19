@@ -1,14 +1,11 @@
 import 'package:bach_thes/controllers/forgotten_password_controller.dart';
 import 'package:bach_thes/controllers/navigation_controller.dart';
-import 'package:bach_thes/views/pages/login_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:bach_thes/views/pages/home_page.dart';
 import 'package:bach_thes/views/widgets/reusable_widgets.dart';
 import 'package:bach_thes/utils/styles.dart';
 
-//UI for the forgotten password page
+//UI for the forgotten password page.
+//User can input their emial adress and receive an email with a "reset password" link.
 
 class ForgotenPasswordPage extends StatefulWidget {
   const ForgotenPasswordPage({super.key});

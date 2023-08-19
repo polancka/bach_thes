@@ -1,11 +1,13 @@
-import 'package:bach_thes/main.dart';
 import 'package:bach_thes/views/widgets/reusable_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../utils/styles.dart';
 
-//page taht shows all badges tha user can achieve and thta the user has achieved already
+//Page that shows all badges that user can achieve.
+//The one that the user has already collected are colored and animated,
+// while the ones that user still has to get are greyed out and still.
+//The information is gathered from Firebase Firestore collection 'Hikers'.
 
 class BadgesPage extends StatefulWidget {
   const BadgesPage({super.key});
@@ -141,7 +143,6 @@ class _BadgesPageState extends State<BadgesPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     getSharedPrefsBadges();
   }
 
@@ -168,10 +169,7 @@ class _BadgesPageState extends State<BadgesPage> {
                 crossAxisSpacing: 10.0,
                 mainAxisSpacing: 10.0,
                 shrinkWrap: true,
-                // Create a grid with 2 columns. If you change the scrollDirection to
-                // horizontal, this produces 2 rows.
                 crossAxisCount: 4,
-                // Generate 100 widgets that display their index in the List.
                 children: renderBadgeTiles(0, 4),
               ))),
               SizedBox(
@@ -214,10 +212,7 @@ class _BadgesPageState extends State<BadgesPage> {
                 crossAxisSpacing: 10.0,
                 mainAxisSpacing: 10.0,
                 shrinkWrap: true,
-                // Create a grid with 2 columns. If you change the scrollDirection to
-                // horizontal, this produces 2 rows.
                 crossAxisCount: 4,
-                // Generate 100 widgets that display their index in the List.
                 children: renderBadgeTiles(8, 12),
               ))),
               SizedBox(
@@ -237,10 +232,7 @@ class _BadgesPageState extends State<BadgesPage> {
                 crossAxisSpacing: 10.0,
                 mainAxisSpacing: 10.0,
                 shrinkWrap: true,
-                // Create a grid with 2 columns. If you change the scrollDirection to
-                // horizontal, this produces 2 rows.
                 crossAxisCount: 4,
-                // Generate 100 widgets that display their index in the List.
                 children: renderBadgeTiles(13, 16),
               ))),
             ],

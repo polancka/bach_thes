@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:bach_thes/controllers/navigation_controller.dart';
 import 'package:bach_thes/utils/styles.dart';
 
+//This page serves as UI for notifying the user that they collected a new badge.
+//It can show one or more badges.
+
 class BadgeAlert extends StatefulWidget {
   List<String> newBadges;
 
@@ -15,8 +18,6 @@ class _BadgeAlertState extends State<BadgeAlert> {
   bool moreThanOneBadge = false;
   @override
   void initState() {
-    print("THIS IS BADGES IN INITSTATE: ${widget.newBadges}");
-    // TODO: implement initState
     if (widget.newBadges.length > 1) {
       setState(() {
         moreThanOneBadge = true;
@@ -29,7 +30,6 @@ class _BadgeAlertState extends State<BadgeAlert> {
   }
 
   Widget renderTrophyTiles(String badge) {
-    print("IN RENDERING TROPHY TILE");
     return Container(
       padding: EdgeInsets.all(15),
       height: 150,
@@ -44,7 +44,7 @@ class _BadgeAlertState extends State<BadgeAlert> {
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Styles.deepgreen,
-                fontSize: 15,
+                fontSize: 17,
                 fontWeight: FontWeight.w500,
               ))
         ],

@@ -2,6 +2,9 @@ import 'package:bach_thes/globals.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+//Hiker class stores all basic information about the user. The functions of the class
+//provide updating in the database.
+
 class Hiker {
   final String id;
   final String username;
@@ -238,8 +241,6 @@ Future<DocumentReference> addHiker(String email, String username, String? userId
     'distanceTogheter': 0.0,
     'mountainChain': [],
   });
-
-  //add reference number for the booklet
 
   return newUSerRef;
 }

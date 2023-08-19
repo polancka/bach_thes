@@ -1,19 +1,12 @@
-import 'dart:convert';
-import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:bach_thes/models/peak.dart';
-import 'package:bach_thes/models/path.dart';
 import 'package:bach_thes/utils/styles.dart';
-import 'package:bach_thes/views/pages/peak_detail.dart';
-import 'package:bach_thes/views/pages/path_detail.dart';
 import 'navigation_controller.dart';
 
 /*Peak_detail_controller contains logic for rendering the page with additional
 information about the chosen peak. It includes rendering a list of paths, of 
 which ending point is the chosen peak. The information is gathered from Firebase Firestore.
-If there are no paths, none are displayed.*/
+If there are no paths, none are displayed. User can add a path to this peak by clicking "+ add a new path".*/
 
 //renders the top image
 Widget bannerImage(String url, double height) {

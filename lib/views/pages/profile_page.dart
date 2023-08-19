@@ -1,25 +1,11 @@
-import 'dart:io';
-
 import 'package:bach_thes/controllers/profile_page_controller.dart';
-import 'package:bach_thes/models/current_user.dart';
-import 'package:bach_thes/models/hike.dart';
-import 'package:bach_thes/models/hiker.dart';
-import 'package:bach_thes/views/widgets/booklet_widget.dart';
-import 'package:bach_thes/views/widgets/mountain_card.dart';
-import 'package:bach_thes/views/widgets/reusable_widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:bach_thes/utils/styles.dart';
 import 'package:percent_indicator/percent_indicator.dart';
-import 'package:bach_thes/views/widgets/hike_card.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'main_page.dart';
-import 'package:bach_thes/models/hiker.dart';
-import 'package:bach_thes/globals.dart';
 import 'package:location/location.dart';
-
-//TODO: change current hiker to getting data from shared prefernces
 
 /* UI for showing users profile page. it shows their picture, username, 
 level, number of points on a progress bar and their booklet. The booklet itself
@@ -48,7 +34,6 @@ class _ProfilePageState extends State<ProfilePage> {
     Location location = new Location();
     LocationData locationData;
     locationData = await location.getLocation();
-    print(locationData.altitude);
   }
 
   getHikerData() async {
@@ -74,7 +59,6 @@ class _ProfilePageState extends State<ProfilePage> {
         _hasHikes = true;
       }
     });
-    //print(recentHikes);
   }
 
   String returnPercentProgress() {
@@ -96,7 +80,6 @@ class _ProfilePageState extends State<ProfilePage> {
   void initState() {
     getHikerData();
     returnListHikes(currentUserTwo);
-    printAltitude();
     super.initState();
   }
 

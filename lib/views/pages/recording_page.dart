@@ -1,5 +1,3 @@
-//TODO: figure out the date and time, figure out counting seconds and altimeters
-
 import 'dart:async';
 import 'dart:core';
 import 'package:bach_thes/controllers/navigation_controller.dart';
@@ -9,7 +7,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:bach_thes/utils/styles.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_background/flutter_background.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -18,10 +15,17 @@ import 'package:bach_thes/models/hiker.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:bach_thes/models/locationPoint.dart';
-import 'package:flutter/services.dart';
 import 'package:location/location.dart' as loc;
 import 'package:bach_thes/controllers/badge_controller.dart' as bc;
-import 'package:shared_preferences/shared_preferences.dart';
+
+//This page serves for recording a hike to a certain peak. It tracks users location,
+//distance and time passed, how many altimeters were done during the hike.
+// It also shows the user on the map.
+//if the user is in the proximity of the peak (150m) while recording,
+// the peak is added to his digital booklet.
+//when recording is done, necessary database updates are called to store all the
+//new information. when the recording is stopped user receives points as a reward.
+//Locaiton tracking also works when application is paused or inactive.
 
 class RecordingPage extends StatefulWidget {
   const RecordingPage({super.key});
@@ -84,7 +88,6 @@ class _RecordingPageState extends State<RecordingPage>
       setState(() {
         _locationPoints.add(firstPosition);
       });
-      //print("THIS IS LOCATION POINTS IN STARTING POSITION: $_locationPoints");
     });
   }
 
@@ -127,21 +130,15 @@ class _RecordingPageState extends State<RecordingPage>
   void didChangeAppLifecycleState(AppLifecycleState state) {
     var appInBackground = (state == AppLifecycleState.inactive);
     if (appInBackground) {
-      //print("in back");
       _startBackTracking();
       //application is running in bacground
       //show notification
     } else if (state == AppLifecycleState.resumed) {
-      //print("resumed");
       _stopBackTracking();
     }
-    //add fucntion to stop back tracking once the app is resumed
-    //cancel the notification
   }
 
   _startBackTracking() async {
-    //print("in startBackTrack");
-
     await BackgroundLocation.setAndroidNotification(
       title: 'Hike recording in process',
       message: 'Keep it up!',
@@ -151,21 +148,14 @@ class _RecordingPageState extends State<RecordingPage>
     await BackgroundLocation.setAndroidConfiguration(1000);
     await BackgroundLocation.startLocationService(
         distanceFilter: 150, forceAndroidLocationManager: true);
-    BackgroundLocation.getLocationUpdates((location) {
-      //print("Location in background is : ${location.latitude}");
-    });
+    BackgroundLocation.getLocationUpdates((location) {});
   }
 
   _stopBackTracking() async {
-    //figure it out for the background
-    //print("stop back tracking");
-
+    //cancel the notificaiton
     //Eraser.clearAllAppNotifications();
-
     //await BackgroundLocation.stopLocationService();
   }
-
-  ///
 
   void _startFetchingLocationPeriodically() async {
     final LocationSettings locationSettings = LocationSettings(
@@ -176,35 +166,28 @@ class _RecordingPageState extends State<RecordingPage>
     StreamSubscription<Position> positionStream =
         Geolocator.getPositionStream(locationSettings: locationSettings)
             .listen((Position position) async {
-      // print("----new location-----");
-      //print("CURRENT: ${position.latitude}, ${position.longitude}");
-      //print("ENDPOINT: ${endPointCoordinates.latitude}, ${endPointCoordinates.longitude}");
       try {
         setState(() {
           if (_locationPoints.length > 1) {
             _distanceDone += GeolocatorPlatform.instance.distanceBetween(
                 _locationPoints[_locationPoints.length - 1].latitude,
                 _locationPoints[_locationPoints.length - 1].longitude,
-                position!.latitude,
-                position!.longitude);
+                position.latitude,
+                position.longitude);
             _altimetersDone +=
                 (_locationPoints[_locationPoints.length - 1].altitude -
                         position.altitude)
                     .abs();
-          } else {
-            //print("The length of the list i 0 or 1");
-          }
-          _locationPoints.add(position!);
+          } else {}
+          _locationPoints.add(position);
         });
         if (!isPeakAchieved) {
-          //print("checking for peak .....");
           var distanceFromPeak = GeolocatorPlatform.instance.distanceBetween(
               _locationPoints.last.latitude,
               _locationPoints.last.longitude,
               endPointCoordinates.latitude,
               endPointCoordinates.longitude);
           if (distanceFromPeak < 150) {
-            //print(_locationPoints.toString());
             setState(() {
               isPeakAchieved = true;
             });
@@ -322,14 +305,6 @@ class _RecordingPageState extends State<RecordingPage>
     MyNavigator(context).navigateToPointsPage("recording a hike", points);
   }
 
-  /*functionForBadges() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      badges = prefs.getStringList('newBadges')!;
-    });
-    print("FUNCTION FOR BADGES $badges");
-  }*/
-
   LatLng locationPointToLatLng(LocationPoint point) {
     LatLng latLngPoint = LatLng(point.latitude, point.longitude);
     return latLngPoint;
@@ -345,7 +320,6 @@ class _RecordingPageState extends State<RecordingPage>
         setState(() {
           itemsPeakNames = peakNames;
         });
-        //print(peakNames);
       } else {
         setState(() {
           itemsPeakNames = [];
@@ -355,19 +329,20 @@ class _RecordingPageState extends State<RecordingPage>
   }
 
   _getPeakCoordinatesAndChain(String? name) async {
-    await FirebaseFirestore.instance
-        .collection("Peaks")
-        .where('name', isEqualTo: name)
-        .get()
-        .then((doc) {
-      setState(() {
-        endPointCoordinates.latitude = doc.docs.first['latitude'];
-        endPointCoordinates.longitude = doc.docs.first['longitude'];
-        _endPointAltitude = doc.docs.first['altitude'];
-        newChain = doc.docs.first['mountainChain'];
+    if (name != "") {
+      await FirebaseFirestore.instance
+          .collection("Peaks")
+          .where('name', isEqualTo: name)
+          .get()
+          .then((doc) {
+        setState(() {
+          endPointCoordinates.latitude = doc.docs.first['latitude'];
+          endPointCoordinates.longitude = doc.docs.first['longitude'];
+          _endPointAltitude = doc.docs.first['altitude'];
+          newChain = doc.docs.first['mountainChain'];
+        });
       });
-      //print(endPointCoordinates.latitude);
-    });
+    }
   }
 
   _getThatValue(String? value) {
@@ -375,7 +350,6 @@ class _RecordingPageState extends State<RecordingPage>
       endPointRecording = value!;
     });
     _getPeakCoordinatesAndChain(value);
-    //print(value);
   }
 
   @override
@@ -383,7 +357,6 @@ class _RecordingPageState extends State<RecordingPage>
     setState(() {
       isPeakAchieved = false;
     });
-    //BackgroundLocation.stopLocationService();
     _timer!.cancel();
     _timerLocation!.cancel();
     WidgetsBinding.instance.removeObserver(this);
@@ -393,8 +366,6 @@ class _RecordingPageState extends State<RecordingPage>
   @override
   Widget build(BuildContext context) {
     var kmsToShow = _distanceDone / 1000;
-    //print(kmsToShow);
-    //print("IN BUILD: ${currentMarker.latitude}");
     return Scaffold(
         appBar: myAppBar("Hike recording"),
         body: Container(

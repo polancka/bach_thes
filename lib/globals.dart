@@ -1,11 +1,8 @@
-import 'dart:math';
-
-import 'package:bach_thes/models/hiker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:developer';
 
-/* This is where global variables are stored */
+/* This is where global variables are stored and updated to the 
+Firebase Firestore collecion 'Indexes' as necessary*/
+
 final db = FirebaseFirestore.instance;
 
 int nextUserId = 1;
@@ -24,5 +21,3 @@ incrementPeakIndex(int? currentIndex) async {
   docRefUpdate.update({"peakIndex": nextIndex}).then((value) {},
       onError: (e) => print("Error updating document $e"));
 }
-
-//late Hiker currentHiker;

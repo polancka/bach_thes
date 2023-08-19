@@ -1,14 +1,11 @@
-import 'package:bach_thes/controllers/list_of_peaks_controller.dart';
-import 'package:bach_thes/globals.dart';
-import 'package:bach_thes/views/widgets/reusable_widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:bach_thes/models/peak.dart';
 import 'package:bach_thes/utils/styles.dart';
-import 'package:bach_thes/models/hiker.dart';
-import 'package:bach_thes/controllers/navigation_controller.dart';
-//TODO: implement logic for getting achieved peaks
+
+//This page serves as a digital booklet. In it all the peaks in the databases collection 'Peaks' are shown.
+//if the current user has a hike recording that achoeved a peak, that peak willl be colored in the booklet.
+// The peaks that have not yet been achieved are greyed out. Peaks are grouped based on their mountain chain.
 
 class BookletPage extends StatefulWidget {
   const BookletPage({super.key});
@@ -42,14 +39,11 @@ class _BookletPageState extends State<BookletPage> {
   String currentUserId = FirebaseAuth.instance.currentUser!.uid.toString();
 
   getAchievedPeaks() async {
-    print("in getachueved peaks");
     var achievedPeaksQuery = await FirebaseFirestore.instance
         .collection('RHikes')
         .where('hikerId', isEqualTo: currentUserId)
         .where('acheived', isEqualTo: true)
         .get();
-
-    print(achievedPeaksQuery.docs.length);
 
     for (var hike in achievedPeaksQuery.docs) {
       achievedPeaks.add(hike['endPointName']);
@@ -117,7 +111,6 @@ class _BookletPageState extends State<BookletPage> {
       }
     }
 
-    //print(currentHiker.getAchievedPeaks());
     setState(() {
       karawanks = List.from(_karawanks);
       julianAlps = List.from(_julian);
