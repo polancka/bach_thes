@@ -432,6 +432,7 @@ Widget colorfulMountainTile(String name, String urlThumbnail) {
               child: Center(
             child: Text(
               "${name}",
+              textAlign: TextAlign.center,
               style: TextStyle(
                   color: Color.fromARGB(255, 42, 98, 44),
                   fontWeight: FontWeight.w600),

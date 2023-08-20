@@ -389,7 +389,8 @@ class _RecordingPageState extends State<RecordingPage>
                     SizedBox(height: 15),
                     Container(child: _isRecording ? myMapTwo() : Text("")),
                     Text("Time spent hiking: $_timePassed"),
-                    Text("Distance hiked: ${kmsToShow} km"),
+                    Text(
+                        "Distance hiked: ${kmsToShow.toString().substring(0, kmsToShow.toString().indexOf('.') + 2)} km"),
                     Text(
                         "Altimeters done: ${_altimetersDone.toString().substring(0, _altimetersDone.toString().indexOf('.') + 2)} m"),
                     SizedBox(height: 25),

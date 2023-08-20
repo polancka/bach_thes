@@ -92,6 +92,7 @@ class MyNavigator {
   }
 
   void navigateToRecordingPage() {
+    Navigator.pop(context);
     Navigator.push(
         context, MaterialPageRoute(builder: ((context) => RecordingPage())));
   }
