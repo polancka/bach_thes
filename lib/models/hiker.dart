@@ -1,9 +1,13 @@
 import 'package:bach_thes/globals.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'dart:typed_data';
 //Hiker class stores all basic information about the user. The functions of the class
 //provide updating in the database.
+
+final FirebaseStorage _storage = FirebaseStorage.instance;
+final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
 class Hiker {
   final String id;
@@ -243,4 +247,36 @@ Future<DocumentReference> addHiker(String email, String username, String? userId
   });
 
   return newUSerRef;
+}
+
+Future<String> updateProfilePictureToStorage(
+    String childName, Uint8List file) async {
+  Reference ref = _storage.ref().child(childName);
+  UploadTask uploadTask = ref.putData(file);
+  TaskSnapshot snapshot = await uploadTask;
+  String downloadUrl = await snapshot.ref.getDownloadURL();
+  return downloadUrl;
+}
+
+Future<String> updateNewPictureUrlInHiker(Uint8List file, String userID) async {
+  String resp = "Some error occured";
+  try {
+    String imageUrl = await updateProfilePictureToStorage(userID, file);
+
+    var wantedHikerQuery = await FirebaseFirestore.instance
+        .collection('Hikers')
+        .where('id', isEqualTo: userID)
+        .get();
+    var docRef = wantedHikerQuery.docs.first.id;
+
+    final docRefUpdate = db.collection('Hikers').doc("${docRef}");
+    docRefUpdate.update({"pictureUrl": imageUrl}).then(
+        (value) => print("DocumentSnapshot successfully updated!"),
+        onError: (e) => print("Error updating document $e"));
+
+    resp = "sucess";
+  } catch (err) {
+    resp = err.toString();
+  }
+  return resp;
 }

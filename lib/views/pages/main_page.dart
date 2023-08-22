@@ -42,20 +42,20 @@ class _MainPageState extends State<MainPage> {
     List<String> mountainChain = List<String>.from(arrayOfMountainChain);
 
     setCurrentHiker(
-      profiles.docs.first['id'],
-      profiles.docs.first['username'],
-      profiles.docs.first['email'],
-      profiles.docs.first['level'],
-      profiles.docs.first['points'],
-      profiles.docs.first['numberOfHikes'],
-      profiles.docs.first['altimetersTogheter'],
-      profiles.docs.first['timeTogheter'],
-      profiles.docs.first['scoreboardParticipation'],
-      stringsOfBadges,
-      recentSearches,
-      profiles.docs.first['distanceTogheter'],
-      mountainChain,
-    );
+        profiles.docs.first['id'],
+        profiles.docs.first['username'],
+        profiles.docs.first['email'],
+        profiles.docs.first['level'],
+        profiles.docs.first['points'],
+        profiles.docs.first['numberOfHikes'],
+        profiles.docs.first['altimetersTogheter'],
+        profiles.docs.first['timeTogheter'],
+        profiles.docs.first['scoreboardParticipation'],
+        stringsOfBadges,
+        recentSearches,
+        profiles.docs.first['distanceTogheter'],
+        mountainChain,
+        profiles.docs.first['pictureUrl']);
   }
 
   checkPrefsForBadges() async {
@@ -152,7 +152,8 @@ class _MainPageState extends State<MainPage> {
       List<String> badges,
       List<String> recentSearches,
       double distanceTogheter,
-      List<String> mountainChain) async {
+      List<String> mountainChain,
+      String pictureUrl) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('id', id);
     prefs.setString('username', username);
@@ -168,5 +169,7 @@ class _MainPageState extends State<MainPage> {
     prefs.setStringList('recentSearches', recentSearches);
     prefs.setDouble('distanceTogheter', distanceTogheter);
     prefs.setStringList('mountainChain', mountainChain);
+    prefs.setString('pictureUrl', pictureUrl);
+    print("SET IN PREFSS: ${prefs.getString('pictureUrl')}");
   }
 }

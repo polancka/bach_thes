@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:bach_thes/controllers/profile_page_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -6,6 +8,8 @@ import 'package:bach_thes/utils/styles.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:location/location.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:bach_thes/models/hiker.dart';
 
 /* UI for showing users profile page. it shows their picture, username, 
 level, number of points on a progress bar and their booklet. The booklet itself
@@ -25,10 +29,33 @@ class _ProfilePageState extends State<ProfilePage> {
   var username;
   var points = 1;
   var level = 1;
+  String profilePicture = "";
   bool _hasHikes = false;
+  Uint8List? _profileImage;
 
   String percentProgress = '';
   double decimalProgress = 0.0;
+
+  void selectImage() async {
+    //print("select Image");
+    Uint8List img = await selectPicture(ImageSource.gallery);
+    setState(() {
+      _profileImage = img;
+      //print(img);
+    });
+    //call a function for updating the new value into the database
+    updateNewPictureUrlInHiker(img, currentUserTwo!);
+  }
+
+  selectPicture(ImageSource source) async {
+    //print("Select picture");
+    final ImagePicker _imagePicker = ImagePicker();
+    XFile? _file = await _imagePicker.pickImage(source: source);
+    if (_file != null) {
+      return await _file.readAsBytes();
+    }
+    print("No image selected");
+  }
 
   printAltitude() async {
     Location location = new Location();
@@ -42,7 +69,9 @@ class _ProfilePageState extends State<ProfilePage> {
       points = prefs.getInt('points')!;
       username = prefs.getString('username');
       level = prefs.getInt('level')!;
+      profilePicture = prefs.getString('pictureUrl')!.toString();
     });
+    //print(profilePicture.toString());
   }
 
   returnListHikes(String? currentUserTwo) async {
@@ -87,21 +116,48 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     var percPoints = getPercent(points);
     return Scaffold(
-        body: Container(
-            child: SingleChildScrollView(
-                child: Column(
+        body: SingleChildScrollView(
+            child: Column(
       children: [
         SizedBox(
           height: 25,
         ),
-        CircleAvatar(
-            backgroundColor: Styles.lightgreen,
-            radius: 50,
-            child: CircleAvatar(
-              backgroundColor: Colors.white,
-              backgroundImage: AssetImage('lib/utils/images/user_logo.png'),
-              radius: 40,
-            )),
+        Stack(
+          children: [
+            _profileImage != null
+                ? CircleAvatar(
+                    backgroundColor: Styles.lightgreen,
+                    radius: 65,
+                    child: CircleAvatar(
+                      backgroundColor: Colors.white,
+                      backgroundImage: MemoryImage(_profileImage!),
+                      radius: 63,
+                    ))
+                : CircleAvatar(
+                    backgroundColor: Styles.lightgreen,
+                    radius: 65,
+                    child: ClipOval(
+                      child: Image.network(
+                        'https://firebasestorage.googleapis.com/v0/b/hiking-app-56fa9.appspot.com/o/LV82XchcJwZP2e586xtFByOE4EG2?alt=media&token=0f19b74e-d915-434e-88b4-0f1708db5e66',
+                        width: 120,
+                        height: 120,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+            Positioned(
+                child: IconButton(
+                  onPressed: () {
+                    selectImage();
+                    _profileImage = null;
+                  },
+                  icon: Icon(Icons.add_a_photo),
+                ),
+                bottom: -10,
+                left: 85)
+          ],
+        ),
+
         //logoWidget(currentHiker.profilePicture),
         SizedBox(
           height: 20,
@@ -174,7 +230,7 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
         )
       ],
-    ))));
+    )));
   }
 }
 

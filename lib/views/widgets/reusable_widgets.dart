@@ -224,7 +224,10 @@ AppBar myAppBar(String text) {
 
 Widget listItemHike(dynamic docSnapshot, BuildContext context) {
   String dateFormat = 'MM/dd/yy';
-  var time = docSnapshot['dateAndTime'];
+  String time = docSnapshot['dateAndTime'].toString();
+  String justDate = time.substring(0, 10);
+  String duration = docSnapshot['duration'];
+  String durationNoSeconds = duration.substring(0, 5);
   //DateTime docDateTime = DateTime.parse(time.toString());
   //var newtime = DateFormat(dateFormat).format(docDateTime);
 
@@ -250,7 +253,7 @@ Widget listItemHike(dynamic docSnapshot, BuildContext context) {
                   "Hike to ${docSnapshot['endPointName']}",
                   style: TextStyle(color: Colors.white),
                 ),
-                subtitle: Text("${time}",
+                subtitle: Text("${justDate}   ${duration}",
                     style: TextStyle(color: Colors.white, fontSize: 14)),
                 trailing: Icon(
                   Icons.check_box,
