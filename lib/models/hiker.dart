@@ -259,9 +259,11 @@ Future<String> updateProfilePictureToStorage(
 }
 
 Future<String> updateNewPictureUrlInHiker(Uint8List file, String userID) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
   String resp = "Some error occured";
   try {
     String imageUrl = await updateProfilePictureToStorage(userID, file);
+    prefs.setString('pictureUrl', imageUrl);
 
     var wantedHikerQuery = await FirebaseFirestore.instance
         .collection('Hikers')

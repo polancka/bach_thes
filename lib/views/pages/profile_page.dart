@@ -136,15 +136,18 @@ class _ProfilePageState extends State<ProfilePage> {
                 : CircleAvatar(
                     backgroundColor: Styles.lightgreen,
                     radius: 65,
-                    child: ClipOval(
-                      child: Image.network(
-                        'https://firebasestorage.googleapis.com/v0/b/hiking-app-56fa9.appspot.com/o/LV82XchcJwZP2e586xtFByOE4EG2?alt=media&token=0f19b74e-d915-434e-88b4-0f1708db5e66',
-                        width: 120,
-                        height: 120,
-                        fit: BoxFit.cover,
+                    child: CircleAvatar(
+                      backgroundColor: Colors.white,
+                      radius: 63,
+                      child: ClipOval(
+                        child: Image.network(
+                          '$profilePicture',
+                          width: 120,
+                          height: 120,
+                          fit: BoxFit.cover,
+                        ),
                       ),
-                    ),
-                  ),
+                    )),
             Positioned(
                 child: IconButton(
                   onPressed: () {
